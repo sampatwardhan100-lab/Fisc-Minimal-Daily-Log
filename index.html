@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  
+  <!-- PWA & Mobile Web App Meta Tags (iOS & Android) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fiscc">
+  <meta name="application-name" content="Fiscc">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#07090e">
-  <title>Fiscc — Minimal Daily Log</title>
+  <meta name="description" content="Fiscc — Minimal Daily Log. Type naturally. Track instantly.">
+
+  <!-- Apple Touch Icon with fallback to logo.png or dynamic SVG -->
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="logo.png">
+  <link rel="icon" id="favicon-link" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Cpath d='M22 14H68L84 30V68L50 96L16 68V20L22 14Z' stroke='%23006466' stroke-width='8' fill='%2307090e'/%3E%3Cpath d='M16 48L30 62L62 30' stroke='%23006466' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+
+  <!-- Embedded Web App Manifest for Android Chrome PWA Install -->
+  <link rel="manifest" id="manifest-placeholder">
+
+  <title>Fiscc v3.5 — Minimal Daily Log</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -53,6 +67,8 @@
       --gold-soft: rgba(212, 175, 55, 0.14);
       --danger: #ef4444;
       --danger-soft: rgba(239, 68, 68, 0.12);
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.12);
       --glass-glow: radial-gradient(circle at 50% 0%, rgba(0, 100, 102, 0.08) 0%, transparent 60%);
     }
 
@@ -74,6 +90,8 @@
       --gold-soft: rgba(180, 138, 28, 0.12);
       --danger: #dc2626;
       --danger-soft: #fee2e2;
+      --success: #059669;
+      --success-soft: #d1fae5;
       --glass-glow: radial-gradient(circle at 50% 0%, rgba(11, 82, 91, 0.03) 0%, transparent 60%);
     }
 
@@ -95,6 +113,8 @@
       --gold-soft: rgba(170, 124, 17, 0.12);
       --danger: #c0392b;
       --danger-soft: #fadbd8;
+      --success: #0d9488;
+      --success-soft: #ccfbf1;
       --glass-glow: radial-gradient(circle at 50% 0%, rgba(27, 73, 101, 0.04) 0%, transparent 60%);
     }
 
@@ -116,6 +136,8 @@
       --gold-soft: rgba(245, 158, 11, 0.12);
       --danger: #f43f5e;
       --danger-soft: rgba(244, 63, 94, 0.12);
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.12);
       --glass-glow: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.06) 0%, transparent 60%);
     }
 
@@ -137,10 +159,11 @@
       --gold-soft: rgba(251, 191, 36, 0.14);
       --danger: #f87171;
       --danger-soft: rgba(248, 113, 113, 0.14);
+      --success: #34d399;
+      --success-soft: rgba(52, 211, 153, 0.14);
       --glass-glow: radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.08) 0%, transparent 60%);
     }
 
-    /* Common Surface & Card Styles */
     body {
       background-color: var(--bg-base);
       color: var(--text-main);
@@ -152,7 +175,7 @@
       touch-action: manipulation;
     }
 
-    /* PREVENT MOBILE ZOOM ON FOCUS (iOS Safari auto-zooms inputs under 16px) */
+    /* Prevent mobile browser zoom on inputs */
     @media screen and (max-width: 768px) {
       input, select, textarea {
         font-size: 16px !important;
@@ -172,22 +195,19 @@
       border-color: var(--border-highlight);
     }
 
-    /* Pulse Glow for Sync Status */
     @keyframes pulseGlow {
       0%, 100% { opacity: 0.6; transform: scale(1); }
       50% { opacity: 1; transform: scale(1.18); }
     }
     .pulse-glow { animation: pulseGlow 2.4s infinite ease-in-out; }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
 
-    /* Modal Overlay Animation & Mobile Orientation Handling */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       display: flex; align-items: center; justify-content: center;
       padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
@@ -201,7 +221,7 @@
       border-radius: 20px;
       padding: 20px sm:24px;
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       max-height: 88vh;
       overflow-y: auto;
       box-shadow: 0 25px 60px -15px rgba(0,0,0,0.6);
@@ -210,7 +230,6 @@
     }
     .modal-overlay.open .modal-box { transform: scale(1); }
 
-    /* Subtle Form Elements */
     input, select, textarea {
       background: var(--bg-input);
       color: var(--text-main);
@@ -221,13 +240,11 @@
       outline: none;
     }
 
-    /* Category Tag Scroll Optimization */
     .category-scroll {
       -webkit-overflow-scrolling: touch;
       touch-action: pan-x;
     }
 
-    /* Toast Notification */
     #toast {
       position: fixed; bottom: 24px; right: 24px;
       background: var(--bg-surface); color: var(--text-main);
@@ -242,7 +259,6 @@
     }
     #toast.show { transform: translateY(0); opacity: 1; }
 
-    /* App Lock Overlay Screen */
     #app-lock-screen {
       position: fixed; inset: 0;
       background: var(--bg-base);
@@ -256,7 +272,6 @@
       opacity: 1; pointer-events: auto;
     }
 
-    /* Logo Mark Styling (Clean, Pure Symbol Only) */
     .fiscc-logo-symbol {
       width: 44px;
       height: 48px;
@@ -265,6 +280,28 @@
     }
     .fiscc-logo-symbol:hover {
       transform: scale(1.05);
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .pill-btn:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-0.5px);
+    }
+    .pill-btn:active {
+      transform: scale(0.96);
     }
   </style>
 </head>
@@ -285,20 +322,14 @@
        ===================================================================== -->
   <div id="app-lock-screen">
     <div class="max-w-xs w-full text-center space-y-5">
-      <!-- Pure Vector Logo Emblem in Lockscreen with Brand Text Lockup -->
       <div class="flex flex-col items-center justify-center gap-2 mb-1">
         <svg class="w-14 h-16" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Document Shield Outline -->
           <path d="M22 14H68L84 30V68L50 96L16 68V20L22 14Z" stroke="currentColor" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
-          <!-- Top Right Fold Notch -->
           <path d="M68 14V30H84" stroke="currentColor" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
-          <!-- Bold Checkmark / Upward Vector Inside -->
           <path d="M16 48L30 62L62 30H46" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
           <path d="M46 30V44" stroke="currentColor" stroke-width="7" stroke-linecap="round" style="color: var(--accent);"/>
-          <!-- Inner Transaction / Flow Arrow 1 -->
           <circle cx="50" cy="48" r="3.5" fill="currentColor" style="color: var(--accent);"/>
           <path d="M57 48H72M72 48L66 43M72 48L66 53" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
-          <!-- Inner Transaction / Flow Arrow 2 -->
           <circle cx="45" cy="65" r="3.5" fill="currentColor" style="color: var(--accent);"/>
           <path d="M52 65H68M68 65L62 60M68 65L62 70" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
         </svg>
@@ -312,7 +343,6 @@
         <p class="text-xs" style="color: var(--text-faint)">Authenticate to access your financial ledger</p>
       </div>
 
-      <!-- Biometric Face ID / Touch ID Button -->
       <div id="lock-biometric-section" class="hidden">
         <button id="btn-unlock-biometric" class="w-full py-2.5 px-4 rounded-xl font-medium text-xs flex items-center justify-center gap-2 border transition hover:scale-[1.02] active:scale-95 shadow" style="background: var(--bg-surface); border-color: var(--border-highlight); color: var(--text-main)">
           <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -325,7 +355,6 @@
         </div>
       </div>
 
-      <!-- PIN / Password Fallback Form -->
       <form id="lock-pin-form" class="space-y-3" onsubmit="return false;">
         <input type="password" id="lock-pin-input" class="w-full text-center tracking-[0.3em] font-mono text-base p-2.5 rounded-xl" placeholder="••••" autocomplete="current-password">
         <button type="submit" id="btn-unlock-pin" class="w-full py-2.5 rounded-xl font-semibold text-xs text-white transition active:scale-95 shadow" style="background: var(--accent)">
@@ -340,30 +369,22 @@
   <main class="max-w-4xl lg:max-w-5xl mx-auto px-2 sm:px-6 py-4 sm:py-8 space-y-5 sm:space-y-6">
 
     <!-- =====================================================================
-         1. FISCC BRAND HEADER & NAVIGATION (v3.2 Logo & Brand Typography)
+         1. FISCC BRAND HEADER & NAVIGATION (v3.4 PWA Ready)
          ===================================================================== -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b" style="border-color: var(--border-subtle)">
-      <!-- Logo Emblem with Brand Name & Tagline Lockup -->
       <div class="flex items-center gap-3">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc: Minimal Daily Log — Type naturally. Track instantly.')" title="Fiscc v3.2">
-          <!-- Vector Architectural Emblem: Shield Document with Checkmark & Flow Vectors -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc v3.5 — Minimal Daily Log')" title="Fiscc v3.5">
           <svg class="fiscc-logo-symbol flex-shrink-0" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Document Shield Outline -->
             <path d="M22 14H68L84 30V68L50 96L16 68V20L22 14Z" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
-            <!-- Top Right Fold Notch -->
             <path d="M68 14V30H84" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
-            <!-- Checkmark / Upward Vector Inside Shield -->
             <path d="M16 48L30 62L62 30H46" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
             <path d="M46 30V44" stroke="currentColor" stroke-width="7.5" stroke-linecap="round" style="color: var(--accent);"/>
-            <!-- Inner Transaction / Flow Arrow 1 -->
             <circle cx="50" cy="48" r="3.5" fill="currentColor" style="color: var(--accent);"/>
             <path d="M57 48H72M72 48L66 43M72 48L66 53" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
-            <!-- Inner Transaction / Flow Arrow 2 -->
             <circle cx="45" cy="65" r="3.5" fill="currentColor" style="color: var(--accent);"/>
             <path d="M52 65H68M68 65L62 60M68 65L62 70" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
           </svg>
 
-          <!-- Brand Text Lockup -->
           <div class="flex flex-col">
             <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight" style="color: var(--text-main);">
               Fiscc: <span class="font-normal" style="color: var(--text-muted);">Minimal Daily Log</span>
@@ -375,7 +396,6 @@
         </div>
       </div>
 
-      <!-- Action & Utility Navigation Bar -->
       <div class="flex items-center flex-wrap gap-2 self-start md:self-auto">
         <!-- Live Sync Pill -->
         <div id="sync-status-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);">
@@ -386,14 +406,20 @@
           <span id="sync-status-text">Local Mode</span>
         </div>
 
-        <!-- Quick Lock Button (Visible if App Lock is configured) -->
+        <!-- Add to Home Screen / Install Button (PWA Trigger - iOS & Android) -->
+        <button id="btn-install-app" class="pill-btn min-h-[36px]" title="Add Fiscc to Home Screen (iOS / Android)">
+          <span>📲</span>
+          <span id="btn-install-label">Install App</span>
+        </button>
+
+        <!-- Quick Lock Button -->
         <button id="btn-quick-lock" class="hidden items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full text-xs font-medium border transition duration-200" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);" title="Lock Application Now">
           <span>🔒</span>
           <span class="hidden sm:inline">Lock</span>
         </button>
 
         <!-- Scan / Receipt Button -->
-        <button id="scan-receipt-btn" class="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full text-xs font-medium border transition duration-200" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);" title="Scan or simulate physical receipt">
+        <button id="scan-receipt-btn" class="pill-btn min-h-[36px]" title="Scan or simulate physical receipt">
           <svg class="w-3.5 h-3.5" style="color: var(--accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -402,13 +428,13 @@
         </button>
 
         <!-- Proof Scan & Resync Tool -->
-        <button id="btn-proof-scan" class="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full text-xs font-medium border transition duration-200" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);" title="Audit integrity and reconcile storage">
+        <button id="btn-proof-scan" class="pill-btn min-h-[36px]" title="Audit integrity and reconcile storage">
           <span>🔄</span>
           <span class="hidden sm:inline">Audit</span>
         </button>
 
-        <!-- Settings Modal Trigger (Hosts Preferences & Version 3.2 Info) -->
-        <button id="btn-open-settings" class="flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full text-xs font-medium border transition duration-200" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);" title="Settings & Themes">
+        <!-- Settings Modal Trigger -->
+        <button id="btn-open-settings" class="pill-btn min-h-[36px]" title="Settings & Themes">
           <span>⚙️</span>
           <span>Settings</span>
         </button>
@@ -446,11 +472,10 @@
           <textarea 
             id="expense-omni-input" 
             rows="3"
-            placeholder="e.g. Spent Rs 601 on 1st Nov on Patrol, lent 500 to Rahul yesterday, swiggy 450 today via UPI"
+            placeholder="e.g. Spent Rs 601 on 1st Nov on Patrol, Salary 75000 yesterday, lent 500 to Rahul on 1-11-26 via UPI"
             class="w-full text-base sm:text-base rounded-xl p-3 sm:p-4 pr-10 resize-none transition-all leading-relaxed"
           ></textarea>
           
-          <!-- Voice Dictation Button (Speech-to-Text) -->
           <button 
             type="button" 
             id="btn-voice-dictate" 
@@ -463,7 +488,6 @@
             </svg>
           </button>
           
-          <!-- Live Preview Detection Badge -->
           <div id="live-parse-badge" class="absolute bottom-2.5 left-2.5 text-[11px] font-mono px-2.5 py-0.5 rounded-full border hidden items-center gap-1.5 backdrop-blur-sm" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">
             <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent)"></span>
             <span id="live-parse-text">Ready</span>
@@ -482,7 +506,6 @@
         </button>
       </div>
 
-      <!-- Quick Suggestion Tag Pills -->
       <div class="mt-3.5 pt-3 border-t" style="border-color: var(--border-subtle)">
         <div class="flex items-center justify-between mb-2 text-[11px]" style="color: var(--text-faint)">
           <span class="uppercase tracking-wider font-medium">Quick Suggestion Tags</span>
@@ -497,7 +520,6 @@
          ===================================================================== -->
     <section class="fiscc-card p-4 sm:p-7 relative overflow-hidden">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b" style="border-color: var(--border-subtle)">
-        <!-- Month Navigator -->
         <div class="flex items-center gap-2 sm:gap-3">
           <button id="prev-month-btn" class="p-2 sm:p-1.5 rounded-lg border transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" title="Previous Month">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
@@ -514,7 +536,6 @@
           </button>
         </div>
 
-        <!-- Currency Selector -->
         <div class="flex items-center gap-2 self-start sm:self-auto">
           <span class="text-xs font-medium" style="color: var(--text-faint)">Currency:</span>
           <select id="currency-selector" class="rounded-lg px-2.5 py-1 text-xs font-mono font-medium border cursor-pointer min-h-[32px]">
@@ -527,7 +548,7 @@
         </div>
       </div>
 
-      <!-- Main Financial Metric Row (Adaptive col-span when cap target is disabled) -->
+      <!-- Main Financial Metric Row -->
       <div class="pt-5 sm:pt-6 grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-end">
         <div id="main-metrics-col" class="col-span-12 md:col-span-12 transition-all">
           <p class="text-xs uppercase font-mono tracking-widest mb-1" style="color: var(--text-faint)">Total Monthly Spend</p>
@@ -538,12 +559,10 @@
           </div>
           
           <div class="flex items-center flex-wrap gap-2 sm:gap-2.5 mt-3">
-            <!-- Year-over-Year (YoY) Spend Comparison -->
             <div id="yoy-badge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border" style="background: var(--bg-subtle); border-color: var(--border-subtle); color: var(--text-muted);">
               <span>📊 Comparing YoY…</span>
             </div>
 
-            <!-- Daily Average -->
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono border" style="background: var(--bg-subtle); border-color: var(--border-subtle); color: var(--text-muted)">
               <span class="w-1.5 h-1.5 rounded-full" style="background: var(--gold)"></span>
               <span id="daily-avg-display">Avg: 0 / day</span>
@@ -555,7 +574,7 @@
           </div>
         </div>
 
-        <!-- Optional Monthly Cap Target (Off by Default, Toggle in Settings) -->
+        <!-- Optional Monthly Cap Target (Off by Default) -->
         <div id="monthly-cap-card" class="col-span-12 md:col-span-5 p-4 rounded-xl border transition-all" style="background: var(--bg-subtle); border-color: var(--border-subtle); display: none;">
           <div class="flex justify-between items-center text-xs mb-2">
             <span class="font-medium" style="color: var(--text-muted)">Monthly Cap Target</span>
@@ -571,19 +590,23 @@
         </div>
       </div>
 
-      <!-- Optional Income Balance Grid (from v1.5) -->
-      <div id="balance-grid" class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-subtle); display: none;">
+      <!-- Accounting Overview: Income vs Expenses Cashflow Grid -->
+      <div id="balance-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-subtle); display: none;">
         <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Income</span>
-          <b id="stat-income" class="block text-sm sm:text-base mt-0.5" style="color: var(--accent)">0</b>
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Total Income (+)</span>
+          <b id="stat-income" class="block text-sm sm:text-base mt-0.5 text-emerald-400">0</b>
         </div>
         <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Spends</span>
-          <b id="stat-expense" class="block text-sm sm:text-base mt-0.5">0</b>
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Total Spends (-)</span>
+          <b id="stat-expense" class="block text-sm sm:text-base mt-0.5" style="color: var(--text-main)">0</b>
         </div>
         <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Net Balance</span>
-          <b id="stat-balance" class="block text-sm sm:text-base mt-0.5" style="color: var(--accent)">0</b>
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Net Cashflow</span>
+          <b id="stat-balance" class="block text-sm sm:text-base mt-0.5">0</b>
+        </div>
+        <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Savings Rate</span>
+          <b id="stat-savings-rate" class="block text-sm sm:text-base mt-0.5 font-mono text-teal-400">0%</b>
         </div>
       </div>
 
@@ -592,7 +615,7 @@
     </section>
 
     <!-- =====================================================================
-         4. ACTIVE DUES & EMI REMINDERS (from v1.5)
+         4. ACTIVE DUES & EMI REMINDERS
          ===================================================================== -->
     <section id="dues-reminders-card" class="fiscc-card p-5 transition duration-300" style="display: none;">
       <div class="flex items-center justify-between mb-2">
@@ -605,7 +628,7 @@
     </section>
 
     <!-- =====================================================================
-         5. 6-MONTH TRAJECTORY CHART (from v2.0)
+         5. 6-MONTH TRAJECTORY CHART
          ===================================================================== -->
     <section class="fiscc-card p-5 sm:p-6 transition duration-300">
       <div class="flex items-center justify-between mb-4">
@@ -642,13 +665,20 @@
         </div>
 
         <div class="flex items-center flex-wrap gap-2">
+          <!-- Filter Tabs for Incomes / Expenses -->
+          <div class="flex rounded-lg border p-0.5 text-xs" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+            <button id="filter-type-all" class="px-2 py-1 rounded font-semibold text-white" style="background: var(--accent);">All</button>
+            <button id="filter-type-expense" class="px-2 py-1 rounded text-zinc-400">Spends</button>
+            <button id="filter-type-income" class="px-2 py-1 rounded text-zinc-400">Income</button>
+          </div>
+
           <!-- Search input -->
           <div class="relative">
             <input 
               id="search-transactions" 
               type="text" 
               placeholder="Search note or tag..." 
-              class="w-36 sm:w-44 text-xs rounded-lg px-2.5 py-1.5 pl-7 border"
+              class="w-32 sm:w-40 text-xs rounded-lg px-2.5 py-1.5 pl-7 border"
             />
             <svg class="w-3.5 h-3.5 absolute left-2 top-2" style="color: var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -657,9 +687,9 @@
 
           <!-- Utilities -->
           <div class="flex items-center gap-1.5">
-            <button id="btn-export-csv" class="px-3 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">CSV</button>
-            <button id="btn-backup-json" class="px-3 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">Backup</button>
-            <button id="btn-restore-json" class="px-3 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">Restore</button>
+            <button id="btn-export-csv" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">CSV</button>
+            <button id="btn-backup-json" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">Backup</button>
+            <button id="btn-restore-json" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">Restore</button>
             <input type="file" id="restore-file-input" class="hidden" accept=".json">
           </div>
         </div>
@@ -684,7 +714,79 @@
   </main>
 
   <!-- =====================================================================
-       MODALS: SETTINGS (Themes, Income, Cap Target, Version About)
+       MODALS: ADD TO HOME SCREEN / INSTALL APP (PWA for iOS & Android)
+       ===================================================================== -->
+  <div id="install-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📲</span>
+          <h3 class="font-serif text-lg font-semibold">Add Fiscc to Home Screen</h3>
+        </div>
+        <button id="close-install-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+
+      <!-- Android Chrome Native Trigger Block -->
+      <div id="android-install-section" class="space-y-3">
+        <div class="p-3 rounded-xl border flex items-center gap-3" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: var(--accent-soft); border: 1px solid var(--accent)">
+            <span class="text-lg">⚡</span>
+          </div>
+          <div>
+            <p class="font-semibold text-xs">Fast 1-Tap Mobile App</p>
+            <p class="text-[11px]" style="color: var(--text-muted)">Install Fiscc onto your device. Works offline, opens fullscreen, and loads in 0ms.</p>
+          </div>
+        </div>
+
+        <button type="button" id="btn-trigger-native-install" class="w-full py-3 rounded-xl font-semibold text-xs text-white transition active:scale-95 shadow-lg flex items-center justify-center gap-2" style="background: var(--accent);">
+          <span>📲</span> <span>Install Fiscc App</span>
+        </button>
+      </div>
+
+      <!-- iOS Safari Instructions Block -->
+      <div id="ios-install-section" class="space-y-3.5 text-xs pt-1">
+        <p class="text-xs" style="color: var(--text-muted)">To install on your <b>iPhone or iPad</b> using Safari:</p>
+        
+        <div class="space-y-2.5">
+          <div class="flex items-start gap-3 p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+            <div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0" style="background: var(--accent); color: #fff;">1</div>
+            <div>
+              <p class="font-medium">Tap the Share button</p>
+              <p class="text-[11px]" style="color: var(--text-muted)">Look for the square icon with an upward arrow <span class="px-1.5 py-0.5 rounded bg-zinc-800 text-teal-400 border border-white/10 font-bold inline-block text-xs">⎋ / ⤤</span> at the bottom of Safari.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+            <div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0" style="background: var(--accent); color: #fff;">2</div>
+            <div>
+              <p class="font-medium">Scroll down and tap "Add to Home Screen"</p>
+              <p class="text-[11px]" style="color: var(--text-muted)">It has a plus icon <span class="px-1.5 py-0.5 rounded bg-zinc-800 text-teal-400 border border-white/10 font-bold inline-block text-xs">⊞</span> labeled <b>Add to Home Screen</b>.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+            <div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0" style="background: var(--accent); color: #fff;">3</div>
+            <div>
+              <p class="font-medium">Tap "Add" in the top-right</p>
+              <p class="text-[11px]" style="color: var(--text-muted)">Fiscc will be placed right on your home screen with zero browser bars.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Chrome/Edge Manual Guide -->
+      <div id="desktop-install-section" class="hidden text-xs space-y-2 pt-2">
+        <p style="color: var(--text-muted)">On Chrome/Edge desktop, click the install icon in the top right of your address bar (or Menu &rarr; <b>Save and share &rarr; Install Fiscc</b>).</p>
+      </div>
+
+      <div class="mt-5 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
+        <button type="button" id="btn-close-install-modal" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: SETTINGS (Themes, Income, Cap Target, Custom Categories, About)
        ===================================================================== -->
   <div id="settings-modal" class="modal-overlay">
     <div class="modal-box">
@@ -694,8 +796,22 @@
       </div>
 
       <div class="space-y-4 text-xs">
-        <!-- 1. Theme Palette Selector -->
+        <!-- Add to Home Screen in Settings -->
         <div>
+          <button type="button" id="btn-settings-install" class="w-full py-2.5 px-3 rounded-xl border flex items-center justify-between text-left transition hover:scale-[1.01]" style="background: var(--bg-subtle); border-color: var(--border-highlight);">
+            <div class="flex items-center gap-2.5">
+              <span class="text-base">📲</span>
+              <div>
+                <b class="text-xs block">Add Fiscc to Home Screen</b>
+                <span class="text-[11px]" style="color: var(--text-muted)">Install on iOS or Android for 1-tap app experience</span>
+              </div>
+            </div>
+            <span class="text-xs font-semibold underline text-teal-400">Setup &rarr;</span>
+          </button>
+        </div>
+
+        <!-- Theme Palette Selector -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <label class="block font-semibold uppercase tracking-wider mb-2" style="color: var(--text-muted)">Color Palette / Themes</label>
           <div class="grid grid-cols-2 gap-2" id="theme-selector-grid">
             <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2" data-th="obsidian">
@@ -721,7 +837,20 @@
           </div>
         </div>
 
-        <!-- 2. Monthly Cap Target (User Configurable Option - OFF by Default) -->
+        <!-- Custom Categories Manager -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="mb-2">
+            <b class="text-sm block">Custom Categories</b>
+            <span style="color: var(--text-muted);">Create your own custom expense tags</span>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="new-custom-cat-input" class="flex-1 p-2 rounded-lg text-xs" placeholder="e.g. Investment, Freelance, Taxes">
+            <button type="button" id="btn-add-custom-cat" class="px-3 py-1.5 rounded-lg text-white font-medium" style="background: var(--accent);">+ Add</button>
+          </div>
+          <div id="custom-cat-chips" class="flex flex-wrap gap-1.5 mt-2.5"></div>
+        </div>
+
+        <!-- Monthly Cap Target -->
         <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <div class="flex items-center justify-between mb-2">
             <div>
@@ -736,18 +865,18 @@
           </div>
         </div>
 
-        <!-- 3. Income Facility Toggle (from v1.5) -->
+        <!-- Income Facility Toggle -->
         <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <div class="flex items-center justify-between">
             <div>
               <b class="text-sm block">Income Tracking Facility</b>
-              <span style="color: var(--text-muted);">Track salary, earnings & Net Balance</span>
+              <span style="color: var(--text-muted);">Accounting overview: Incomes vs. Expenses & Savings Rate</span>
             </div>
             <input type="checkbox" id="setting-toggle-income" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);">
           </div>
         </div>
 
-        <!-- 4. EMI & Dues Reminders Toggle (from v1.5) -->
+        <!-- EMI & Dues Reminders Toggle -->
         <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <div class="flex items-center justify-between">
             <div>
@@ -758,7 +887,7 @@
           </div>
         </div>
 
-        <!-- 5. App Lock & Security (Face ID / Biometrics & PIN Lock) -->
+        <!-- App Lock & Security -->
         <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <div class="flex items-center justify-between mb-2">
             <div>
@@ -784,17 +913,32 @@
           </div>
         </div>
 
-        <!-- 6. ABOUT FISCC & VERSION INFO (v3.2) -->
+        <!-- Reset All Data Safeguard -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="flex items-center justify-between">
+            <div>
+              <b class="text-sm block text-rose-400">Reset Ledger Data</b>
+              <span style="color: var(--text-muted);">Clear all transactions and reset to pristine state</span>
+            </div>
+            <button type="button" id="btn-reset-data" class="px-3 py-1 rounded-lg border text-xs text-rose-400 border-rose-500/30 hover:bg-rose-500/10">
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- ABOUT FISCC & VERSION INFO (v3.5) -->
         <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <div class="p-3.5 rounded-xl border space-y-1.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
             <div class="flex justify-between items-center">
               <span class="font-serif font-semibold text-sm">Fiscc — Minimal Daily Log</span>
               <span class="font-mono text-[10px] px-2.5 py-0.5 rounded-full font-semibold border" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent)">
-                v3.2
+                v3.5
               </span>
             </div>
-            <p style="color: var(--text-muted);">“Type naturally. Track instantly.” Universal Omniparser &bull; Voice Dictation &bull; Biometric & PIN Security &bull; Dual Offline & Cloud Sync.</p>
-            <p class="font-mono text-[10px]" style="color: var(--text-faint);">Build: 2026.11 &bull; Version 3.2 Master Release</p>
+            <p style="color: var(--text-muted);">
+              <b>v3.5 Changelog:</b> Fixed in-place entry modifications (never creates duplicates in local storage or cloud sync); added smart deductions / reimbursements / friend split offsets against existing entries (e.g. <code>Received Rs 1000 against Hotel X</code> or via the <code>↩</code> button); advanced payment mode tagging (Credit Card, Debit Card, UPI, Bank Transfer, Cash, NetBanking, Wallet); connector parsing (<code>via</code>, <code>through</code>, <code>by</code>, <code>with</code>, <code>using</code>); and improved description cleaning.
+            </p>
+            <p class="font-mono text-[10px]" style="color: var(--text-faint);">Build: 2026.11 &bull; Fiscc v3.5 Release</p>
           </div>
         </div>
       </div>
@@ -808,7 +952,7 @@
   </div>
 
   <!-- =====================================================================
-       MODALS: EDIT & MODIFY DATE (from v1.5)
+       MODALS: EDIT & MODIFY DATE (v3.5 In-Place Update)
        ===================================================================== -->
   <div id="edit-modal" class="modal-overlay">
     <div class="modal-box">
@@ -845,31 +989,95 @@
             <label class="block font-medium mb-1" style="color: var(--text-muted)">Payment Mode</label>
             <select id="edit-pay" class="w-full p-2 rounded-lg text-xs">
               <option value="">(None)</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Debit Card">Debit Card</option>
               <option value="UPI">UPI</option>
-              <option value="Card">Card</option>
               <option value="Cash">Cash</option>
-              <option value="Bank">Bank</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="NetBanking">NetBanking</option>
+              <option value="Wallet">Wallet</option>
+              <option value="Cheque">Cheque</option>
             </select>
           </div>
         </div>
+
         <div>
           <label class="block font-medium mb-1" style="color: var(--text-muted)">Category</label>
           <select id="edit-cat" class="w-full p-2 rounded-lg text-xs"></select>
         </div>
+        <div id="edit-manual-cat-row" class="hidden">
+          <label class="block font-medium mb-1 text-teal-400">Manual / Custom Category Name</label>
+          <input type="text" id="edit-manual-cat" class="w-full p-2 rounded-lg text-xs" placeholder="Type custom category name...">
+        </div>
+
         <div id="edit-borrower-row" class="hidden">
           <label class="block font-medium mb-1" style="color: var(--gold)">Borrower / Person Owing</label>
           <input type="text" id="edit-borrower" class="w-full p-2 rounded-lg text-xs" placeholder="e.g. Rahul">
         </div>
-        <div class="pt-3 border-t flex justify-end gap-2" style="border-color: var(--border-subtle)">
-          <button type="button" id="btn-cancel-edit" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle);">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 rounded-lg font-medium text-xs text-white" style="background: var(--accent);">Save Changes</button>
+
+        <div class="pt-3 border-t flex justify-between items-center gap-2" style="border-color: var(--border-subtle)">
+          <button type="button" id="btn-edit-duplicate" class="px-3 py-1.5 rounded-lg border text-xs flex items-center gap-1.5" style="border-color: var(--border-subtle); color: var(--text-muted);" title="Clone this entry">
+            <span>⎘</span> <span>Duplicate</span>
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" id="btn-cancel-edit" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle);">Cancel</button>
+            <button type="submit" class="px-4 py-1.5 rounded-lg font-medium text-xs text-white" style="background: var(--accent);">Save Changes</button>
+          </div>
         </div>
       </form>
     </div>
   </div>
 
   <!-- =====================================================================
-       MODALS: SCAN RECEIPT OCR SIMULATION (from v2.0)
+       MODALS: REIMBURSEMENT / DEDUCT FROM EXISTING ENTRY (v3.5)
+       ===================================================================== -->
+  <div id="reimburse-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div>
+          <h3 class="font-serif text-lg font-semibold">Deduct / Reimburse Entry</h3>
+          <p class="text-xs" style="color: var(--text-muted)">Subtract friend shares, refunds, or repayments</p>
+        </div>
+        <button id="close-reimburse-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+      <form id="reimburse-form" class="space-y-3 text-xs" onsubmit="return false;">
+        <input type="hidden" id="reimburse-id">
+        <div class="p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex justify-between items-center">
+            <b id="reimburse-entry-title" class="text-sm truncate">Hotel X</b>
+            <span id="reimburse-entry-current" class="font-mono text-sm font-semibold">₹ 4,000.00</span>
+          </div>
+          <p id="reimburse-entry-meta" class="text-[11px] mt-0.5" style="color: var(--text-faint)">Date &bull; Food &bull; Card</p>
+        </div>
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Amount Received / Reimbursed (-)</label>
+          <input type="number" step="0.01" min="0.01" id="reimburse-amount" class="w-full p-2.5 rounded-lg font-mono text-sm" placeholder="e.g. 1000" required>
+        </div>
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Note / Contributor (Optional)</label>
+          <input type="text" id="reimburse-note" class="w-full p-2 rounded-lg text-xs" placeholder="e.g. Rahul's share, Friend repayment">
+        </div>
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Received Mode</label>
+          <select id="reimburse-pay" class="w-full p-2 rounded-lg text-xs">
+            <option value="UPI">UPI / GPay / PhonePe</option>
+            <option value="Cash">Cash</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Credit Card">Credit Card Refund</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Wallet">Wallet</option>
+          </select>
+        </div>
+        <div class="pt-3 border-t flex justify-end gap-2" style="border-color: var(--border-subtle)">
+          <button type="button" id="btn-cancel-reimburse" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle);">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 rounded-lg font-medium text-xs text-white" style="background: var(--accent);">Apply Deduction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: SCAN RECEIPT OCR SIMULATION
        ===================================================================== -->
   <div id="scan-modal" class="modal-overlay">
     <div class="modal-box">
@@ -933,18 +1141,51 @@
   </div>
 
   <!-- =====================================================================
-       JAVASCRIPT APPLICATION CORE (Synchronous 0ms execution)
+       JAVASCRIPT APPLICATION CORE (Fiscc v3.4)
        ===================================================================== -->
   <script>
-    // --- CATEGORIES & DICTIONARIES ---
-    const CAT_ICONS = {
-      "Food": "🍔", "Groceries": "🛒", "Transport": "🚕", "Shopping": "🛍️",
-      "Subscriptions": "📱", "Bills": "💡", "Health": "💊", "Entertainment": "🎬",
-      "Travel": "✈️", "Education": "📚", "Investments": "📈", "Personal Care": "✨",
-      "Home": "🏡", "Gifts & Charity": "🎁", "Pets": "🐾", "Other": "🏷️"
+    // --- DYNAMIC WEB APP MANIFEST & PWA SETUP FOR BOTH ANDROID & IOS ---
+    (function setupPWAEnvironment() {
+      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="#07090e"/><path d="M42 26H130L160 56V130L96 172L32 130V36L42 26Z" stroke="#006466" stroke-width="12" fill="none" stroke-linejoin="round"/><path d="M32 90L60 118L124 54" stroke="#006466" stroke-width="14" stroke-linecap="round" fill="none"/></svg>`;
+      const iconDataUrl = "data:image/svg+xml;base64," + btoa(iconSvg);
+
+      const manifestObj = {
+        name: "Fiscc — Minimal Daily Log",
+        short_name: "Fiscc",
+        description: "Type naturally. Track instantly. Architectural Minimalist Finance System.",
+        start_url: "./",
+        display: "standalone",
+        background_color: "#07090e",
+        theme_color: "#006466",
+        orientation: "portrait-primary",
+        icons: [
+          {
+            src: iconDataUrl,
+            sizes: "192x192 512x512",
+            type: "image/svg+xml",
+            purpose: "any maskable"
+          }
+        ]
+      };
+
+      const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: "application/json" });
+      const manifestUrl = URL.createObjectURL(manifestBlob);
+      const manifestLink = document.getElementById("manifest-placeholder");
+      if (manifestLink) {
+        manifestLink.setAttribute("href", manifestUrl);
+      }
+    })();
+
+    // --- STANDARD CATEGORIES & KEYWORDS ---
+    const BASE_CAT_ICONS = {
+      "Food": "🍔", "Groceries": "🛒", "Vehicle": "🚗", "Transport": "🚕", 
+      "Shopping": "🛍️", "Subscriptions": "📱", "Bills": "💡", "Health": "💊", 
+      "Entertainment": "🎬", "Travel": "✈️", "Education": "📚", "Investments": "📈", 
+      "Personal Care": "✨", "Home": "🏡", "Gifts & Charity": "🎁", "Pets": "🐾", "Other": "🏷️"
     };
 
     const KW = {
+      "Vehicle": /vehicle|car|bike|motorcycle|scooter|service|servicing|tyre|tire|mechanic|challan|rto|toll|fastag|diesel|petrol|patrol|cng|engine oil|ev charge|ev charging|repair car|repair bike/i,
       "Subscriptions": /netflix|spotify|youtube|prime video|amazon prime|icloud|apple music|chatgpt|openai|hulu|disney|patreon|discord|subscription|saas|github|audible/i,
       "Investments": /sip|mutual fund|stock|stocks|share|shares|zerodha|groww|crypto|bitcoin|eth|gold|deposit|fd|rd|trading|etf|equity/i,
       "Education": /course|udemy|coursera|books|book|tuition|school|college|exam|coaching|cert|bootcamp|training|kindle|stationery|pen|pencil|notes/i,
@@ -956,7 +1197,7 @@
       "Entertainment": /movie|cinema|theatre|concert|game|gaming|steam|playstation|xbox|event|party|club|pub|bowling|amusement/i,
       "Travel": /flight|hotel|airbnb|resort|vacation|trip|tour|visa|airfare|hostel|luggage|makemytrip|goibibo/i,
       "Groceries": /grocer|vegetable|veggie|fruit|milk|supermarket|bigbasket|blinkit|zepto|ration|dal|rice|bread|instamart|pantry|egg|chicken|meat|fish/i,
-      "Transport": /cab|uber|ola|taxi|bus|metro|train|fuel|petrol|patrol|diesel|gas|parking|auto|toll|rickshaw|rapido|fastag|cng|fare/i,
+      "Transport": /cab|uber|ola|taxi|bus|metro|train|auto|rickshaw|rapido|fare/i,
       "Shopping": /shirt|shoes|clothes|shopping|mall|jeans|pants|apparel|electronics|gadget|amazon|flipkart|myntra|zara|h&m|dress|tshirt/i,
       "Bills": /rent|electric|electricity|power|wifi|broadband|internet|recharge|emi|insurance|water bill|gas bill|piped gas|maintenance|society/i,
       "Food": /lunch|dinner|breakfast|coffee|tea|cafe|restaurant|snack|pizza|swiggy|zomato|meal|biryani|burger|eat|drinks|bakery|dessert|takeout|starbucks|chai/i
@@ -972,13 +1213,14 @@
 
     const $ = id => document.getElementById(id);
 
-    // --- APPLICATION STATE (Fiscc v3.2) ---
+    // --- APPLICATION STATE (Fiscc v3.4) ---
     let S = {
       items: [],
       cur: "₹",
       theme: "obsidian",
+      customCategories: [],
       settings: {
-        enableIncome: false,
+        enableIncome: true,
         showDues: true,
         enableCap: false,
         monthlyCap: 45000,
@@ -991,6 +1233,8 @@
     let isAppLocked = false;
     let lastDeletedItem = null;
     let activeCategoryFilter = null;
+    let activeTypeFilter = "all";
+    let deferredPrompt = null;
 
     const iso = d => {
       const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
@@ -1000,7 +1244,7 @@
     let vm = iso(new Date()).slice(0, 7);
 
     function fmt(n, customCur) {
-      return (customCur || S.cur) + " " + Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      return (customCur || S.cur) + " " + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function monthName(mStr) {
@@ -1013,6 +1257,11 @@
       return String(str || "")
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function getCatIcon(catName) {
+      if (BASE_CAT_ICONS[catName]) return BASE_CAT_ICONS[catName];
+      return "🏷️";
     }
 
     function showToast(msg) {
@@ -1029,7 +1278,7 @@
       t.innerHTML = `
         <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
         <span>${escapeHtml(msg)}</span>
-        <button id="btn-toast-undo" class="underline font-bold ml-2 cursor-pointer" style="color: var(--accent);">Undo</button>
+        <button id="btn-toast-undo" class="underline font-bold ml-2 cursor-pointer text-teal-400">Undo</button>
       `;
       t.classList.add("show");
       clearTimeout(t._timer);
@@ -1061,7 +1310,7 @@
     // --- STORAGE MANAGEMENT ---
     function loadStorage() {
       try {
-        const raw = localStorage.getItem("fiscc_ledger") || localStorage.getItem("exp-agent") || localStorage.getItem("exp_agent_db");
+        const raw = localStorage.getItem("fiscc_ledger") || localStorage.getItem("exp-agent");
         if (raw) {
           const parsed = JSON.parse(raw);
           if (Array.isArray(parsed)) {
@@ -1070,8 +1319,9 @@
             S.items = Array.isArray(parsed.items) ? parsed.items : [];
             S.cur = parsed.cur || "₹";
             S.theme = parsed.theme || "obsidian";
+            S.customCategories = Array.isArray(parsed.customCategories) ? parsed.customCategories : [];
             S.settings = Object.assign({ 
-              enableIncome: false, 
+              enableIncome: true, 
               showDues: true, 
               enableCap: false, 
               monthlyCap: 45000,
@@ -1086,9 +1336,83 @@
       }
       applyTheme(S.theme || "obsidian");
       initAppLock();
+      checkPWAInstallState();
     }
 
-    // --- APP LOCK & BIOMETRIC AUTH ENGINE ---
+    function saveStorage() {
+      try {
+        const str = JSON.stringify(S);
+        localStorage.setItem("fiscc_ledger", str);
+        localStorage.setItem("exp-agent", str);
+      } catch (e) {
+        console.warn("Storage save error", e);
+      }
+    }
+
+    // --- PWA INSTALL & STANDALONE DETECTION ---
+    function isRunningStandalone() {
+      return (window.navigator.standalone === true) || 
+             (window.matchMedia("(display-mode: standalone)").matches) ||
+             (window.matchMedia("(display-mode: fullscreen)").matches);
+    }
+
+    function isIOSDevice() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    }
+
+    function checkPWAInstallState() {
+      const installBtn = $("btn-install-app");
+      const label = $("btn-install-label");
+
+      if (isRunningStandalone()) {
+        if (label) label.textContent = "App Active";
+        if (installBtn) {
+          installBtn.title = "Fiscc is running in Standalone App mode";
+          installBtn.onclick = () => showToast("Fiscc is currently running as an installed app");
+        }
+      }
+    }
+
+    function openInstallModal() {
+      const isIOS = isIOSDevice();
+      const androidSection = $("android-install-section");
+      const iosSection = $("ios-install-section");
+      const desktopSection = $("desktop-install-section");
+
+      if (isIOS) {
+        iosSection.classList.remove("hidden");
+        androidSection.classList.add("hidden");
+        desktopSection.classList.add("hidden");
+      } else if (deferredPrompt) {
+        androidSection.classList.remove("hidden");
+        iosSection.classList.add("hidden");
+        desktopSection.classList.add("hidden");
+      } else {
+        androidSection.classList.remove("hidden");
+        iosSection.classList.add("hidden");
+        desktopSection.classList.remove("hidden");
+      }
+
+      $("install-modal").classList.add("open");
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = $("btn-install-app");
+      if (installBtn && !isRunningStandalone()) {
+        installBtn.classList.remove("hidden");
+        installBtn.classList.add("inline-flex");
+      }
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredPrompt = null;
+      showToast("✓ Fiscc installed to Home Screen!");
+      checkPWAInstallState();
+    });
+
+    // --- APP LOCK ---
     function initAppLock() {
       if (!S.settings.enableLock || !S.settings.lockPin) {
         $("btn-quick-lock").classList.add("hidden");
@@ -1098,7 +1422,6 @@
       $("btn-quick-lock").classList.remove("hidden");
       $("btn-quick-lock").classList.add("inline-flex");
 
-      // Check if session is already unlocked in this browser tab
       const isSessionUnlocked = sessionStorage.getItem("fiscc_session_unlocked") === "true";
       if (!isSessionUnlocked) {
         lockApp();
@@ -1125,7 +1448,6 @@
       isAppLocked = false;
       sessionStorage.setItem("fiscc_session_unlocked", "true");
       $("app-lock-screen").classList.remove("active");
-      $("lock-error-msg").textContent = "";
       showToast("App Unlocked");
     }
 
@@ -1134,32 +1456,13 @@
       try {
         const challenge = new Uint8Array(32);
         window.crypto.getRandomValues(challenge);
-
-        // Challenge platform authenticator (Touch ID, Face ID, Windows Hello)
         await navigator.credentials.get({
-          publicKey: {
-            challenge: challenge,
-            timeout: 60000,
-            userVerification: "preferred"
-          }
+          publicKey: { challenge, timeout: 60000, userVerification: "preferred" }
         });
         unlockApp();
-      } catch (err) {
-        console.log("Biometric prompt dismissed or unverified, use PIN fallback.");
-      }
+      } catch (err) {}
     }
 
-    function saveStorage() {
-      try {
-        const str = JSON.stringify(S);
-        localStorage.setItem("fiscc_ledger", str);
-        localStorage.setItem("exp-agent", str);
-      } catch (e) {
-        console.warn("Storage save error", e);
-      }
-    }
-
-    // --- THEME APPLIER ---
     function applyTheme(themeKey) {
       document.documentElement.setAttribute("data-theme", themeKey);
       S.theme = themeKey;
@@ -1174,38 +1477,133 @@
       });
     }
 
-    // --- UNIVERSAL NATURAL LANGUAGE PARSER (Dates, Currency & Dues) ---
+    // =========================================================================
+    // UNIVERSAL NATURAL LANGUAGE DATE & CURRENCY PARSER (v3.5 Enhanced)
+    // =========================================================================
+
+    // Advanced Payment Mode Extractor with Preposition Connectors
+    function extractPaymentMode(text) {
+      if (/\b(?:credit\s*card|c\.?c\.?|amex|mastercard\s+credit|visa\s+credit)\b/i.test(text)) return "Credit Card";
+      if (/\b(?:debit\s*card|d\.?c\.?|atm\s*card|visa\s+debit|mastercard\s+debit)\b/i.test(text)) return "Debit Card";
+      if (/\b(?:upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|qr\s*code|qr|scan\s*and\s*pay)\b/i.test(text)) return "UPI";
+      if (/\b(?:cash|in\s*cash|currency\s*notes)\b/i.test(text)) return "Cash";
+      if (/\b(?:netbanking|net\s*banking)\b/i.test(text)) return "NetBanking";
+      if (/\b(?:direct\s*bank|bank\s*transfer|neft|rtgs|imps|wire\s*transfer|hdfc|icici|sbi|axis|kotak|pnb)\b/i.test(text)) return "Bank Transfer";
+      if (/\b(?:wallet|amazon\s*pay|apple\s*pay)\b/i.test(text)) return "Wallet";
+      if (/\b(?:cheque|check)\b/i.test(text)) return "Cheque";
+      return "";
+    }
+
+    // Try finding an existing entry to deduct / reimburse against
+    function findMatchingEntryForReimbursement(targetKeyword) {
+      if (!targetKeyword || !targetKeyword.trim()) return null;
+      const cleanKeyword = targetKeyword.toLowerCase().replace(/^(?:the|for|against|on|at)\s+/i, "").trim();
+      if (!cleanKeyword) return null;
+
+      // Search recent expenses first
+      return S.items.find(item => {
+        if (item.type === "income") return false;
+        const desc = (item.description || "").toLowerCase();
+        const cat = (item.category || "").toLowerCase();
+        return desc.includes(cleanKeyword) || cleanKeyword.includes(desc) || cat.includes(cleanKeyword);
+      }) || null;
+    }
+
     function parseExpenseText(text) {
       const now = new Date();
-      let defaultDate = iso(now);
-
-      if (/day before yesterday/i.test(text)) {
-        const y = new Date(); y.setDate(y.getDate() - 2); defaultDate = iso(y);
-      } else if (/yesterday/i.test(text)) {
-        const y = new Date(); y.setDate(y.getDate() - 1); defaultDate = iso(y);
-      }
-
-      let defaultPay = "";
-      if (/upi|gpay|phonepe|paytm/i.test(text)) defaultPay = "UPI";
-      else if (/card|credit|debit/i.test(text)) defaultPay = "Card";
-      else if (/cash/i.test(text)) defaultPay = "Cash";
-      else if (/bank|transfer|netbanking|neft/i.test(text)) defaultPay = "Bank";
+      const defaultYear = parseInt(vm.slice(0, 4), 10) || now.getFullYear();
 
       const out = [];
       const parts = text.split(/\s*(?:,|\band\b|\n|;)\s*/i).filter(Boolean);
 
-      for (const p of parts) {
+      for (let p of parts) {
+        // --- 0. CHECK FOR REIMBURSEMENT / DEDUCTION PATTERNS ---
+        const isReimbursementPhrase = /\b(received|got back|reimbursement|reimbursed|refund|refunded|minus|deduct|share from|paid back)\b/i.test(p);
+        const targetMatch = p.match(/(?:against|for|on|from|towards)\s+([A-Za-z0-9\s&'-]+?)(?:\s+(?:via|through|by|with|using|yesterday|today|on|\d)|$)/i);
+
+        let pDate = iso(now);
+        let dateMatchedString = "";
+
+        // 1. EXTRACT & ISOLATE DATES FIRST
+        const tagDmyMatch = p.match(/\b(\d{1,2})\s*\([dD]\)[-/.\s]*(\d{1,2})\s*\([mM]\)[-/.\s]*(\d{2,4})\s*\([yY]\)\b/i);
+        const numericDmyMatch = p.match(/\b(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})\b/);
+        const dayMonthMatch = p.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\s*,?\s*(\d{2,4}))?\b/i);
+        const monthDayMatch = p.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s*,?\s*(\d{2,4}))?\b/i);
+        const lastDayMatch = p.match(/\blast\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i);
+        const dayBeforeYesterdayMatch = p.match(/\bday\s+before\s+yesterday\b/i);
+        const yesterdayMatch = p.match(/\byesterday\b/i);
+        const todayMatch = p.match(/\btoday\b/i);
+
+        if (tagDmyMatch) {
+          const day = parseInt(tagDmyMatch[1], 10);
+          const mon = parseInt(tagDmyMatch[2], 10);
+          let yr = parseInt(tagDmyMatch[3], 10);
+          if (yr < 100) yr = 2000 + yr;
+          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          dateMatchedString = tagDmyMatch[0];
+        } else if (numericDmyMatch) {
+          const day = parseInt(numericDmyMatch[1], 10);
+          const mon = parseInt(numericDmyMatch[2], 10);
+          let yr = parseInt(numericDmyMatch[3], 10);
+          if (yr < 100) yr = 2000 + yr;
+          if (mon >= 1 && mon <= 12 && day >= 1 && day <= 31) {
+            pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            dateMatchedString = numericDmyMatch[0];
+          }
+        } else if (dayMonthMatch) {
+          const day = parseInt(dayMonthMatch[1], 10);
+          const monKey = dayMonthMatch[2].toLowerCase().slice(0, 3);
+          const mon = MONTHS_MAP[monKey] || 1;
+          let yr = dayMonthMatch[3] ? parseInt(dayMonthMatch[3], 10) : defaultYear;
+          if (yr < 100) yr = 2000 + yr;
+          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          dateMatchedString = dayMonthMatch[0];
+        } else if (monthDayMatch) {
+          const monKey = monthDayMatch[1].toLowerCase().slice(0, 3);
+          const day = parseInt(monthDayMatch[2], 10);
+          const mon = MONTHS_MAP[monKey] || 1;
+          let yr = monthDayMatch[3] ? parseInt(monthDayMatch[3], 10) : defaultYear;
+          if (yr < 100) yr = 2000 + yr;
+          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          dateMatchedString = monthDayMatch[0];
+        } else if (lastDayMatch) {
+          const targetDay = DAYS_MAP[lastDayMatch[1].toLowerCase()];
+          const d = new Date();
+          let diff = d.getDay() - targetDay;
+          if (diff <= 0) diff += 7;
+          d.setDate(d.getDate() - diff);
+          pDate = iso(d);
+          dateMatchedString = lastDayMatch[0];
+        } else if (dayBeforeYesterdayMatch) {
+          const y = new Date(); y.setDate(y.getDate() - 2);
+          pDate = iso(y);
+          dateMatchedString = dayBeforeYesterdayMatch[0];
+        } else if (yesterdayMatch) {
+          const y = new Date(); y.setDate(y.getDate() - 1);
+          pDate = iso(y);
+          dateMatchedString = yesterdayMatch[0];
+        } else if (todayMatch) {
+          pDate = iso(new Date());
+          dateMatchedString = todayMatch[0];
+        }
+
+        let textWithoutDate = p;
+        if (dateMatchedString) {
+          textWithoutDate = p.replace(dateMatchedString, " ");
+        }
+
+        // 2. EXTRACT AMOUNT & CURRENCY
         let amt = null;
         let detectedCur = S.cur;
-
-        const curMatch = p.match(/(?:(?:rs\.?|inr|₹)\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:rs\.?|inr|₹))/i);
-        const usdMatch = p.match(/(?:\$\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*usd)/i);
-        const eurMatch = p.match(/(?:€\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*eur)/i);
-        const gbpMatch = p.match(/(?:£\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*gbp)/i);
-        const aedMatch = p.match(/(?:aed\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*aed)/i);
-        const genericMatch = p.match(/(\d[\d,]*(?:\.\d+)?)\s*(k)?/i);
-
         let matchStr = "";
+
+        const curMatch = textWithoutDate.match(/(?:(?:rs\.?|inr|₹)\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:rs\.?|inr|₹))/i);
+        const usdMatch = textWithoutDate.match(/(?:\$\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*usd)/i);
+        const eurMatch = textWithoutDate.match(/(?:€\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*eur)/i);
+        const gbpMatch = textWithoutDate.match(/(?:£\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*gbp)/i);
+        const aedMatch = textWithoutDate.match(/(?:aed\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*aed)/i);
+        const plainNumberMatch = textWithoutDate.match(/\b(\d[\d,]*(?:\.\d+)?)\s*(k)?\b/i);
+
         if (curMatch) {
           const val = curMatch[1] || curMatch[3];
           const isK = curMatch[2] || curMatch[4];
@@ -1236,65 +1634,33 @@
           amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
           detectedCur = "AED";
           matchStr = aedMatch[0];
-        } else if (genericMatch) {
-          amt = parseFloat(genericMatch[1].replace(/,/g, "")) * (genericMatch[2] ? 1000 : 1);
-          matchStr = genericMatch[0];
+        } else if (plainNumberMatch) {
+          amt = parseFloat(plainNumberMatch[1].replace(/,/g, "")) * (plainNumberMatch[2] ? 1000 : 1);
+          matchStr = plainNumberMatch[0];
         }
 
         if (!amt || isNaN(amt)) continue;
 
-        // Comprehensive Date Formats
-        let pDate = defaultDate;
-        const dmyMatch = p.match(/\b(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})\b/);
-        const dayMonthMatch = p.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\s+(\d{2,4}))?\b/i);
-        const monthDayMatch = p.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s+(\d{2,4}))?\b/i);
-        const lastDayMatch = p.match(/\blast\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i);
+        // 3. PAYMENT MODE & PREPOSITIONS (via, through, by, with, using)
+        const pPayment = extractPaymentMode(p);
 
-        if (dmyMatch) {
-          const day = parseInt(dmyMatch[1], 10);
-          const mon = parseInt(dmyMatch[2], 10);
-          let yr = parseInt(dmyMatch[3], 10);
-          if (yr < 100) yr = 2000 + yr;
-          if (mon >= 1 && mon <= 12 && day >= 1 && day <= 31) {
-            pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        // If this is a reimbursement / offset against an existing item:
+        if (isReimbursementPhrase && targetMatch) {
+          const matchedTarget = findMatchingEntryForReimbursement(targetMatch[1]);
+          if (matchedTarget) {
+            out.push({
+              isOffsetAction: true,
+              targetItem: matchedTarget,
+              deductAmount: Math.round(amt * 100) / 100,
+              payment: pPayment,
+              date: pDate,
+              note: `Reimbursed from: ${p}`
+            });
+            continue;
           }
-        } else if (dayMonthMatch) {
-          const day = parseInt(dayMonthMatch[1], 10);
-          const monKey = dayMonthMatch[2].toLowerCase();
-          const mon = MONTHS_MAP[monKey] || 1;
-          let yr = dayMonthMatch[3] ? parseInt(dayMonthMatch[3], 10) : now.getFullYear();
-          if (yr < 100) yr = 2000 + yr;
-          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        } else if (monthDayMatch) {
-          const monKey = monthDayMatch[1].toLowerCase();
-          const day = parseInt(monthDayMatch[2], 10);
-          const mon = MONTHS_MAP[monKey] || 1;
-          let yr = monthDayMatch[3] ? parseInt(monthDayMatch[3], 10) : now.getFullYear();
-          if (yr < 100) yr = 2000 + yr;
-          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-        } else if (lastDayMatch) {
-          const targetDay = DAYS_MAP[lastDayMatch[1].toLowerCase()];
-          const d = new Date();
-          let diff = d.getDay() - targetDay;
-          if (diff <= 0) diff += 7;
-          d.setDate(d.getDate() - diff);
-          pDate = iso(d);
-        } else if (/day before yesterday/i.test(p)) {
-          const y = new Date(); y.setDate(y.getDate() - 2); pDate = iso(y);
-        } else if (/yesterday/i.test(p)) {
-          const y = new Date(); y.setDate(y.getDate() - 1); pDate = iso(y);
-        } else if (/today/i.test(p)) {
-          pDate = iso(new Date());
         }
 
-        // Mode of payment
-        let pPayment = defaultPay;
-        if (/upi|gpay|phonepe|paytm/i.test(p)) pPayment = "UPI";
-        else if (/card|credit|debit/i.test(p)) pPayment = "Card";
-        else if (/cash/i.test(p)) pPayment = "Cash";
-        else if (/bank|transfer/i.test(p)) pPayment = "Bank";
-
-        // Transaction Type
+        // 4. TRANSACTION TYPE & BORROWER
         let type = "expense";
         let borrower = "";
         let isEmi = /\bemi\b/i.test(p);
@@ -1305,31 +1671,36 @@
         if (isLending) {
           type = "lent";
           if (lentMatch) borrower = (lentMatch[1] || lentMatch[2] || lentMatch[3] || "").trim();
-        } else if (S.settings.enableIncome && /salary|credited|freelance|dividend|bonus|income|received|got paid|cashback/i.test(p)) {
+        } else if (/salary|credited|freelance|dividend|bonus|income|received|got paid|cashback|stipend|consulting|sale proceeds/i.test(p)) {
           type = "income";
         }
 
-        // Clean Description
-        let desc = p
+        // 5. ACCURATE DESCRIPTION CLEANING
+        // Strip out prepositions, amount, payment indicators, and noise words
+        let desc = textWithoutDate
           .replace(matchStr, "")
-          .replace(/\b(today|yesterday|day before yesterday|last (?:sunday|monday|tuesday|wednesday|thursday|friday|saturday))\b/gi, "")
-          .replace(/\b(\d{1,2}(?:st|nd|rd|th)?\s+(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*)\b/gi, "")
-          .replace(/\b((?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{1,2}(?:st|nd|rd|th)?)\b/gi, "")
-          .replace(/\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b/g, "")
-          .replace(/\b(spent|on|for|paid|via|by|rs|inr|upi|gpay|cash|card|bank|lent to|borrowed by|expecting return)\b|[₹$€£]/gi, "")
+          .replace(/\b(?:via|through|by|with|using|paid\s+via|paid\s+by|paid\s+through)\s+(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|cash|netbanking|net\s*banking|direct\s*bank|bank\s*transfer|bank|wallet|cheque|check|card)\b/gi, "")
+          .replace(/\b(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|phonepe|paytm|cash|netbanking|direct\s*bank|bank\s*transfer)\b/gi, "")
+          .replace(/\b(spent|on|for|paid|via|by|with|through|using|rs|inr|usd|eur|gbp|aed|lent to|borrowed by|expecting return|salary|income|credited|to)\b|[₹$€£]/gi, "")
+          .replace(/\s+/g, " ")
           .trim();
 
         if (!desc) {
           desc = type === "lent" ? (borrower ? `Lent to ${borrower}` : "Money Lent") : (type === "income" ? "Income" : "Expense");
         }
 
-        // Categorize
+        // 6. CATEGORIZATION
         let cat = "Other";
         if (type === "lent") cat = "Gifts & Charity";
         else if (type === "income") cat = "Investments";
         else {
-          for (const c in KW) {
-            if (KW[c].test(p)) { cat = c; break; }
+          for (const c of S.customCategories) {
+            if (new RegExp("\\b" + c + "\\b", "i").test(p)) { cat = c; break; }
+          }
+          if (cat === "Other") {
+            for (const c in KW) {
+              if (KW[c].test(p)) { cat = c; break; }
+            }
           }
         }
 
@@ -1351,7 +1722,6 @@
       return out;
     }
 
-    // --- LIVE PARSING TYPING BADGE ---
     function updateLiveBadge() {
       const val = $("expense-omni-input").value;
       const badge = $("live-parse-badge");
@@ -1362,8 +1732,12 @@
       }
       const parsed = parseExpenseText(val);
       if (parsed.length > 0) {
-        const total = parsed.reduce((sum, itm) => sum + itm.amount, 0);
-        text.textContent = `Detected ${parsed.length} ${parsed.length === 1 ? 'entry' : 'entries'} (~ ${fmt(total, parsed[0].currency)})`;
+        if (parsed[0].isOffsetAction) {
+          text.textContent = `Deduct ${fmt(parsed[0].deductAmount)} from "${parsed[0].targetItem.description}"`;
+        } else {
+          const total = parsed.reduce((sum, itm) => sum + itm.amount, 0);
+          text.textContent = `Detected ${parsed.length} ${parsed.length === 1 ? 'entry' : 'entries'} (~ ${fmt(total, parsed[0].currency)}) on ${parsed[0].date}`;
+        }
         badge.classList.remove("hidden");
         badge.classList.add("inline-flex");
       } else {
@@ -1371,7 +1745,7 @@
       }
     }
 
-    // --- ADD EXPENSE ACTION ---
+    // Add Expense or Apply Offset Deduction
     function addExpense() {
       const input = $("expense-omni-input");
       const val = input.value.trim();
@@ -1387,23 +1761,118 @@
         return;
       }
 
-      items.forEach(it => S.items.unshift(it));
-      saveStorage();
+      let offsetCount = 0;
+      const newItemsToAdd = [];
 
-      vm = items[0].date.slice(0, 7);
+      items.forEach(it => {
+        if (it.isOffsetAction && it.targetItem) {
+          applyReimbursement(it.targetItem, it.deductAmount, it.note, it.payment);
+          offsetCount++;
+        } else {
+          newItemsToAdd.push(it);
+        }
+      });
+
+      if (newItemsToAdd.length > 0) {
+        newItemsToAdd.forEach(it => S.items.unshift(it));
+        vm = newItemsToAdd[0].date.slice(0, 7);
+      }
+
+      saveStorage();
       input.value = "";
       updateLiveBadge();
-
       render();
-      showToast(`Added ${items.length} entry${items.length > 1 ? "ies" : ""}`);
 
-      if (window.cloudSyncAdd) window.cloudSyncAdd(items);
+      if (offsetCount > 0 && newItemsToAdd.length === 0) {
+        // Reimbursement feedback already triggered inside applyReimbursement
+      } else {
+        showToast(`Logged ${newItemsToAdd.length} entry${newItemsToAdd.length > 1 ? "ies" : ""}`);
+        if (window.cloudSyncAdd) window.cloudSyncAdd(newItemsToAdd);
+      }
     }
 
-    // --- DELETE ACTION ---
+    // Apply Deduction / Reimbursement to an existing entry
+    function applyReimbursement(item, deductAmount, note, payment) {
+      if (!item || !deductAmount) return;
+
+      item.originalAmount = item.originalAmount || item.amount;
+      item.reimbursements = item.reimbursements || [];
+      item.reimbursements.push({
+        amount: deductAmount,
+        date: iso(new Date()),
+        note: note || "Reimbursement / Friend share",
+        payment: payment || ""
+      });
+
+      const oldAmount = item.amount;
+      item.amount = Math.max(0, Math.round((item.amount - deductAmount) * 100) / 100);
+
+      saveStorage();
+      render();
+      showToast(`✓ Deducted ${fmt(deductAmount)} from "${item.description}" (${fmt(oldAmount)} → ${fmt(item.amount)})`);
+
+      if (window.cloudSyncUpdate) window.cloudSyncUpdate(item);
+    }
+
+    // Open Reimburse Modal
+    function openReimburseModal(id) {
+      const itm = S.items.find(x => String(x.id) === String(id));
+      if (!itm) return;
+
+      $("reimburse-id").value = itm.id;
+      $("reimburse-entry-title").textContent = itm.description;
+      $("reimburse-entry-current").textContent = fmt(itm.amount, itm.currency);
+      $("reimburse-entry-meta").textContent = `${itm.date} • ${itm.category} • ${itm.payment || 'Direct'}`;
+      $("reimburse-amount").value = "";
+      $("reimburse-note").value = "";
+
+      $("reimburse-modal").classList.add("open");
+      $("reimburse-amount").focus();
+    }
+
+    $("close-reimburse-x").onclick = () => $("reimburse-modal").classList.remove("open");
+    $("btn-cancel-reimburse").onclick = () => $("reimburse-modal").classList.remove("open");
+
+    $("reimburse-form").onsubmit = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const id = $("reimburse-id").value;
+      const itm = S.items.find(x => String(x.id) === String(id));
+      const amount = parseFloat($("reimburse-amount").value);
+      const note = $("reimburse-note").value.trim();
+      const pay = $("reimburse-pay").value;
+
+      if (!itm || !amount || isNaN(amount)) {
+        showToast("Please enter a valid amount to deduct");
+        return false;
+      }
+
+      applyReimbursement(itm, amount, note, pay);
+      $("reimburse-modal").classList.remove("open");
+      return false;
+    };
+
+    function duplicateEntry(id) {
+      const itm = S.items.find(x => String(x.id) === String(id));
+      if (!itm) return;
+
+      const copy = {
+        ...itm,
+        id: "fiscc_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+        description: itm.description + " (Copy)",
+        createdAt: Date.now()
+      };
+
+      S.items.unshift(copy);
+      saveStorage();
+      render();
+      showToast(`Duplicated "${itm.description}"`);
+
+      if (window.cloudSyncAdd) window.cloudSyncAdd([copy]);
+    }
+
     function removeEntry(id) {
-      const itm = S.items.find(x => x.id === id);
-      S.items = S.items.filter(x => x.id !== id);
+      const itm = S.items.find(x => String(x.id) === String(id));
+      S.items = S.items.filter(x => String(x.id) !== String(id));
       saveStorage();
       render();
       if (itm) {
@@ -1414,9 +1883,9 @@
       if (window.cloudSyncDelete) window.cloudSyncDelete(id);
     }
 
-    // --- EDIT & MODIFY DATE MODAL LOGIC ---
+    // STRICT IN-PLACE EDITING (NEVER CREATES A NEW ENTRY)
     function openEditModal(id) {
-      const itm = S.items.find(x => x.id === id);
+      const itm = S.items.find(x => String(x.id) === String(id));
       if (!itm) return;
 
       $("edit-id").value = itm.id;
@@ -1427,42 +1896,98 @@
       $("edit-type").value = itm.type || "expense";
       $("edit-borrower").value = itm.borrower || "";
 
-      $("edit-cat").innerHTML = Object.keys(CAT_ICONS)
-        .map(c => `<option value="${escapeHtml(c)}" ${itm.category === c ? 'selected' : ''}>${CAT_ICONS[c]} ${escapeHtml(c)}</option>`)
-        .join("");
+      const allCats = [...Object.keys(BASE_CAT_ICONS), ...S.customCategories];
+      const uniqueCats = Array.from(new Set(allCats));
+
+      let catOptionsHtml = uniqueCats.map(c => `
+        <option value="${escapeHtml(c)}" ${itm.category === c ? 'selected' : ''}>
+          ${getCatIcon(c)} ${escapeHtml(c)}
+        </option>
+      `).join("");
+
+      catOptionsHtml += `<option value="__manual__">✍️ Custom / Type Manually...</option>`;
+      $("edit-cat").innerHTML = catOptionsHtml;
+
+      const isKnown = uniqueCats.includes(itm.category);
+      if (!isKnown && itm.category) {
+        $("edit-cat").value = "__manual__";
+        $("edit-manual-cat").value = itm.category;
+        $("edit-manual-cat-row").classList.remove("hidden");
+      } else {
+        $("edit-manual-cat-row").classList.add("hidden");
+        $("edit-manual-cat").value = "";
+      }
 
       $("edit-borrower-row").classList.toggle("hidden", itm.type !== "lent");
       $("edit-modal").classList.add("open");
     }
 
+    $("edit-cat").onchange = e => {
+      $("edit-manual-cat-row").classList.toggle("hidden", e.target.value !== "__manual__");
+    };
+
     $("edit-type").onchange = e => {
       $("edit-borrower-row").classList.toggle("hidden", e.target.value !== "lent");
     };
+
     $("close-edit-x").onclick = () => $("edit-modal").classList.remove("open");
     $("btn-cancel-edit").onclick = () => $("edit-modal").classList.remove("open");
 
-    $("edit-form").onsubmit = () => {
+    $("btn-edit-duplicate").onclick = () => {
       const id = $("edit-id").value;
-      const itm = S.items.find(x => x.id === id);
-      if (!itm) return;
+      $("edit-modal").classList.remove("open");
+      duplicateEntry(id);
+    };
 
+    // Form submission modifies existing entry index strictly in place
+    $("edit-form").onsubmit = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const id = $("edit-id").value;
+      const idx = S.items.findIndex(x => String(x.id) === String(id));
+      if (idx === -1) {
+        showToast("Error: entry not found");
+        return false;
+      }
+
+      const itm = S.items[idx];
       itm.description = $("edit-desc").value.trim() || "Expense";
       itm.amount = parseFloat($("edit-amount").value) || itm.amount;
       itm.date = $("edit-date").value || itm.date;
       itm.payment = $("edit-pay").value;
       itm.type = $("edit-type").value;
-      itm.category = $("edit-cat").value;
+
+      let chosenCat = $("edit-cat").value;
+      if (chosenCat === "__manual__") {
+        chosenCat = $("edit-manual-cat").value.trim() || "Other";
+        if (!S.customCategories.includes(chosenCat)) {
+          S.customCategories.push(chosenCat);
+        }
+      }
+      itm.category = chosenCat;
       itm.borrower = itm.type === "lent" ? $("edit-borrower").value.trim() : "";
 
+      // Deduplicate S.items by ID safeguard
+      const seen = new Set();
+      S.items = S.items.filter(item => {
+        if (seen.has(String(item.id))) return false;
+        seen.add(String(item.id));
+        return true;
+      });
+
       saveStorage();
+
+      if (itm.date && itm.date.slice(0, 7) !== vm) {
+        vm = itm.date.slice(0, 7);
+      }
+
       $("edit-modal").classList.remove("open");
       render();
-      showToast("✓ Entry & date updated");
+      showToast("✓ Entry updated in-place");
 
-      if (window.cloudSyncAdd) window.cloudSyncAdd([itm]);
+      if (window.cloudSyncUpdate) window.cloudSyncUpdate(itm);
+      return false;
     };
 
-    // --- SETTLE DUE ACTION ---
     function settleDue(id) {
       const itm = S.items.find(x => x.id === id);
       if (!itm) return;
@@ -1470,10 +1995,9 @@
       saveStorage();
       render();
       showToast(`✓ Marked settled for ${itm.borrower || itm.description}`);
-      if (window.cloudSyncAdd) window.cloudSyncAdd([itm]);
+      if (window.cloudSyncUpdate) window.cloudSyncUpdate(itm);
     }
 
-    // --- PROOF SCAN & AUDIT (🔄) ---
     function runProofScan() {
       let fixes = 0;
       S.items.forEach(itm => {
@@ -1488,7 +2012,9 @@
       if (window.cloudSyncTrigger) window.cloudSyncTrigger();
     }
 
-    // --- RENDER APPLICATION DASHBOARD ---
+    // =========================================================================
+    // RENDER APPLICATION DASHBOARD
+    // =========================================================================
     function render(filterQuery = "") {
       $("currency-selector").value = S.cur;
       $("current-month-display").textContent = monthName(vm);
@@ -1499,7 +2025,7 @@
 
       const totalExpense = expenses.reduce((sum, itm) => sum + (Number(itm.amount) || 0), 0);
       const totalIncome = incomeItems.reduce((sum, itm) => sum + (Number(itm.amount) || 0), 0);
-      const netBalance = totalIncome - totalExpense;
+      const netCashflow = totalIncome - totalExpense;
 
       // Update Total Spend Display
       const parts = totalExpense.toFixed(2).split(".");
@@ -1516,7 +2042,7 @@
       if (lastYearSpends > 0) {
         const diffPct = Math.round(((totalExpense - lastYearSpends) / lastYearSpends) * 100);
         if (diffPct < 0) {
-          yoyBadge.style.color = "var(--accent)";
+          yoyBadge.style.color = "var(--success)";
           yoyBadge.innerHTML = `📉 ${Math.abs(diffPct)}% less than ${monthName(lastYearMonth)}`;
         } else {
           yoyBadge.style.color = "var(--danger)";
@@ -1536,7 +2062,7 @@
       $("entry-count-pill").textContent = `${monthItems.length} transaction${monthItems.length === 1 ? '' : 's'}`;
       $("ledger-badge-count").textContent = `${monthItems.length} entries`;
 
-      // Monthly Cap Target Progress Bar (Optional, Off by default)
+      // Monthly Cap Target Progress Bar
       const capCard = $("monthly-cap-card");
       const metricsCol = $("main-metrics-col");
       if (S.settings.enableCap) {
@@ -1565,14 +2091,21 @@
         }
       }
 
-      // Income Balance Grid (Optional)
+      // Accounting Income vs Expense Grid
       const balGrid = $("balance-grid");
-      if (S.settings.enableIncome) {
+      if (S.settings.enableIncome || incomeItems.length > 0) {
         balGrid.style.display = "grid";
         $("stat-income").textContent = fmt(totalIncome);
         $("stat-expense").textContent = fmt(totalExpense);
-        $("stat-balance").textContent = fmt(netBalance);
-        $("stat-balance").style.color = netBalance >= 0 ? "var(--accent)" : "var(--danger)";
+        $("stat-balance").textContent = fmt(netCashflow);
+        $("stat-balance").style.color = netCashflow >= 0 ? "var(--success)" : "var(--danger)";
+
+        let savingsPct = 0;
+        if (totalIncome > 0) {
+          savingsPct = Math.round((netCashflow / totalIncome) * 100);
+        }
+        $("stat-savings-rate").textContent = `${savingsPct}%`;
+        $("stat-savings-rate").style.color = savingsPct >= 20 ? "var(--success)" : (savingsPct >= 0 ? "var(--gold)" : "var(--danger)");
       } else {
         balGrid.style.display = "none";
       }
@@ -1615,7 +2148,7 @@
           return `
             <div class="flex items-center gap-3 text-xs cursor-pointer p-1 rounded-lg transition hover:bg-white/[0.04] ${isFiltered ? 'border border-teal-500/30' : ''}" onclick="toggleCategoryFilter('${escapeHtml(c)}')">
               <span class="w-28 truncate font-medium flex items-center gap-1.5">
-                <span>${CAT_ICONS[c] || "🏷️"}</span>
+                <span>${getCatIcon(c)}</span>
                 <span class="truncate ${isFiltered ? 'font-bold' : ''}" style="color: ${isFiltered ? 'var(--accent)' : 'inherit'}">${escapeHtml(c)}</span>
               </span>
               <div class="flex-1 h-2 rounded-full overflow-hidden" style="background: var(--bg-subtle)">
@@ -1627,11 +2160,9 @@
         }).join("")
         : '<div class="text-xs text-center py-2" style="color: var(--text-faint)">No expenses categorized for this month yet.</div>';
 
-      // 6-Month Trajectory Chart
       renderChart(currY, currM);
-
-      // Filtered Transactions List
       renderLedger(monthItems, filterQuery);
+      renderCategoryChips();
     }
 
     function toggleCategoryFilter(cat) {
@@ -1644,7 +2175,6 @@
       }
       render();
     }
-    window.toggleCategoryFilter = toggleCategoryFilter;
 
     // --- 6-MONTH CHART RENDERER ---
     function renderChart(currY, currM) {
@@ -1686,13 +2216,19 @@
       });
     }
 
-    // --- ACTIVITY STATEMENT RENDERER ---
+    // --- ACTIVITY STATEMENT RENDERER (v3.5 with Reimbursement Offsets) ---
     function renderLedger(monthItems, query = "") {
       const listEl = $("transactions-list");
       const emptyEl = $("empty-state-view");
 
       let filtered = monthItems.sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.createdAt || 0) - (a.createdAt || 0));
       
+      if (activeTypeFilter === "expense") {
+        filtered = filtered.filter(t => t.type !== "income");
+      } else if (activeTypeFilter === "income") {
+        filtered = filtered.filter(t => t.type === "income");
+      }
+
       if (activeCategoryFilter) {
         filtered = filtered.filter(t => t.category === activeCategoryFilter);
       }
@@ -1716,20 +2252,30 @@
       listEl.innerHTML = filtered.map(t => {
         const isInc = t.type === "income";
         const isLent = t.type === "lent";
-        const icon = isInc ? "💰" : (isLent ? "🤝" : (CAT_ICONS[t.category] || "🏷️"));
+        const icon = isInc ? "💰" : (isLent ? "🤝" : getCatIcon(t.category));
         const typeNote = isInc ? " [Income]" : (isLent ? ` [Lent: ${escapeHtml(t.borrower || "Due")}]` : "");
         const meta = [`${icon} ${escapeHtml(t.category)}${typeNote}`, escapeHtml(t.payment), escapeHtml(t.date)].filter(Boolean).join(" &bull; ");
         const sign = isInc ? "+" : "";
-        const amtColor = isInc ? "var(--accent)" : (isLent ? "var(--gold)" : "var(--text-main)");
+        const amtColor = isInc ? "var(--success)" : (isLent ? "var(--gold)" : "var(--text-main)");
+
+        // Reimbursement badge if originalAmount > amount
+        let reimbursementTag = "";
+        if (t.originalAmount && t.originalAmount > t.amount) {
+          const diff = Math.round((t.originalAmount - t.amount) * 100) / 100;
+          reimbursementTag = `<span class="block text-[10px] text-emerald-400 font-mono">Original: ${fmt(t.originalAmount, t.currency)} (-${fmt(diff)} reimbursed)</span>`;
+        }
 
         return `
           <div class="py-3 px-2 flex items-center justify-between gap-3 group rounded-xl hover:bg-white/[0.02]">
             <div class="min-w-0 flex-1">
               <p class="text-sm font-medium truncate">${escapeHtml(t.description)}</p>
               <p class="text-[11px]" style="color: var(--text-faint)">${meta}</p>
+              ${reimbursementTag}
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
               <span class="font-mono text-sm sm:text-base font-semibold" style="color: ${amtColor}">${sign}${fmt(t.amount, t.currency)}</span>
+              ${!isInc ? `<button onclick="openReimburseModal('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 text-teal-400 hover:text-teal-300" title="Deduct / Reimburse from Friends">↩</button>` : ''}
+              <button onclick="duplicateEntry('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 hover:text-white" title="Duplicate Entry">⎘</button>
               <button onclick="openEditModal('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 hover:text-white" title="Modify Date/Entry">✎</button>
               <button onclick="removeEntry('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 text-rose-400" title="Delete">✕</button>
             </div>
@@ -1738,7 +2284,36 @@
       }).join("");
     }
 
-    // --- MONTH NAVIGATION ---
+    function renderCategoryChips() {
+      const container = $("category-pills-container");
+      const allCategories = [...Object.entries(BASE_CAT_ICONS), ...S.customCategories.map(c => [c, "🏷️"])];
+
+      container.innerHTML = allCategories.map(([name, icon]) => `
+        <button class="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" onclick="appendTag('${name}')">
+          <span>${icon}</span> <span>${name}</span>
+        </button>
+      `).join("");
+
+      const customChipsEl = $("custom-cat-chips");
+      if (customChipsEl) {
+        customChipsEl.innerHTML = S.customCategories.length
+          ? S.customCategories.map((c, idx) => `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+                <span>🏷️ ${escapeHtml(c)}</span>
+                <button type="button" onclick="deleteCustomCat(${idx})" class="text-rose-400 hover:text-rose-300 font-bold ml-1">✕</button>
+              </span>
+            `).join("")
+          : `<span class="text-[11px]" style="color: var(--text-faint)">No custom categories added yet.</span>`;
+      }
+    }
+
+    function deleteCustomCat(idx) {
+      S.customCategories.splice(idx, 1);
+      saveStorage();
+      render();
+      showToast("Custom category removed");
+    }
+
     function shiftMonth(n) {
       const [y, m] = vm.split("-").map(Number);
       const d = new Date(y, m - 1 + n, 1);
@@ -1746,7 +2321,6 @@
       render();
     }
 
-    // --- CSV & JSON EXPORT ---
     function downloadBlob(filename, content, type) {
       const blob = new Blob([content], { type });
       const url = URL.createObjectURL(blob);
@@ -1758,7 +2332,31 @@
     }
 
     function initListeners() {
-      // Export CSV Statement
+      // PWA Install Triggers (Header & Settings)
+      $("btn-install-app").onclick = openInstallModal;
+      $("btn-settings-install").onclick = () => {
+        $("settings-modal").classList.remove("open");
+        openInstallModal();
+      };
+      $("close-install-x").onclick = () => $("install-modal").classList.remove("open");
+      $("btn-close-install-modal").onclick = () => $("install-modal").classList.remove("open");
+
+      // Native Android PWA Prompt trigger
+      $("btn-trigger-native-install").onclick = async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === "accepted") {
+            showToast("Installing Fiscc App…");
+          }
+          deferredPrompt = null;
+          $("install-modal").classList.remove("open");
+        } else {
+          showToast("Tap Chrome's 3-dots menu (⋮) → 'Install app' or 'Add to Home screen'");
+        }
+      };
+
+      // Export CSV
       $("btn-export-csv").onclick = () => {
         if (!S.items.length) {
           showToast("No entries to export");
@@ -1798,7 +2396,62 @@
         e.target.value = "";
       };
 
-      // App Lock event handlers
+      // Reset All Data Safeguard
+      $("btn-reset-data").onclick = () => {
+        if (confirm("Are you sure you want to clear all transactions and reset Fiscc? This cannot be undone.")) {
+          S.items = [];
+          saveStorage();
+          render();
+          showToast("Ledger reset to empty state");
+        }
+      };
+
+      // Filter Tabs (All / Spends / Income)
+      const updateFilterBtns = (activeId) => {
+        ["filter-type-all", "filter-type-expense", "filter-type-income"].forEach(id => {
+          const btn = $(id);
+          if (id === activeId) {
+            btn.style.background = "var(--accent)";
+            btn.className = "px-2 py-1 rounded font-semibold text-white";
+          } else {
+            btn.style.background = "transparent";
+            btn.className = "px-2 py-1 rounded text-zinc-400";
+          }
+        });
+      };
+
+      $("filter-type-all").onclick = () => {
+        activeTypeFilter = "all";
+        updateFilterBtns("filter-type-all");
+        renderLedger(S.items.filter(i => (i.date || "").startsWith(vm)));
+      };
+      $("filter-type-expense").onclick = () => {
+        activeTypeFilter = "expense";
+        updateFilterBtns("filter-type-expense");
+        renderLedger(S.items.filter(i => (i.date || "").startsWith(vm)));
+      };
+      $("filter-type-income").onclick = () => {
+        activeTypeFilter = "income";
+        updateFilterBtns("filter-type-income");
+        renderLedger(S.items.filter(i => (i.date || "").startsWith(vm)));
+      };
+
+      // Add Custom Category in Settings
+      $("btn-add-custom-cat").onclick = () => {
+        const name = $("new-custom-cat-input").value.trim();
+        if (!name) return;
+        if (!S.customCategories.includes(name)) {
+          S.customCategories.push(name);
+          saveStorage();
+          $("new-custom-cat-input").value = "";
+          render();
+          showToast(`Added custom category: ${name}`);
+        } else {
+          showToast("Category already exists");
+        }
+      };
+
+      // App Lock
       $("btn-quick-lock").onclick = () => lockApp();
       $("btn-trigger-lock-now").onclick = () => {
         $("settings-modal").classList.remove("open");
@@ -1818,15 +2471,7 @@
         return false;
       };
 
-      // Category Suggestion Pills
-      $("category-pills-container").innerHTML = Object.entries(CAT_ICONS)
-        .map(([name, icon]) => `
-          <button class="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" onclick="appendTag('${name}')">
-            <span>${icon}</span> <span>${name}</span>
-          </button>
-        `).join("");
-
-      // Voice Dictation (Web Speech API)
+      // Voice Dictation
       const btnVoice = $("btn-voice-dictate");
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -1837,21 +2482,15 @@
         recognizer.lang = navigator.language || "en-US";
 
         let isListening = false;
-
         btnVoice.onclick = () => {
-          if (isListening) {
-            recognizer.stop();
-            return;
-          }
+          if (isListening) { recognizer.stop(); return; }
           try {
             recognizer.start();
             isListening = true;
             btnVoice.style.color = "var(--accent)";
             btnVoice.style.borderColor = "var(--accent)";
             showToast("🎙️ Listening… Speak your expense");
-          } catch (e) {
-            console.warn("Speech recognition already running", e);
-          }
+          } catch (e) {}
         };
 
         recognizer.onresult = event => {
@@ -1863,17 +2502,8 @@
           showToast(`Heard: "${spokenText}"`);
         };
 
-        recognizer.onerror = () => {
-          isListening = false;
-          btnVoice.style.color = "var(--text-muted)";
-          btnVoice.style.borderColor = "var(--border-subtle)";
-        };
-
-        recognizer.onend = () => {
-          isListening = false;
-          btnVoice.style.color = "var(--text-muted)";
-          btnVoice.style.borderColor = "var(--border-subtle)";
-        };
+        recognizer.onerror = () => { isListening = false; btnVoice.style.color = "var(--text-muted)"; };
+        recognizer.onend = () => { isListening = false; btnVoice.style.color = "var(--text-muted)"; };
       } else {
         btnVoice.onclick = () => showToast("Voice recognition not supported in this browser");
       }
@@ -1894,7 +2524,6 @@
         $("expense-omni-input").focus();
       };
 
-      // Currency Switcher
       $("currency-selector").onchange = e => {
         S.cur = e.target.value;
         saveStorage();
@@ -1902,38 +2531,34 @@
         showToast(`Currency changed to ${S.cur}`);
       };
 
-      // Month navigators
       $("prev-month-btn").onclick = () => shiftMonth(-1);
       $("next-month-btn").onclick = () => shiftMonth(1);
 
-      // Search bar
       $("search-transactions").addEventListener("input", e => {
         const mo = S.items.filter(i => (i.date || "").startsWith(vm));
         renderLedger(mo, e.target.value);
       });
 
-      // Proof Scan (🔄)
       $("btn-proof-scan").onclick = runProofScan;
 
       // Settings Modal Open/Close
       $("btn-open-settings").onclick = () => {
-        $("setting-toggle-income").checked = !!S.settings.enableIncome;
+        $("setting-toggle-income").checked = S.settings.enableIncome !== false;
         $("setting-toggle-dues").checked = S.settings.showDues !== false;
         $("setting-toggle-cap").checked = !!S.settings.enableCap;
         $("setting-cap-amount").value = S.settings.monthlyCap || 45000;
         $("cap-input-row").style.display = S.settings.enableCap ? "flex" : "none";
 
-        // Lock Settings
         $("setting-toggle-lock").checked = !!S.settings.enableLock;
         $("setting-lock-pin").value = S.settings.lockPin || "";
         $("setting-toggle-biometric").checked = S.settings.enableBiometric !== false;
         $("lock-config-panel").style.display = S.settings.enableLock ? "block" : "none";
 
+        renderCategoryChips();
         $("settings-modal").classList.add("open");
       };
       $("close-settings-x").onclick = () => $("settings-modal").classList.remove("open");
 
-      // Dynamic toggle for monthly cap & lock input row
       $("setting-toggle-cap").onchange = e => {
         $("cap-input-row").style.display = e.target.checked ? "flex" : "none";
       };
@@ -1941,7 +2566,6 @@
         $("lock-config-panel").style.display = e.target.checked ? "block" : "none";
       };
 
-      // Theme Buttons
       document.querySelectorAll(".theme-btn").forEach(btn => {
         btn.onclick = () => {
           applyTheme(btn.dataset.th);
@@ -1950,14 +2574,12 @@
         };
       });
 
-      // Save Settings
       $("btn-save-settings").onclick = () => {
         S.settings.enableIncome = $("setting-toggle-income").checked;
         S.settings.showDues = $("setting-toggle-dues").checked;
         S.settings.enableCap = $("setting-toggle-cap").checked;
         S.settings.monthlyCap = parseFloat($("setting-cap-amount").value) || 45000;
 
-        // Security Save
         S.settings.enableLock = $("setting-toggle-lock").checked;
         S.settings.lockPin = $("setting-lock-pin").value.trim();
         S.settings.enableBiometric = $("setting-toggle-biometric").checked;
@@ -1995,32 +2617,32 @@
       updateLiveBadge();
     }
 
-    // Expose functions globally for inline HTML click handlers
     window.appendTag = appendTag;
     window.settleDue = settleDue;
     window.openEditModal = openEditModal;
+    window.openReimburseModal = openReimburseModal;
+    window.duplicateEntry = duplicateEntry;
     window.removeEntry = removeEntry;
+    window.deleteCustomCat = deleteCustomCat;
+    window.toggleCategoryFilter = toggleCategoryFilter;
 
-    // Initialize application state and UI
     loadStorage();
     initListeners();
     render();
   </script>
 
   <!-- =====================================================================
-       FIREBASE AUTH & CLOUD SYNC MODULE (Asynchronous & Non-blocking)
+       FIREBASE AUTH & CLOUD SYNC MODULE (Deterministic ID Syncing)
        ===================================================================== -->
   <script type="module">
     const $ = id => document.getElementById(id);
     let isSignUp = false;
 
-    // Detect if running inside a sandboxed blob, preview iframe, or local file
     const isRestrictedEnv = window.location.protocol === "file:" || 
                             window.location.protocol === "blob:" || 
                             window.location.origin === "null" ||
                             window.location.hostname.includes("usercontent.goog");
 
-    // Local / Preview session login helper
     function loginAsLocalSession(email) {
       const localUid = "local_" + btoa(email).replace(/[^a-zA-Z0-9]/g, "").slice(0, 10);
       const user = { email: email, uid: localUid, isLocalSession: true };
@@ -2038,7 +2660,6 @@
       showToast(`Signed in as ${email} (Local Session)`);
     }
 
-    // Optimistic cache check to eliminate the "Local Mode" flash
     const cachedEmail = localStorage.getItem("fiscc_auth_email");
     const isCachedLocal = localStorage.getItem("fiscc_is_local_user") === "true";
     const rememberedEmail = localStorage.getItem("fiscc_remembered_email");
@@ -2065,15 +2686,6 @@
       if (rem) {
         $("auth-email").value = rem;
         $("auth-remember-me").checked = true;
-      }
-      // If in sandbox, show informational guidance in modal
-      if (isRestrictedEnv) {
-        $("auth-error-msg").innerHTML = `
-          <div class="p-2 rounded border" style="background: var(--bg-subtle); border-color: var(--border-subtle); color: var(--text-muted);">
-            <b>ℹ️ Preview Sandbox Detected:</b><br>
-            You are running inside a preview frame (<code>${window.location.protocol === 'blob:' ? 'blob preview' : window.location.hostname}</code>). External Google Auth requests may be restricted. You can sign in using a Local Session, or deploy to GitHub Pages for live cloud sync.
-          </div>
-        `;
       }
       $("auth-modal").classList.add("open");
     };
@@ -2118,6 +2730,7 @@
         getFirestore, 
         collection, 
         addDoc, 
+        setDoc,
         deleteDoc, 
         doc, 
         onSnapshot 
@@ -2136,12 +2749,7 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // Enforce local browser persistence when available
-      try {
-        await setPersistence(auth, browserLocalPersistence);
-      } catch (pErr) {
-        console.warn("Auth persistence notice:", pErr);
-      }
+      try { await setPersistence(auth, browserLocalPersistence); } catch (pErr) {}
 
       let unsub = null;
 
@@ -2175,12 +2783,6 @@
             } else if (S.items.length > 0) {
               window.cloudSyncAdd(S.items);
             }
-          }, err => {
-            console.warn("Firestore sync warning", err);
-            if (err.code === "permission-denied") {
-              $("sync-status-text").textContent = "Rules Expired";
-              showToast("Firestore security rules need updating");
-            }
           });
         } else if (!window.fisccCurrentUser || !window.fisccCurrentUser.isLocalSession) {
           window.fisccCurrentUser = null;
@@ -2198,13 +2800,25 @@
         const u = window.fisccCurrentUser;
         if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
         try {
-          const userRef = collection(db, "users", u.uid, "expenses");
           for (const itm of items) {
             const { id, ...data } = itm;
-            await addDoc(userRef, data);
+            // Use setDoc with the existing unique ID to avoid ghost duplicates
+            await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
           }
         } catch (e) {
           console.warn("Cloud sync write failed", e);
+        }
+      };
+
+      window.cloudSyncUpdate = async (itm) => {
+        const u = window.fisccCurrentUser;
+        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
+        try {
+          const { id, ...data } = itm;
+          // Strictly updates the existing Firestore document in place
+          await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
+        } catch (e) {
+          console.warn("Cloud sync update failed", e);
         }
       };
 
@@ -2212,13 +2826,11 @@
         const u = window.fisccCurrentUser;
         if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
         try {
-          const userRef = collection(db, "users", u.uid, "expenses");
           for (const itm of S.items) {
-            if (String(itm.id).startsWith("fiscc_") || String(itm.id).startsWith("exp_")) {
-              const { id, ...data } = itm;
-              await addDoc(userRef, data);
-            }
+            const { id, ...data } = itm;
+            await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
           }
+          saveStorage();
         } catch (e) {
           console.warn("Cloud sync trigger error", e);
         }
@@ -2226,36 +2838,28 @@
 
       window.cloudSyncDelete = async (id) => {
         const u = window.fisccCurrentUser;
-        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_") || String(id).startsWith("fiscc_") || String(id).startsWith("exp_")) return;
+        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
         try {
-          await deleteDoc(doc(db, "users", u.uid, "expenses", id));
+          await deleteDoc(doc(db, "users", u.uid, "expenses", String(id)));
         } catch (e) {
           console.warn("Cloud delete failed", e);
         }
       };
 
-      // Form submit handler with automatic sandbox fallback
       $("auth-form").onsubmit = async (e) => {
         if (e && e.preventDefault) e.preventDefault();
-
         const email = $("auth-email").value.trim();
         const pass = $("auth-password").value;
         const rememberMe = $("auth-remember-me") ? $("auth-remember-me").checked : true;
 
         if (!email || !pass) return false;
-
-        // Remember Me Email Caching
-        if (rememberMe) {
-          localStorage.setItem("fiscc_remembered_email", email);
-        } else {
-          localStorage.removeItem("fiscc_remembered_email");
-        }
+        if (rememberMe) localStorage.setItem("fiscc_remembered_email", email);
+        else localStorage.removeItem("fiscc_remembered_email");
 
         $("auth-submit-btn").disabled = true;
         $("auth-submit-btn").textContent = isSignUp ? "Creating account…" : "Signing in…";
         $("auth-error-msg").innerHTML = "";
 
-        // If explicitly running in local file or restricted blob origin, offer direct login
         if (window.location.protocol === "file:") {
           $("auth-submit-btn").disabled = false;
           $("auth-submit-btn").textContent = isSignUp ? "Create Account" : "Sign In";
@@ -2266,9 +2870,7 @@
         try {
           if (isSignUp) {
             const cred = await createUserWithEmailAndPassword(auth, email, pass);
-            if (S.items.length > 0 && cred.user) {
-              await window.cloudSyncAdd(S.items);
-            }
+            if (S.items.length > 0 && cred.user) await window.cloudSyncAdd(S.items);
             showToast("Account created in Fiscc Cloud!");
           } else {
             await signInWithEmailAndPassword(auth, email, pass);
@@ -2276,46 +2878,7 @@
           }
           $("auth-modal").classList.remove("open");
         } catch (err) {
-          console.warn("Auth error:", err);
-
-          if (err.code === "auth/network-request-failed") {
-            $("auth-error-msg").innerHTML = `
-              <div class="space-y-2">
-                <p><b>⚠️ Sandbox / Network Block (auth/network-request-failed):</b></p>
-                <p style="color: var(--text-muted)">The preview sandbox (<code>${window.location.protocol === 'blob:' ? 'blob preview' : window.location.hostname}</code>) or a browser extension blocked outbound requests to Google Auth servers.</p>
-                <button type="button" id="btn-login-local-fallback" class="w-full mt-2 py-2 px-3 rounded-lg text-white font-medium text-xs shadow transition active:scale-95" style="background: var(--accent);">
-                  ⚡ Continue as ${escapeHtml(email)} (Local Session)
-                </button>
-                <p class="text-[10px]" style="color: var(--text-faint)">
-                  On GitHub Pages (<code>https://&lt;username&gt;.github.io</code>), live Firebase Cloud sync will connect directly.
-                </p>
-              </div>
-            `;
-            const fallbackBtn = $("btn-login-local-fallback");
-            if (fallbackBtn) {
-              fallbackBtn.onclick = () => loginAsLocalSession(email);
-            }
-          } else if (err.code === "auth/unauthorized-domain") {
-            $("auth-error-msg").innerHTML = `
-              <b>⚠️ Domain Not Authorized:</b><br>
-              The domain <code>${window.location.hostname}</code> is not yet whitelisted.<br>
-              Go to <a href="https://console.firebase.google.com/project/expense-agent-15e80/authentication/settings" target="_blank" class="underline font-bold">Firebase Console &rarr; Auth &rarr; Settings &rarr; Authorized Domains</a> and add <code>${window.location.hostname}</code>.
-            `;
-          } else if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
-            $("auth-error-msg").innerHTML = `
-              Incorrect email or password.<br>
-              If you haven't registered this account yet, click <b>"Create Account"</b> above!
-            `;
-          } else if (err.code === "auth/email-already-in-use") {
-            $("auth-error-msg").innerHTML = `
-              An account with this email already exists.<br>
-              Please click <b>"Sign In"</b> above to log in.
-            `;
-          } else if (err.code === "auth/weak-password") {
-            $("auth-error-msg").textContent = "Password should be at least 6 characters.";
-          } else {
-            $("auth-error-msg").textContent = err.message ? err.message.replace("Firebase: ", "") : "Sign in failed.";
-          }
+          $("auth-error-msg").textContent = err.message ? err.message.replace("Firebase: ", "") : "Sign in failed.";
         } finally {
           $("auth-submit-btn").disabled = false;
           $("auth-submit-btn").textContent = isSignUp ? "Create Account" : "Sign In";
@@ -2325,27 +2888,17 @@
 
       $("btn-forgot-pass").onclick = async () => {
         const email = $("auth-email").value.trim();
-        if (!email) {
-          $("auth-error-msg").textContent = "Please enter your email above first.";
-          $("auth-email").focus();
-          return;
-        }
+        if (!email) { $("auth-error-msg").textContent = "Please enter your email above first."; return; }
         try {
           await sendPasswordResetEmail(auth, email);
           showToast("Password reset link sent to your email!");
         } catch (err) {
-          if (err.code === "auth/network-request-failed") {
-            $("auth-error-msg").textContent = "Password reset requests are restricted in preview mode. Please use GitHub Pages.";
-          } else {
-            $("auth-error-msg").textContent = err.message.replace("Firebase: ", "");
-          }
+          $("auth-error-msg").textContent = err.message ? err.message.replace("Firebase: ", "") : "Failed to send reset link.";
         }
       };
 
       $("btn-sign-out").onclick = async () => {
-        try {
-          await signOut(auth);
-        } catch (e) {}
+        try { await signOut(auth); } catch (e) {}
         window.fisccCurrentUser = null;
         localStorage.removeItem("fiscc_auth_email");
         localStorage.removeItem("fiscc_is_local_user");
@@ -2357,7 +2910,7 @@
       };
 
     } catch (err) {
-      console.warn("Firebase running in purely local mode", err);
+      console.warn("Firebase running in local mode", err);
     }
   </script>
 </body>
