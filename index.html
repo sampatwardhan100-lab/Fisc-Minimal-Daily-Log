@@ -4,23 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   
-  <!-- PWA & Mobile Web App Meta Tags (iOS & Android) -->
+  <!-- PWA & Mobile Web App Meta Tags (Android APK & iOS) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Fiscc">
-  <meta name="application-name" content="Fiscc">
+  <meta name="application-name" content="Fiscc Money Logs">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#07090e">
-  <meta name="description" content="Fiscc — Minimal Daily Log. Type naturally. Track instantly.">
+  <meta name="description" content="Fiscc Money Logs — Minimal Daily Log with Automated Backups & APK Standalone Packaging.">
 
-  <!-- Apple Touch Icon with fallback to logo.png or dynamic SVG -->
+  <!-- Favicon & PWA Icons -->
   <link rel="apple-touch-icon" id="apple-touch-icon" href="logo.png">
   <link rel="icon" id="favicon-link" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Cpath d='M22 14H68L84 30V68L50 96L16 68V20L22 14Z' stroke='%23006466' stroke-width='8' fill='%2307090e'/%3E%3Cpath d='M16 48L30 62L62 30' stroke='%23006466' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
 
-  <!-- Embedded Web App Manifest for Android Chrome PWA Install -->
+  <!-- Embedded Web App Manifest for Android APK / TWA -->
   <link rel="manifest" id="manifest-placeholder">
 
-  <title>Fiscc v3.5 — Minimal Daily Log</title>
+  <title>Fiscc Money Logs v3.7 — Always Cloud Synced & Backup Vault</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -46,9 +46,6 @@
   </script>
 
   <style>
-    /* ==========================================================================
-       THEME SYSTEM SPECIFICATION (CSS VARIABLES)
-       ========================================================================== */
     :root, [data-theme="obsidian"] {
       --bg-base: #07090e;
       --bg-surface: #0f131c;
@@ -175,7 +172,6 @@
       touch-action: manipulation;
     }
 
-    /* Prevent mobile browser zoom on inputs */
     @media screen and (max-width: 768px) {
       input, select, textarea {
         font-size: 16px !important;
@@ -221,7 +217,7 @@
       border-radius: 20px;
       padding: 20px sm:24px;
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
       max-height: 88vh;
       overflow-y: auto;
       box-shadow: 0 25px 60px -15px rgba(0,0,0,0.6);
@@ -311,7 +307,7 @@
   <!-- Ambient Glow Background -->
   <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[380px] pointer-events-none -z-10" style="background: var(--glass-glow); filter: blur(80px);"></div>
 
-  <!-- Toast Element -->
+  <!-- Toast Notification -->
   <div id="toast">
     <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
     <span id="toast-text">Message</span>
@@ -334,13 +330,13 @@
           <path d="M52 65H68M68 65L62 60M68 65L62 70" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
         </svg>
         <div class="text-center">
-          <h2 class="text-base font-semibold tracking-tight" style="color: var(--text-main)">Fiscc: Minimal Daily Log</h2>
-          <p class="text-xs font-medium" style="color: var(--text-muted)">Type naturally. Track instantly.</p>
+          <h2 class="text-base font-semibold tracking-tight" style="color: var(--text-main)">Fiscc Money Logs</h2>
+          <p class="text-xs font-medium" style="color: var(--text-muted)">Secure Local Ledger &amp; Backup</p>
         </div>
       </div>
 
       <div class="space-y-1">
-        <p class="text-xs" style="color: var(--text-faint)">Authenticate to access your financial ledger</p>
+        <p class="text-xs" style="color: var(--text-faint)">Enter your PIN or use biometrics to unlock</p>
       </div>
 
       <div id="lock-biometric-section" class="hidden">
@@ -348,7 +344,7 @@
           <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
           </svg>
-          <span>Unlock with Face ID / Touch ID</span>
+          <span>Unlock with Face ID / Biometrics</span>
         </button>
         <div class="relative my-3 text-[11px]" style="color: var(--text-faint)">
           <span class="px-2" style="background: var(--bg-base)">or enter PIN</span>
@@ -369,11 +365,11 @@
   <main class="max-w-4xl lg:max-w-5xl mx-auto px-2 sm:px-6 py-4 sm:py-8 space-y-5 sm:space-y-6">
 
     <!-- =====================================================================
-         1. FISCC BRAND HEADER & NAVIGATION (v3.4 PWA Ready)
+         1. FISCC BRAND HEADER & NAVIGATION (APK Ready + Backup Vault)
          ===================================================================== -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b" style="border-color: var(--border-subtle)">
       <div class="flex items-center gap-3">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc v3.5 — Minimal Daily Log')" title="Fiscc v3.5">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc Money Logs v3.7 — Always Cloud Synced')" title="Fiscc v3.7">
           <svg class="fiscc-logo-symbol flex-shrink-0" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M22 14H68L84 30V68L50 96L16 68V20L22 14Z" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
             <path d="M68 14V30H84" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
@@ -387,29 +383,25 @@
 
           <div class="flex flex-col">
             <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight" style="color: var(--text-main);">
-              Fiscc: <span class="font-normal" style="color: var(--text-muted);">Minimal Daily Log</span>
+              Fiscc: <span class="font-normal" style="color: var(--text-muted);">Money Logs</span>
             </h1>
-            <p class="text-xs font-medium tracking-wide" style="color: var(--text-faint);">
-              Type naturally. Track instantly.
+            <p class="text-xs font-medium tracking-wide flex items-center gap-1.5" style="color: var(--text-faint);">
+              <span>v3.7 Always Synced</span>
+              <span>&bull;</span>
+              <span id="header-backup-status" class="text-emerald-400 font-mono text-[10px]">Cloud Active</span>
             </p>
           </div>
         </div>
       </div>
 
       <div class="flex items-center flex-wrap gap-2 self-start md:self-auto">
-        <!-- Live Sync Pill -->
-        <div id="sync-status-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);">
+        <!-- Live Sync Pill with Click-to-Refresh -->
+        <button id="sync-status-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border cursor-pointer hover:border-teal-500 transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" title="Click to refresh Cloud Sync">
           <span class="relative flex h-2 w-2">
             <span id="sync-pulse" class="pulse-glow absolute inline-flex h-full w-full rounded-full opacity-75" style="background: var(--accent);"></span>
             <span id="sync-dot" class="relative inline-flex rounded-full h-2 w-2" style="background: var(--accent);"></span>
           </span>
-          <span id="sync-status-text">Local Mode</span>
-        </div>
-
-        <!-- Add to Home Screen / Install Button (PWA Trigger - iOS & Android) -->
-        <button id="btn-install-app" class="pill-btn min-h-[36px]" title="Add Fiscc to Home Screen (iOS / Android)">
-          <span>📲</span>
-          <span id="btn-install-label">Install App</span>
+          <span id="sync-status-text">Connecting…</span>
         </button>
 
         <!-- Quick Lock Button -->
@@ -427,14 +419,8 @@
           <span class="hidden xs:inline">Scan</span>
         </button>
 
-        <!-- Proof Scan & Resync Tool -->
-        <button id="btn-proof-scan" class="pill-btn min-h-[36px]" title="Audit integrity and reconcile storage">
-          <span>🔄</span>
-          <span class="hidden sm:inline">Audit</span>
-        </button>
-
-        <!-- Settings Modal Trigger -->
-        <button id="btn-open-settings" class="pill-btn min-h-[36px]" title="Settings & Themes">
+        <!-- Settings Modal Trigger (Houses Backup, PWA/APK & Configuration) -->
+        <button id="btn-open-settings" class="pill-btn min-h-[36px]" title="Settings & Preferences">
           <span>⚙️</span>
           <span>Settings</span>
         </button>
@@ -444,11 +430,37 @@
           Sign In / Cloud
         </button>
         <div id="account-box" class="hidden items-center gap-2">
-          <span id="user-badge" class="text-xs truncate max-w-[100px] sm:max-w-[140px]" style="color: var(--text-muted);">user@mail.com</span>
+          <span id="user-badge" class="text-xs truncate max-w-[100px] sm:max-w-[140px] font-mono" style="color: var(--text-muted);">user@mail.com</span>
+          <button id="btn-force-pull-cloud" class="text-xs px-2 py-1 rounded-lg border hover:border-teal-400 text-teal-400" style="background: var(--bg-surface); border-color: var(--border-subtle)" title="Pull latest from Cloud">🔄</button>
           <button id="btn-sign-out" class="text-xs px-2.5 py-1 rounded-lg border" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted)">Sign Out</button>
         </div>
       </div>
     </header>
+
+    <!-- =====================================================================
+         RECONCILE FLOATING BANNER (v3.7 Non-blocking Smart Merge)
+         ===================================================================== -->
+    <div id="reconcile-banner" class="hidden p-3.5 rounded-xl border transition-all animate-pulse-once" style="background: var(--bg-card); border-color: var(--gold); box-shadow: 0 4px 20px -5px rgba(212,175,55,0.25);">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl">⚠️</span>
+          <div>
+            <b class="text-xs block" style="color: var(--gold)">Local Entries Found Before Sign-In</b>
+            <span id="reconcile-banner-msg" class="text-[11px]" style="color: var(--text-muted)">
+              Showing all server data now. Choose what to do with your 1 local dummy entry:
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
+          <button type="button" id="btn-banner-merge" class="px-3 py-1.5 rounded-lg font-medium text-xs text-white shadow" style="background: var(--accent);">
+            ➕ Add Local to Cloud
+          </button>
+          <button type="button" id="btn-banner-discard" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted);" title="Keep only cloud data">
+            Keep Cloud Only
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- =====================================================================
          2. OMNI NATURAL LANGUAGE INPUT CARD
@@ -459,7 +471,7 @@
           <svg class="w-3.5 h-3.5" style="color: var(--accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
-          Smart Natural Omniparser (Dates, Currencies & Dues)
+          Smart Natural Omniparser (Dates, Modes, Dues & Reimbursements)
         </label>
         <div class="flex items-center gap-2 text-[11px]" style="color: var(--text-faint);">
           <span class="hidden sm:inline font-mono">Press ⌘/Ctrl + Enter to add</span>
@@ -472,7 +484,7 @@
           <textarea 
             id="expense-omni-input" 
             rows="3"
-            placeholder="e.g. Spent Rs 601 on 1st Nov on Patrol, Salary 75000 yesterday, lent 500 to Rahul on 1-11-26 via UPI"
+            placeholder="e.g. Spent Rs 601 on 1st Nov on Patrol via UPI, Salary 75000 yesterday, lent 500 to Rahul, or Received 300 against Patrol"
             class="w-full text-base sm:text-base rounded-xl p-3 sm:p-4 pr-10 resize-none transition-all leading-relaxed"
           ></textarea>
           
@@ -508,8 +520,8 @@
 
       <div class="mt-3.5 pt-3 border-t" style="border-color: var(--border-subtle)">
         <div class="flex items-center justify-between mb-2 text-[11px]" style="color: var(--text-faint)">
-          <span class="uppercase tracking-wider font-medium">Quick Suggestion Tags</span>
-          <span class="hidden xs:inline">Click to append</span>
+          <span class="uppercase tracking-wider font-medium">Quick Categories</span>
+          <span class="hidden xs:inline">Click to append tag</span>
         </div>
         <div id="category-pills-container" class="category-scroll flex items-center gap-1.5 overflow-x-auto pb-1 scroll-smooth"></div>
       </div>
@@ -590,7 +602,7 @@
         </div>
       </div>
 
-      <!-- Accounting Overview: Income vs Expenses Cashflow Grid -->
+      <!-- Accounting Overview: Incomes vs Spends -->
       <div id="balance-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-subtle); display: none;">
         <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
           <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Total Income (+)</span>
@@ -677,20 +689,20 @@
             <input 
               id="search-transactions" 
               type="text" 
-              placeholder="Search note or tag..." 
-              class="w-32 sm:w-40 text-xs rounded-lg px-2.5 py-1.5 pl-7 border"
+              placeholder="Search note, category..." 
+              class="w-32 sm:w-44 text-xs rounded-lg px-2.5 py-1.5 pl-7 border"
             />
             <svg class="w-3.5 h-3.5 absolute left-2 top-2" style="color: var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
 
-          <!-- Utilities -->
+          <!-- Quick Actions -->
           <div class="flex items-center gap-1.5">
-            <button id="btn-export-csv" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">CSV</button>
-            <button id="btn-backup-json" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">Backup</button>
-            <button id="btn-restore-json" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">Restore</button>
-            <input type="file" id="restore-file-input" class="hidden" accept=".json">
+            <button id="btn-quick-backup" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition flex items-center gap-1" style="background: var(--bg-subtle); border-color: var(--border-subtle);" title="Save snapshot now">
+              <span>💾</span> <span>Backup</span>
+            </button>
+            <button id="btn-quick-csv" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">CSV</button>
           </div>
         </div>
       </div>
@@ -709,78 +721,172 @@
 
     <!-- Footer Quote -->
     <footer class="pt-6 pb-6 text-center text-xs flex flex-col items-center gap-1 border-t" style="border-color: var(--border-subtle); color: var(--text-faint);">
-      <span class="font-serif italic">“Fiscc &bull; Architectural Minimalist Finance System”</span>
+      <span class="font-serif italic">“Fiscc &bull; Architectural Minimalist Finance System &bull; Standalone APK &amp; Backup Vault”</span>
     </footer>
   </main>
 
   <!-- =====================================================================
-       MODALS: ADD TO HOME SCREEN / INSTALL APP (PWA for iOS & Android)
+       MODAL: DEDICATED BACKUP & DATA VAULT HUB (Automatic Snapshots & Restore)
        ===================================================================== -->
-  <div id="install-modal" class="modal-overlay">
+  <div id="backup-modal" class="modal-overlay">
     <div class="modal-box">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b" style="border-color: var(--border-subtle)">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
         <div class="flex items-center gap-2">
-          <span class="text-lg">📲</span>
-          <h3 class="font-serif text-lg font-semibold">Add Fiscc to Home Screen</h3>
-        </div>
-        <button id="close-install-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
-      </div>
-
-      <!-- Android Chrome Native Trigger Block -->
-      <div id="android-install-section" class="space-y-3">
-        <div class="p-3 rounded-xl border flex items-center gap-3" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: var(--accent-soft); border: 1px solid var(--accent)">
-            <span class="text-lg">⚡</span>
-          </div>
+          <span class="text-lg">💾</span>
           <div>
-            <p class="font-semibold text-xs">Fast 1-Tap Mobile App</p>
-            <p class="text-[11px]" style="color: var(--text-muted)">Install Fiscc onto your device. Works offline, opens fullscreen, and loads in 0ms.</p>
+            <h3 class="font-serif text-lg font-semibold">Fiscc Backup Vault</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Secure manual &amp; automated snapshots</p>
+          </div>
+        </div>
+        <button id="close-backup-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- 1. Quick Backup Actions -->
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="btn-download-json-backup" class="p-3 rounded-xl border flex flex-col items-start gap-1 text-left transition hover:scale-[1.01]" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+            <div class="flex items-center gap-1.5 font-semibold text-emerald-400">
+              <span>📥</span>
+              <span>Download JSON Backup</span>
+            </div>
+            <span class="text-[11px]" style="color: var(--text-muted)">Save full database with all settings &amp; custom categories.</span>
+          </button>
+
+          <button type="button" id="btn-trigger-restore-json" class="p-3 rounded-xl border flex flex-col items-start gap-1 text-left transition hover:scale-[1.01]" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+            <div class="flex items-center gap-1.5 font-semibold text-sky-400">
+              <span>📤</span>
+              <span>Restore from File</span>
+            </div>
+            <span class="text-[11px]" style="color: var(--text-muted)">Import previously saved .json backup file.</span>
+          </button>
+          <input type="file" id="backup-file-input" class="hidden" accept=".json">
+        </div>
+
+        <!-- 2. Export Formats (CSV / Spreadsheet) -->
+        <div class="p-3 rounded-xl border space-y-2" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex justify-between items-center">
+            <b>Spreadsheet Exports (Excel / Sheets)</b>
+            <span class="text-[10px] font-mono" style="color: var(--text-faint)">RFC 4180 CSV</span>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" id="btn-export-month-csv" class="flex-1 py-1.5 px-2 rounded-lg border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              Export Current Month
+            </button>
+            <button type="button" id="btn-export-all-csv" class="flex-1 py-1.5 px-2 rounded-lg border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              Export All Entries
+            </button>
           </div>
         </div>
 
-        <button type="button" id="btn-trigger-native-install" class="w-full py-3 rounded-xl font-semibold text-xs text-white transition active:scale-95 shadow-lg flex items-center justify-center gap-2" style="background: var(--accent);">
-          <span>📲</span> <span>Install Fiscc App</span>
-        </button>
-      </div>
-
-      <!-- iOS Safari Instructions Block -->
-      <div id="ios-install-section" class="space-y-3.5 text-xs pt-1">
-        <p class="text-xs" style="color: var(--text-muted)">To install on your <b>iPhone or iPad</b> using Safari:</p>
-        
-        <div class="space-y-2.5">
-          <div class="flex items-start gap-3 p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-            <div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0" style="background: var(--accent); color: #fff;">1</div>
+        <!-- 3. Automated Rolling Snapshots (Local Safe-Vault) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex justify-between items-center">
             <div>
-              <p class="font-medium">Tap the Share button</p>
-              <p class="text-[11px]" style="color: var(--text-muted)">Look for the square icon with an upward arrow <span class="px-1.5 py-0.5 rounded bg-zinc-800 text-teal-400 border border-white/10 font-bold inline-block text-xs">⎋ / ⤤</span> at the bottom of Safari.</p>
+              <b class="text-xs block">Rolling Auto-Snapshots</b>
+              <span class="text-[11px]" style="color: var(--text-muted)">Stores last 5 safe checkpoints automatically</span>
             </div>
+            <button type="button" id="btn-create-manual-snapshot" class="px-2.5 py-1 rounded-lg border text-[11px] font-medium" style="background: var(--accent); color: #fff;">
+              + Create Now
+            </button>
           </div>
 
-          <div class="flex items-start gap-3 p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-            <div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0" style="background: var(--accent); color: #fff;">2</div>
-            <div>
-              <p class="font-medium">Scroll down and tap "Add to Home Screen"</p>
-              <p class="text-[11px]" style="color: var(--text-muted)">It has a plus icon <span class="px-1.5 py-0.5 rounded bg-zinc-800 text-teal-400 border border-white/10 font-bold inline-block text-xs">⊞</span> labeled <b>Add to Home Screen</b>.</p>
-            </div>
-          </div>
+          <div id="snapshot-history-list" class="space-y-1.5 pt-1"></div>
+        </div>
 
-          <div class="flex items-start gap-3 p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
-            <div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0" style="background: var(--accent); color: #fff;">3</div>
-            <div>
-              <p class="font-medium">Tap "Add" in the top-right</p>
-              <p class="text-[11px]" style="color: var(--text-muted)">Fiscc will be placed right on your home screen with zero browser bars.</p>
-            </div>
+        <!-- 4. Danger Area -->
+        <div class="pt-2 border-t flex items-center justify-between" style="border-color: var(--border-subtle)">
+          <div>
+            <b class="text-rose-400">Erase All Data</b>
+            <span class="block text-[11px]" style="color: var(--text-muted)">Reset ledger to blank state</span>
           </div>
+          <button type="button" id="btn-vault-reset-data" class="px-3 py-1.5 rounded-lg border text-xs text-rose-400 border-rose-500/30 hover:bg-rose-500/10">
+            Reset All
+          </button>
         </div>
       </div>
 
-      <!-- Desktop Chrome/Edge Manual Guide -->
-      <div id="desktop-install-section" class="hidden text-xs space-y-2 pt-2">
-        <p style="color: var(--text-muted)">On Chrome/Edge desktop, click the install icon in the top right of your address bar (or Menu &rarr; <b>Save and share &rarr; Install Fiscc</b>).</p>
+      <div class="mt-4 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
+        <button type="button" id="btn-close-backup-modal" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: ANDROID APK HUB & STANDALONE INSTALLATION
+       ===================================================================== -->
+  <div id="apk-hub-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🤖</span>
+          <div>
+            <h3 class="font-serif text-lg font-semibold">Android APK &amp; Installation Hub</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Run Fiscc as a standalone native app</p>
+          </div>
+        </div>
+        <button id="close-apk-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
       </div>
 
-      <div class="mt-5 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
-        <button type="button" id="btn-close-install-modal" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Close</button>
+      <div class="space-y-4 text-xs">
+        <!-- 1-Tap PWA Install Trigger -->
+        <div class="p-3 rounded-xl border space-y-2" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+          <div class="flex items-start gap-2.5">
+            <span class="text-xl">⚡</span>
+            <div class="flex-1">
+              <b class="text-xs block">Option 1: Direct 1-Tap Home Screen App</b>
+              <p class="text-[11px] mt-0.5" style="color: var(--text-muted)">
+                Installed directly through your mobile browser. Works 100% offline, gives full screen experience without address bar, and uses 0MB storage.
+              </p>
+            </div>
+          </div>
+          <button type="button" id="btn-apk-native-install" class="w-full py-2.5 rounded-xl font-semibold text-xs text-white transition active:scale-95 shadow flex items-center justify-center gap-2" style="background: var(--accent);">
+            <span>📲</span> <span>Install Direct App</span>
+          </button>
+        </div>
+
+        <!-- Convert to Signed .APK File (PWABuilder / Bubblewrap) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex items-start gap-2.5">
+            <span class="text-xl">📦</span>
+            <div class="flex-1">
+              <b class="text-xs block">Option 2: Generate Installable .APK File</b>
+              <p class="text-[11px] mt-0.5" style="color: var(--text-muted)">
+                Want an actual <code>.apk</code> file to install via Android package installer or share with others?
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-[11px]" style="color: var(--text-muted)">
+            <div class="p-2 rounded-lg border" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              <b>Method A: Free 1-Minute APK Generator (PWABuilder)</b>
+              <ol class="list-decimal ml-4 mt-1 space-y-0.5">
+                <li>Host this file on GitHub Pages, Vercel, or Netlify.</li>
+                <li>Go to <a href="https://www.pwabuilder.com" target="_blank" class="text-teal-400 underline font-semibold">PWABuilder.com</a>.</li>
+                <li>Paste your URL &rarr; Click <b>Package for Android</b>.</li>
+                <li>Download your ready-to-install <b>signed .apk</b> file!</li>
+              </ol>
+            </div>
+
+            <div class="p-2 rounded-lg border" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              <b>Method B: Capacitor / Android Studio</b>
+              <p class="mt-0.5">Run <code>npx cap add android</code> and <code>npx cap build</code> to build a native Android APK binary directly in Android Studio.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Manifest & Asset Bundle -->
+        <div class="flex gap-2">
+          <button type="button" id="btn-download-manifest" class="flex-1 py-2 px-3 rounded-xl border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+            📄 Download manifest.json
+          </button>
+          <button type="button" id="btn-copy-manifest" class="py-2 px-3 rounded-xl border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+            📋 Copy Config
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
+        <button type="button" id="btn-close-apk-modal" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Close</button>
       </div>
     </div>
   </div>
@@ -791,27 +897,53 @@
   <div id="settings-modal" class="modal-overlay">
     <div class="modal-box">
       <div class="flex justify-between items-center mb-4 pb-2 border-b" style="border-color: var(--border-subtle)">
-        <h3 class="font-serif text-lg font-semibold">Settings & Preferences</h3>
+        <h3 class="font-serif text-lg font-semibold">Settings &amp; Preferences</h3>
         <button id="close-settings-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
       </div>
 
       <div class="space-y-4 text-xs">
-        <!-- Add to Home Screen in Settings -->
-        <div>
-          <button type="button" id="btn-settings-install" class="w-full py-2.5 px-3 rounded-xl border flex items-center justify-between text-left transition hover:scale-[1.01]" style="background: var(--bg-subtle); border-color: var(--border-highlight);">
-            <div class="flex items-center gap-2.5">
-              <span class="text-base">📲</span>
+        <!-- 1. BACKUP VAULT & DATA HUB (MOVED UNDER SETTINGS) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-base">💾</span>
               <div>
-                <b class="text-xs block">Add Fiscc to Home Screen</b>
-                <span class="text-[11px]" style="color: var(--text-muted)">Install on iOS or Android for 1-tap app experience</span>
+                <b class="text-xs block">Backup Vault &amp; Snapshots</b>
+                <span class="text-[11px]" style="color: var(--text-muted)">Download JSON, restore files, and view auto-snapshots</span>
               </div>
             </div>
-            <span class="text-xs font-semibold underline text-teal-400">Setup &rarr;</span>
-          </button>
+            <button type="button" id="btn-settings-open-vault" class="px-3 py-1.5 rounded-lg border text-xs font-medium text-teal-400 hover:scale-[1.02] transition" style="background: var(--bg-surface); border-color: var(--accent)">
+              Open Vault &rarr;
+            </button>
+          </div>
+          <div class="flex items-center gap-2 pt-1 border-t" style="border-color: var(--border-subtle)">
+            <button type="button" id="btn-settings-quick-json" class="flex-1 py-1.5 rounded-lg border text-center transition hover:border-teal-400" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              📥 Save JSON Backup
+            </button>
+            <button type="button" id="btn-settings-quick-restore" class="flex-1 py-1.5 rounded-lg border text-center transition hover:border-sky-400" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              📤 Restore File
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. PWA & ANDROID APK HUB (MOVED UNDER SETTINGS) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🤖</span>
+              <div>
+                <b class="text-xs block">Install App &amp; Android APK</b>
+                <span class="text-[11px]" style="color: var(--text-muted)">Install to home screen or package into standalone .apk</span>
+              </div>
+            </div>
+            <button type="button" id="btn-settings-open-apk" class="px-3 py-1.5 rounded-lg border text-xs font-medium text-emerald-400 hover:scale-[1.02] transition" style="background: var(--bg-surface); border-color: var(--accent)">
+              APK Hub &rarr;
+            </button>
+          </div>
         </div>
 
         <!-- Theme Palette Selector -->
-        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+        <div>
           <label class="block font-semibold uppercase tracking-wider mb-2" style="color: var(--text-muted)">Color Palette / Themes</label>
           <div class="grid grid-cols-2 gap-2" id="theme-selector-grid">
             <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2" data-th="obsidian">
@@ -913,32 +1045,18 @@
           </div>
         </div>
 
-        <!-- Reset All Data Safeguard -->
-        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
-          <div class="flex items-center justify-between">
-            <div>
-              <b class="text-sm block text-rose-400">Reset Ledger Data</b>
-              <span style="color: var(--text-muted);">Clear all transactions and reset to pristine state</span>
-            </div>
-            <button type="button" id="btn-reset-data" class="px-3 py-1 rounded-lg border text-xs text-rose-400 border-rose-500/30 hover:bg-rose-500/10">
-              Reset
-            </button>
-          </div>
-        </div>
-
-        <!-- ABOUT FISCC & VERSION INFO (v3.5) -->
+        <!-- Version & Build Info -->
         <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
           <div class="p-3.5 rounded-xl border space-y-1.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
             <div class="flex justify-between items-center">
-              <span class="font-serif font-semibold text-sm">Fiscc — Minimal Daily Log</span>
+              <span class="font-serif font-semibold text-sm">Fiscc Money Logs</span>
               <span class="font-mono text-[10px] px-2.5 py-0.5 rounded-full font-semibold border" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent)">
-                v3.5
+                v3.7 Cloud Always
               </span>
             </div>
             <p style="color: var(--text-muted);">
-              <b>v3.5 Changelog:</b> Fixed in-place entry modifications (never creates duplicates in local storage or cloud sync); added smart deductions / reimbursements / friend split offsets against existing entries (e.g. <code>Received Rs 1000 against Hotel X</code> or via the <code>↩</code> button); advanced payment mode tagging (Credit Card, Debit Card, UPI, Bank Transfer, Cash, NetBanking, Wallet); connector parsing (<code>via</code>, <code>through</code>, <code>by</code>, <code>with</code>, <code>using</code>); and improved description cleaning.
+              v3.7 Release: Guaranteed instant server priority. When signed in, older cloud entries display immediately with automatic network reconnection and local entry reconcile.
             </p>
-            <p class="font-mono text-[10px]" style="color: var(--text-faint);">Build: 2026.11 &bull; Fiscc v3.5 Release</p>
           </div>
         </div>
       </div>
@@ -952,7 +1070,7 @@
   </div>
 
   <!-- =====================================================================
-       MODALS: EDIT & MODIFY DATE (v3.5 In-Place Update)
+       MODALS: EDIT & MODIFY DATE (In-Place Update)
        ===================================================================== -->
   <div id="edit-modal" class="modal-overlay">
     <div class="modal-box">
@@ -1029,7 +1147,7 @@
   </div>
 
   <!-- =====================================================================
-       MODALS: REIMBURSEMENT / DEDUCT FROM EXISTING ENTRY (v3.5)
+       MODALS: REIMBURSEMENT / DEDUCTION FROM EXISTING ENTRY
        ===================================================================== -->
   <div id="reimburse-modal" class="modal-overlay">
     <div class="modal-box">
@@ -1077,7 +1195,7 @@
   </div>
 
   <!-- =====================================================================
-       MODALS: SCAN RECEIPT OCR SIMULATION
+       MODALS: SCAN RECEIPT SIMULATION
        ===================================================================== -->
   <div id="scan-modal" class="modal-overlay">
     <div class="modal-box">
@@ -1090,7 +1208,7 @@
       </div>
       <div id="dropzone" class="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition relative overflow-hidden" style="border-color: var(--border-highlight); background: var(--bg-subtle)">
         <p class="text-sm font-medium">Click to upload or drop receipt photo</p>
-        <p class="text-xs mt-1" style="color: var(--text-faint)">AI OCR extracts merchant, amount & date instantly</p>
+        <p class="text-xs mt-1" style="color: var(--text-faint)">OCR automatically fills merchant, amount &amp; date</p>
       </div>
       <div class="mt-4 pt-3 border-t flex justify-between items-center text-xs" style="border-color: var(--border-subtle)">
         <button id="simulate-sample-btn" class="font-semibold underline" style="color: var(--accent);">
@@ -1141,18 +1259,83 @@
   </div>
 
   <!-- =====================================================================
-       JAVASCRIPT APPLICATION CORE (Fiscc v3.4)
+       MODAL: CLOUD SYNC RECONCILIATION & MERGE CONFLICT (v3.6)
+       ===================================================================== -->
+  <div id="cloud-merge-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔄</span>
+          <div>
+            <h3 class="font-serif text-lg font-semibold">Cloud Sync: Data Reconcile</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Choose how to combine your local and cloud records</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3.5 text-xs">
+        <p style="color: var(--text-muted)">
+          You signed in while having entries stored locally on this device. We found existing data already stored on your cloud account.
+        </p>
+
+        <!-- Comparison Summary Card -->
+        <div class="grid grid-cols-2 gap-2 p-3 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="p-2 rounded-lg" style="background: var(--bg-surface)">
+            <span class="text-[10px] font-mono uppercase font-semibold block" style="color: var(--text-faint)">Local on Device</span>
+            <b id="reconcile-local-count" class="text-sm font-mono text-amber-400 block mt-0.5">1 entry</b>
+            <span id="reconcile-local-desc" class="text-[11px] truncate block text-zinc-400">Patrol Rs 601...</span>
+          </div>
+
+          <div class="p-2 rounded-lg" style="background: var(--bg-surface)">
+            <span class="text-[10px] font-mono uppercase font-semibold block" style="color: var(--text-faint)">Cloud Account</span>
+            <b id="reconcile-cloud-count" class="text-sm font-mono text-emerald-400 block mt-0.5">0 entries</b>
+            <span id="reconcile-cloud-desc" class="text-[11px] truncate block text-zinc-400">Saved on server</span>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="space-y-2 pt-1">
+          <!-- Option 1: Merge Both -->
+          <button type="button" id="btn-reconcile-merge" class="w-full p-3 rounded-xl border text-left transition hover:scale-[1.01] flex items-start gap-3" style="background: var(--accent-soft); border-color: var(--accent)">
+            <span class="text-lg mt-0.5">➕</span>
+            <div>
+              <b class="text-xs block" style="color: var(--accent)">Merge &amp; Add Both (Recommended)</b>
+              <span class="text-[11px]" style="color: var(--text-muted)">Keep both your older cloud entries AND your local additions. All records will be merged without losing anything.</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Replace Local with Cloud -->
+          <button type="button" id="btn-reconcile-replace" class="w-full p-3 rounded-xl border text-left transition hover:scale-[1.01] flex items-start gap-3" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+            <span class="text-lg mt-0.5">☁️</span>
+            <div>
+              <b class="text-xs block">Use Cloud Data (Replace Local)</b>
+              <span class="text-[11px]" style="color: var(--text-muted)">Discard the temporary local entries and restore your full cloud ledger. (A safety backup snapshot will be saved first).</span>
+            </div>
+          </button>
+
+          <!-- Option 3: Overwrite Cloud with Local -->
+          <button type="button" id="btn-reconcile-overwrite" class="w-full p-2.5 rounded-xl border text-left transition text-zinc-400 hover:text-zinc-200" style="background: transparent; border-color: var(--border-subtle)">
+            <span class="text-[11px] block font-medium">Overwrite Server with this Device's Data only</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       JAVASCRIPT APPLICATION CORE (v3.6 APK & Backup Vault)
        ===================================================================== -->
   <script>
-    // --- DYNAMIC WEB APP MANIFEST & PWA SETUP FOR BOTH ANDROID & IOS ---
+    // --- 1. DYNAMIC WEB APP MANIFEST & OFFLINE SERVICE WORKER ---
+    let manifestDataUri = "";
     (function setupPWAEnvironment() {
       const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="#07090e"/><path d="M42 26H130L160 56V130L96 172L32 130V36L42 26Z" stroke="#006466" stroke-width="12" fill="none" stroke-linejoin="round"/><path d="M32 90L60 118L124 54" stroke="#006466" stroke-width="14" stroke-linecap="round" fill="none"/></svg>`;
       const iconDataUrl = "data:image/svg+xml;base64," + btoa(iconSvg);
 
       const manifestObj = {
-        name: "Fiscc — Minimal Daily Log",
+        name: "Fiscc Money Logs",
         short_name: "Fiscc",
-        description: "Type naturally. Track instantly. Architectural Minimalist Finance System.",
+        description: "Minimal Daily Log & Financial Statement. Type naturally. Track instantly.",
         start_url: "./",
         display: "standalone",
         background_color: "#07090e",
@@ -1168,11 +1351,31 @@
         ]
       };
 
-      const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: "application/json" });
-      const manifestUrl = URL.createObjectURL(manifestBlob);
+      manifestDataUri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(manifestObj, null, 2));
       const manifestLink = document.getElementById("manifest-placeholder");
       if (manifestLink) {
-        manifestLink.setAttribute("href", manifestUrl);
+        manifestLink.setAttribute("href", manifestDataUri);
+      }
+
+      // Register Offline Caching Service Worker for Native APK Run
+      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+        const swScript = `
+          const CACHE_NAME = 'fiscc-v36-cache';
+          self.addEventListener('install', e => {
+            self.skipWaiting();
+          });
+          self.addEventListener('activate', e => {
+            e.waitUntil(clients.claim());
+          });
+          self.addEventListener('fetch', e => {
+            e.respondWith(
+              fetch(e.request).catch(() => caches.match(e.request))
+            );
+          });
+        `;
+        const blob = new Blob([swScript], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob))
+          .catch(() => {});
       }
     })();
 
@@ -1213,12 +1416,13 @@
 
     const $ = id => document.getElementById(id);
 
-    // --- APPLICATION STATE (Fiscc v3.4) ---
+    // --- APPLICATION STATE (v3.6) ---
     let S = {
       items: [],
       cur: "₹",
       theme: "obsidian",
       customCategories: [],
+      lastBackupTimestamp: 0,
       settings: {
         enableIncome: true,
         showDues: true,
@@ -1307,6 +1511,95 @@
       }, 5000);
     }
 
+    // =========================================================================
+    // 2. AUTOMATED BACKUP & ROLLING SNAPSHOT ENGINE
+    // =========================================================================
+    function getRollingSnapshots() {
+      try {
+        const raw = localStorage.getItem("fiscc_rolling_backups");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveRollingSnapshot(label = "Auto") {
+      try {
+        const snapshots = getRollingSnapshots();
+        const newSnapshot = {
+          id: "snap_" + Date.now(),
+          timestamp: Date.now(),
+          dateStr: new Date().toLocaleString(),
+          label: label,
+          itemCount: S.items.length,
+          data: JSON.parse(JSON.stringify(S))
+        };
+
+        // Keep last 5 snapshots
+        snapshots.unshift(newSnapshot);
+        const trimmed = snapshots.slice(0, 5);
+        localStorage.setItem("fiscc_rolling_backups", JSON.stringify(trimmed));
+        S.lastBackupTimestamp = Date.now();
+        updateBackupStatusDisplay();
+      } catch (e) {
+        console.warn("Could not save snapshot", e);
+      }
+    }
+
+    function restoreFromSnapshot(snapshotId) {
+      const snapshots = getRollingSnapshots();
+      const snap = snapshots.find(s => s.id === snapshotId);
+      if (!snap) {
+        showToast("Snapshot not found");
+        return;
+      }
+      if (confirm(`Restore snapshot from ${snap.dateStr} (${snap.itemCount} items)? Current entries will be replaced.`)) {
+        S = snap.data;
+        saveStorage(false); // don't overwrite the snapshot we just restored
+        applyTheme(S.theme || "obsidian");
+        render();
+        renderSnapshotList();
+        showToast(`✓ Restored snapshot from ${snap.dateStr}`);
+        if (window.cloudSyncTrigger) window.cloudSyncTrigger();
+      }
+    }
+
+    function renderSnapshotList() {
+      const container = $("snapshot-history-list");
+      if (!container) return;
+      const snapshots = getRollingSnapshots();
+      if (!snapshots.length) {
+        container.innerHTML = `<p class="text-[11px]" style="color: var(--text-faint)">No safe snapshots recorded yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = snapshots.map(s => `
+        <div class="flex items-center justify-between p-2 rounded-lg border text-[11px]" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+          <div>
+            <b class="text-teal-400 font-mono">${escapeHtml(s.label)}</b>
+            <span style="color: var(--text-faint)"> &bull; ${escapeHtml(s.dateStr)}</span>
+            <span class="block text-[10px]" style="color: var(--text-muted)">${s.itemCount} transactions</span>
+          </div>
+          <button type="button" onclick="restoreFromSnapshot('${s.id}')" class="px-2.5 py-1 rounded border text-xs font-medium hover:border-teal-400" style="background: var(--bg-subtle); border-color: var(--border-highlight); color: var(--text-main);">
+            Restore
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function updateBackupStatusDisplay() {
+      const el = $("header-backup-status");
+      if (!el) return;
+      if (!S.lastBackupTimestamp) {
+        el.textContent = "Safe: Active";
+        return;
+      }
+      const mins = Math.floor((Date.now() - S.lastBackupTimestamp) / 60000);
+      if (mins < 1) el.textContent = "Backed up just now";
+      else if (mins < 60) el.textContent = `Backed up ${mins}m ago`;
+      else el.textContent = "Backup Safe";
+    }
+
     // --- STORAGE MANAGEMENT ---
     function loadStorage() {
       try {
@@ -1320,6 +1613,7 @@
             S.cur = parsed.cur || "₹";
             S.theme = parsed.theme || "obsidian";
             S.customCategories = Array.isArray(parsed.customCategories) ? parsed.customCategories : [];
+            S.lastBackupTimestamp = parsed.lastBackupTimestamp || 0;
             S.settings = Object.assign({ 
               enableIncome: true, 
               showDues: true, 
@@ -1334,16 +1628,21 @@
       } catch (e) {
         console.warn("Storage load warning", e);
       }
+
       applyTheme(S.theme || "obsidian");
       initAppLock();
       checkPWAInstallState();
+      updateBackupStatusDisplay();
     }
 
-    function saveStorage() {
+    function saveStorage(createAutoSnapshot = true) {
       try {
         const str = JSON.stringify(S);
         localStorage.setItem("fiscc_ledger", str);
         localStorage.setItem("exp-agent", str);
+        if (createAutoSnapshot) {
+          saveRollingSnapshot("Auto");
+        }
       } catch (e) {
         console.warn("Storage save error", e);
       }
@@ -1356,59 +1655,21 @@
              (window.matchMedia("(display-mode: fullscreen)").matches);
     }
 
-    function isIOSDevice() {
-      return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    }
-
     function checkPWAInstallState() {
-      const installBtn = $("btn-install-app");
-      const label = $("btn-install-label");
-
+      const btn = $("btn-open-apk-hub");
       if (isRunningStandalone()) {
-        if (label) label.textContent = "App Active";
-        if (installBtn) {
-          installBtn.title = "Fiscc is running in Standalone App mode";
-          installBtn.onclick = () => showToast("Fiscc is currently running as an installed app");
-        }
+        if (btn) btn.innerHTML = `<span>⚡</span> <span class="font-semibold">APK Mode</span>`;
       }
-    }
-
-    function openInstallModal() {
-      const isIOS = isIOSDevice();
-      const androidSection = $("android-install-section");
-      const iosSection = $("ios-install-section");
-      const desktopSection = $("desktop-install-section");
-
-      if (isIOS) {
-        iosSection.classList.remove("hidden");
-        androidSection.classList.add("hidden");
-        desktopSection.classList.add("hidden");
-      } else if (deferredPrompt) {
-        androidSection.classList.remove("hidden");
-        iosSection.classList.add("hidden");
-        desktopSection.classList.add("hidden");
-      } else {
-        androidSection.classList.remove("hidden");
-        iosSection.classList.add("hidden");
-        desktopSection.classList.remove("hidden");
-      }
-
-      $("install-modal").classList.add("open");
     }
 
     window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      const installBtn = $("btn-install-app");
-      if (installBtn && !isRunningStandalone()) {
-        installBtn.classList.remove("hidden");
-        installBtn.classList.add("inline-flex");
-      }
     });
 
     window.addEventListener("appinstalled", () => {
       deferredPrompt = null;
-      showToast("✓ Fiscc installed to Home Screen!");
+      showToast("✓ Fiscc installed as Standalone App!");
       checkPWAInstallState();
     });
 
@@ -1478,10 +1739,8 @@
     }
 
     // =========================================================================
-    // UNIVERSAL NATURAL LANGUAGE DATE & CURRENCY PARSER (v3.5 Enhanced)
+    // 3. UNIVERSAL NATURAL LANGUAGE DATE & CURRENCY PARSER
     // =========================================================================
-
-    // Advanced Payment Mode Extractor with Preposition Connectors
     function extractPaymentMode(text) {
       if (/\b(?:credit\s*card|c\.?c\.?|amex|mastercard\s+credit|visa\s+credit)\b/i.test(text)) return "Credit Card";
       if (/\b(?:debit\s*card|d\.?c\.?|atm\s*card|visa\s+debit|mastercard\s+debit)\b/i.test(text)) return "Debit Card";
@@ -1494,13 +1753,11 @@
       return "";
     }
 
-    // Try finding an existing entry to deduct / reimburse against
     function findMatchingEntryForReimbursement(targetKeyword) {
       if (!targetKeyword || !targetKeyword.trim()) return null;
       const cleanKeyword = targetKeyword.toLowerCase().replace(/^(?:the|for|against|on|at)\s+/i, "").trim();
       if (!cleanKeyword) return null;
 
-      // Search recent expenses first
       return S.items.find(item => {
         if (item.type === "income") return false;
         const desc = (item.description || "").toLowerCase();
@@ -1517,14 +1774,12 @@
       const parts = text.split(/\s*(?:,|\band\b|\n|;)\s*/i).filter(Boolean);
 
       for (let p of parts) {
-        // --- 0. CHECK FOR REIMBURSEMENT / DEDUCTION PATTERNS ---
         const isReimbursementPhrase = /\b(received|got back|reimbursement|reimbursed|refund|refunded|minus|deduct|share from|paid back)\b/i.test(p);
         const targetMatch = p.match(/(?:against|for|on|from|towards)\s+([A-Za-z0-9\s&'-]+?)(?:\s+(?:via|through|by|with|using|yesterday|today|on|\d)|$)/i);
 
         let pDate = iso(now);
         let dateMatchedString = "";
 
-        // 1. EXTRACT & ISOLATE DATES FIRST
         const tagDmyMatch = p.match(/\b(\d{1,2})\s*\([dD]\)[-/.\s]*(\d{1,2})\s*\([mM]\)[-/.\s]*(\d{2,4})\s*\([yY]\)\b/i);
         const numericDmyMatch = p.match(/\b(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})\b/);
         const dayMonthMatch = p.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\s*,?\s*(\d{2,4}))?\b/i);
@@ -1592,7 +1847,6 @@
           textWithoutDate = p.replace(dateMatchedString, " ");
         }
 
-        // 2. EXTRACT AMOUNT & CURRENCY
         let amt = null;
         let detectedCur = S.cur;
         let matchStr = "";
@@ -1641,10 +1895,8 @@
 
         if (!amt || isNaN(amt)) continue;
 
-        // 3. PAYMENT MODE & PREPOSITIONS (via, through, by, with, using)
         const pPayment = extractPaymentMode(p);
 
-        // If this is a reimbursement / offset against an existing item:
         if (isReimbursementPhrase && targetMatch) {
           const matchedTarget = findMatchingEntryForReimbursement(targetMatch[1]);
           if (matchedTarget) {
@@ -1660,7 +1912,6 @@
           }
         }
 
-        // 4. TRANSACTION TYPE & BORROWER
         let type = "expense";
         let borrower = "";
         let isEmi = /\bemi\b/i.test(p);
@@ -1675,8 +1926,6 @@
           type = "income";
         }
 
-        // 5. ACCURATE DESCRIPTION CLEANING
-        // Strip out prepositions, amount, payment indicators, and noise words
         let desc = textWithoutDate
           .replace(matchStr, "")
           .replace(/\b(?:via|through|by|with|using|paid\s+via|paid\s+by|paid\s+through)\s+(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|cash|netbanking|net\s*banking|direct\s*bank|bank\s*transfer|bank|wallet|cheque|check|card)\b/gi, "")
@@ -1689,7 +1938,6 @@
           desc = type === "lent" ? (borrower ? `Lent to ${borrower}` : "Money Lent") : (type === "income" ? "Income" : "Expense");
         }
 
-        // 6. CATEGORIZATION
         let cat = "Other";
         if (type === "lent") cat = "Gifts & Charity";
         else if (type === "income") cat = "Investments";
@@ -1745,7 +1993,6 @@
       }
     }
 
-    // Add Expense or Apply Offset Deduction
     function addExpense() {
       const input = $("expense-omni-input");
       const val = input.value.trim();
@@ -1783,15 +2030,12 @@
       updateLiveBadge();
       render();
 
-      if (offsetCount > 0 && newItemsToAdd.length === 0) {
-        // Reimbursement feedback already triggered inside applyReimbursement
-      } else {
+      if (offsetCount === 0 || newItemsToAdd.length > 0) {
         showToast(`Logged ${newItemsToAdd.length} entry${newItemsToAdd.length > 1 ? "ies" : ""}`);
         if (window.cloudSyncAdd) window.cloudSyncAdd(newItemsToAdd);
       }
     }
 
-    // Apply Deduction / Reimbursement to an existing entry
     function applyReimbursement(item, deductAmount, note, payment) {
       if (!item || !deductAmount) return;
 
@@ -1814,7 +2058,6 @@
       if (window.cloudSyncUpdate) window.cloudSyncUpdate(item);
     }
 
-    // Open Reimburse Modal
     function openReimburseModal(id) {
       const itm = S.items.find(x => String(x.id) === String(id));
       if (!itm) return;
@@ -1883,7 +2126,6 @@
       if (window.cloudSyncDelete) window.cloudSyncDelete(id);
     }
 
-    // STRICT IN-PLACE EDITING (NEVER CREATES A NEW ENTRY)
     function openEditModal(id) {
       const itm = S.items.find(x => String(x.id) === String(id));
       if (!itm) return;
@@ -1939,7 +2181,6 @@
       duplicateEntry(id);
     };
 
-    // Form submission modifies existing entry index strictly in place
     $("edit-form").onsubmit = (e) => {
       if (e && e.preventDefault) e.preventDefault();
       const id = $("edit-id").value;
@@ -1966,7 +2207,6 @@
       itm.category = chosenCat;
       itm.borrower = itm.type === "lent" ? $("edit-borrower").value.trim() : "";
 
-      // Deduplicate S.items by ID safeguard
       const seen = new Set();
       S.items = S.items.filter(item => {
         if (seen.has(String(item.id))) return false;
@@ -1998,22 +2238,8 @@
       if (window.cloudSyncUpdate) window.cloudSyncUpdate(itm);
     }
 
-    function runProofScan() {
-      let fixes = 0;
-      S.items.forEach(itm => {
-        if (!itm.id) { itm.id = "fiscc_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6); fixes++; }
-        if (!itm.amount || isNaN(itm.amount)) { itm.amount = 0; fixes++; }
-        if (!itm.date || !/^\d{4}-\d{2}-\d{2}$/.test(itm.date)) { itm.date = iso(new Date()); fixes++; }
-        if (!itm.category) { itm.category = "Other"; fixes++; }
-      });
-      saveStorage();
-      render();
-      showToast(`✓ Proof scan passed: ${S.items.length} items verified`);
-      if (window.cloudSyncTrigger) window.cloudSyncTrigger();
-    }
-
     // =========================================================================
-    // RENDER APPLICATION DASHBOARD
+    // 4. RENDER DASHBOARD & METRICS
     // =========================================================================
     function render(filterQuery = "") {
       $("currency-selector").value = S.cur;
@@ -2027,11 +2253,10 @@
       const totalIncome = incomeItems.reduce((sum, itm) => sum + (Number(itm.amount) || 0), 0);
       const netCashflow = totalIncome - totalExpense;
 
-      // Update Total Spend Display
       const parts = totalExpense.toFixed(2).split(".");
       $("total-spend-display").innerHTML = `${S.cur} ${Number(parts[0]).toLocaleString()}<span class="text-2xl sm:text-3xl font-light opacity-60">.${parts[1]}</span>`;
 
-      // Year-over-Year (YoY) Spend Comparison
+      // Year-over-Year comparison
       const [currY, currM] = vm.split("-").map(Number);
       const lastYearMonth = `${currY - 1}-${String(currM).padStart(2, "0")}`;
       const lastYearSpends = S.items
@@ -2053,7 +2278,6 @@
         yoyBadge.innerHTML = `📊 No data for ${monthName(lastYearMonth)}`;
       }
 
-      // Daily Average
       const dNow = new Date();
       const isCurrentMonth = vm === iso(dNow).slice(0, 7);
       const daysCount = isCurrentMonth ? Math.max(1, dNow.getDate()) : 30;
@@ -2163,6 +2387,7 @@
       renderChart(currY, currM);
       renderLedger(monthItems, filterQuery);
       renderCategoryChips();
+      updateBackupStatusDisplay();
     }
 
     function toggleCategoryFilter(cat) {
@@ -2176,7 +2401,6 @@
       render();
     }
 
-    // --- 6-MONTH CHART RENDERER ---
     function renderChart(currY, currM) {
       const container = $("six-months-bars-container");
       container.innerHTML = "";
@@ -2216,7 +2440,6 @@
       });
     }
 
-    // --- ACTIVITY STATEMENT RENDERER (v3.5 with Reimbursement Offsets) ---
     function renderLedger(monthItems, query = "") {
       const listEl = $("transactions-list");
       const emptyEl = $("empty-state-view");
@@ -2258,7 +2481,6 @@
         const sign = isInc ? "+" : "";
         const amtColor = isInc ? "var(--success)" : (isLent ? "var(--gold)" : "var(--text-main)");
 
-        // Reimbursement badge if originalAmount > amount
         let reimbursementTag = "";
         if (t.originalAmount && t.originalAmount > t.amount) {
           const diff = Math.round((t.originalAmount - t.amount) * 100) / 100;
@@ -2331,18 +2553,62 @@
       URL.revokeObjectURL(url);
     }
 
-    function initListeners() {
-      // PWA Install Triggers (Header & Settings)
-      $("btn-install-app").onclick = openInstallModal;
-      $("btn-settings-install").onclick = () => {
-        $("settings-modal").classList.remove("open");
-        openInstallModal();
-      };
-      $("close-install-x").onclick = () => $("install-modal").classList.remove("open");
-      $("btn-close-install-modal").onclick = () => $("install-modal").classList.remove("open");
+    function exportCsv(itemsToExport, filename) {
+      if (!itemsToExport.length) {
+        showToast("No entries to export");
+        return;
+      }
+      const q = s => `"${String(s || '').replace(/"/g, '""')}"`;
+      const rows = [
+        ["Date", "Category", "Description", "Payment Mode", "Amount", "Currency", "Type", "Status"],
+        ...itemsToExport.map(i => [
+          i.date, 
+          q(i.category), 
+          q(i.description), 
+          q(i.payment || "Direct"), 
+          i.amount, 
+          i.currency || S.cur,
+          i.type || "expense", 
+          i.status || "completed"
+        ])
+      ];
+      downloadBlob(filename, rows.map(r => r.join(",")).join("\n"), "text/csv;charset=utf-8;");
+      showToast("CSV statement exported");
+    }
 
-      // Native Android PWA Prompt trigger
-      $("btn-trigger-native-install").onclick = async () => {
+    // =========================================================================
+    // 5. EVENT LISTENERS & MODAL MANAGEMENT
+    // =========================================================================
+    function initListeners() {
+      // Connect Settings triggers for Backup Vault and APK Hub
+      $("btn-settings-open-vault").onclick = () => {
+        $("settings-modal").classList.remove("open");
+        renderSnapshotList();
+        $("backup-modal").classList.add("open");
+      };
+
+      $("btn-settings-open-apk").onclick = () => {
+        $("settings-modal").classList.remove("open");
+        $("apk-hub-modal").classList.add("open");
+      };
+
+      $("btn-settings-quick-json").onclick = () => {
+        const filename = `Fiscc_Backup_${iso(new Date())}_${Date.now().toString().slice(-4)}.json`;
+        downloadBlob(filename, JSON.stringify(S, null, 2), "application/json");
+        saveRollingSnapshot("Export");
+        showToast("Full JSON Backup downloaded");
+      };
+
+      $("btn-settings-quick-restore").onclick = () => {
+        $("backup-file-input").click();
+      };
+
+      // APK Hub Modal Open/Close
+      $("close-apk-x").onclick = () => $("apk-hub-modal").classList.remove("open");
+      $("btn-close-apk-modal").onclick = () => $("apk-hub-modal").classList.remove("open");
+
+      // 1-Tap PWA Install Trigger
+      $("btn-apk-native-install").onclick = async () => {
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
@@ -2350,63 +2616,105 @@
             showToast("Installing Fiscc App…");
           }
           deferredPrompt = null;
-          $("install-modal").classList.remove("open");
+          $("apk-hub-modal").classList.remove("open");
         } else {
-          showToast("Tap Chrome's 3-dots menu (⋮) → 'Install app' or 'Add to Home screen'");
+          showToast("Tap browser menu (⋮) → 'Install App' or 'Add to Home Screen'");
         }
       };
 
-      // Export CSV
-      $("btn-export-csv").onclick = () => {
-        if (!S.items.length) {
-          showToast("No entries to export");
-          return;
-        }
-        const q = s => `"${String(s || '').replace(/"/g, '""')}"`;
-        const rows = [
-          ["Date", "Category", "Description", "Payment", "Amount", "Type", "Status"],
-          ...S.items.map(i => [i.date, q(i.category), q(i.description), q(i.payment || ""), i.amount, i.type || "expense", i.status || "completed"])
-        ];
-        downloadBlob(`Fiscc_Statement_${vm}.csv`, rows.map(r => r.join(",")).join("\n"), "text/csv");
-        showToast("CSV statement exported");
+      // Download Manifest JSON
+      $("btn-download-manifest").onclick = () => {
+        downloadBlob("manifest.json", decodeURIComponent(manifestDataUri.replace("data:application/json;charset=utf-8,", "")), "application/json");
+        showToast("manifest.json downloaded");
       };
 
-      // Backup JSON
-      $("btn-backup-json").onclick = () => {
-        downloadBlob(`Fiscc_Backup_${Date.now()}.json`, JSON.stringify(S, null, 2), "application/json");
-        showToast("Backup JSON exported");
+      // Copy Manifest JSON
+      $("btn-copy-manifest").onclick = () => {
+        const jsonStr = decodeURIComponent(manifestDataUri.replace("data:application/json;charset=utf-8,", ""));
+        navigator.clipboard.writeText(jsonStr)
+          .then(() => showToast("Manifest config copied to clipboard!"))
+          .catch(() => showToast("Copy failed"));
       };
 
-      // Restore JSON
-      $("btn-restore-json").onclick = () => $("restore-file-input").click();
-      $("restore-file-input").onchange = async e => {
+      // Backup Vault Modal Open/Close
+      if ($("btn-open-backup-vault")) {
+        $("btn-open-backup-vault").onclick = () => {
+          renderSnapshotList();
+          $("backup-modal").classList.add("open");
+        };
+      }
+      if ($("btn-quick-backup")) {
+        $("btn-quick-backup").onclick = () => {
+          saveRollingSnapshot("Manual");
+          showToast("✓ Backup snapshot recorded!");
+        };
+      }
+      $("close-backup-x").onclick = () => $("backup-modal").classList.remove("open");
+      $("btn-close-backup-modal").onclick = () => $("backup-modal").classList.remove("open");
+
+      // Download Full JSON Backup
+      $("btn-download-json-backup").onclick = () => {
+        const filename = `Fiscc_Backup_${iso(new Date())}_${Date.now().toString().slice(-4)}.json`;
+        downloadBlob(filename, JSON.stringify(S, null, 2), "application/json");
+        saveRollingSnapshot("Export");
+        showToast("Full JSON Backup downloaded");
+      };
+
+      // Restore JSON from file
+      $("btn-trigger-restore-json").onclick = () => $("backup-file-input").click();
+      $("backup-file-input").onchange = async e => {
         const f = e.target.files[0];
         if (!f) return;
         try {
           const parsed = JSON.parse(await f.text());
           if (Array.isArray(parsed)) S.items = parsed;
           else if (parsed && Array.isArray(parsed.items)) S = parsed;
-          saveStorage();
+          saveStorage(false);
+          saveRollingSnapshot("Restored");
           applyTheme(S.theme || "obsidian");
           render();
-          showToast(`Restored ${S.items.length} items`);
+          renderSnapshotList();
+          showToast(`✓ Successfully restored ${S.items.length} transactions!`);
+          if (window.cloudSyncTrigger) window.cloudSyncTrigger();
         } catch (err) {
           showToast("Invalid JSON backup file");
         }
         e.target.value = "";
       };
 
+      // Manual snapshot creation
+      $("btn-create-manual-snapshot").onclick = () => {
+        saveRollingSnapshot("Manual");
+        renderSnapshotList();
+        showToast("Created manual checkpoint");
+      };
+
+      // CSV exports
+      $("btn-quick-csv").onclick = () => {
+        const mo = S.items.filter(i => (i.date || "").startsWith(vm));
+        exportCsv(mo, `Fiscc_Statement_${vm}.csv`);
+      };
+      $("btn-export-month-csv").onclick = () => {
+        const mo = S.items.filter(i => (i.date || "").startsWith(vm));
+        exportCsv(mo, `Fiscc_Statement_${vm}.csv`);
+      };
+      $("btn-export-all-csv").onclick = () => {
+        exportCsv(S.items, `Fiscc_Full_Ledger_${iso(new Date())}.csv`);
+      };
+
       // Reset All Data Safeguard
-      $("btn-reset-data").onclick = () => {
+      $("btn-vault-reset-data").onclick = () => {
         if (confirm("Are you sure you want to clear all transactions and reset Fiscc? This cannot be undone.")) {
+          saveRollingSnapshot("Pre-Reset");
           S.items = [];
-          saveStorage();
+          saveStorage(false);
           render();
-          showToast("Ledger reset to empty state");
+          renderSnapshotList();
+          showToast("Ledger reset to empty state (Pre-reset snapshot saved)");
         }
       };
 
-      // Filter Tabs (All / Spends / Income)
+      // Filter Tabs
       const updateFilterBtns = (activeId) => {
         ["filter-type-all", "filter-type-expense", "filter-type-income"].forEach(id => {
           const btn = $(id);
@@ -2508,7 +2816,7 @@
         btnVoice.onclick = () => showToast("Voice recognition not supported in this browser");
       }
 
-      // Live parsing
+      // Live parsing & submission
       $("expense-omni-input").addEventListener("input", updateLiveBadge);
       $("btn-add-expense").addEventListener("click", addExpense);
       $("expense-omni-input").addEventListener("keydown", e => {
@@ -2538,8 +2846,6 @@
         const mo = S.items.filter(i => (i.date || "").startsWith(vm));
         renderLedger(mo, e.target.value);
       });
-
-      $("btn-proof-scan").onclick = runProofScan;
 
       // Settings Modal Open/Close
       $("btn-open-settings").onclick = () => {
@@ -2596,7 +2902,7 @@
         showToast("Preferences & Security saved");
       };
 
-      // Receipt Scan Simulation Modal
+      // Receipt Scan Simulation
       $("scan-receipt-btn").onclick = () => $("scan-modal").classList.add("open");
       $("close-scan-x").onclick = () => $("scan-modal").classList.remove("open");
       $("cancel-scan-btn").onclick = () => $("scan-modal").classList.remove("open");
@@ -2625,6 +2931,7 @@
     window.removeEntry = removeEntry;
     window.deleteCustomCat = deleteCustomCat;
     window.toggleCategoryFilter = toggleCategoryFilter;
+    window.restoreFromSnapshot = restoreFromSnapshot;
 
     loadStorage();
     initListeners();
@@ -2632,52 +2939,18 @@
   </script>
 
   <!-- =====================================================================
-       FIREBASE AUTH & CLOUD SYNC MODULE (Deterministic ID Syncing)
+       FIREBASE AUTH & DETERMINISTIC CLOUD SYNC MODULE (v3.7 Always Synced)
        ===================================================================== -->
   <script type="module">
     const $ = id => document.getElementById(id);
     let isSignUp = false;
 
-    const isRestrictedEnv = window.location.protocol === "file:" || 
-                            window.location.protocol === "blob:" || 
-                            window.location.origin === "null" ||
-                            window.location.hostname.includes("usercontent.goog");
+    // Purge any legacy local-session lockouts from v3.6
+    localStorage.removeItem("fiscc_is_local_user");
 
-    function loginAsLocalSession(email) {
-      const localUid = "local_" + btoa(email).replace(/[^a-zA-Z0-9]/g, "").slice(0, 10);
-      const user = { email: email, uid: localUid, isLocalSession: true };
-      window.fisccCurrentUser = user;
-      localStorage.setItem("fiscc_auth_email", email);
-      localStorage.setItem("fiscc_is_local_user", "true");
-
-      $("sync-status-text").textContent = "Local Session";
-      $("sync-dot").style.background = "var(--accent)";
-      $("btn-open-auth").classList.add("hidden");
-      $("account-box").classList.remove("hidden");
-      $("account-box").classList.add("inline-flex");
-      $("user-badge").textContent = email;
-      $("auth-modal").classList.remove("open");
-      showToast(`Signed in as ${email} (Local Session)`);
-    }
-
-    const cachedEmail = localStorage.getItem("fiscc_auth_email");
-    const isCachedLocal = localStorage.getItem("fiscc_is_local_user") === "true";
     const rememberedEmail = localStorage.getItem("fiscc_remembered_email");
-
     if (rememberedEmail && $("auth-email")) {
       $("auth-email").value = rememberedEmail;
-    }
-
-    if (cachedEmail) {
-      if (isCachedLocal || isRestrictedEnv) {
-        loginAsLocalSession(cachedEmail);
-      } else {
-        $("sync-status-text").textContent = "Connecting…";
-        $("btn-open-auth").classList.add("hidden");
-        $("account-box").classList.remove("hidden");
-        $("account-box").classList.add("inline-flex");
-        $("user-badge").textContent = cachedEmail;
-      }
     }
 
     $("btn-open-auth").onclick = () => {
@@ -2729,8 +3002,8 @@
       const { 
         getFirestore, 
         collection, 
-        addDoc, 
         setDoc,
+        getDocs,
         deleteDoc, 
         doc, 
         onSnapshot 
@@ -2752,6 +3025,145 @@
       try { await setPersistence(auth, browserLocalPersistence); } catch (pErr) {}
 
       let unsub = null;
+      let cachedLocalPreSignIn = [];
+
+      function updateSyncStatus(status, isOnline = true) {
+        const textEl = $("sync-status-text");
+        const dotEl = $("sync-dot");
+        const pulseEl = $("sync-pulse");
+        if (!textEl || !dotEl) return;
+
+        textEl.textContent = status;
+        if (isOnline) {
+          dotEl.style.background = "var(--accent)";
+          if (pulseEl) pulseEl.style.background = "var(--accent)";
+        } else {
+          dotEl.style.background = "var(--gold)";
+          if (pulseEl) pulseEl.style.background = "var(--gold)";
+        }
+      }
+
+      // Online & Offline Network Listeners
+      window.addEventListener("online", () => {
+        if (auth.currentUser) {
+          updateSyncStatus("Cloud Synced", true);
+          showToast("Network restored: Cloud Synced");
+          pullCloudData(auth.currentUser);
+        }
+      });
+
+      window.addEventListener("offline", () => {
+        updateSyncStatus("Offline Cache", false);
+        showToast("Offline: Working with local cache");
+      });
+
+      // Pull all entries directly from Cloud
+      async function pullCloudData(user) {
+        if (!user || !user.uid) return;
+        try {
+          updateSyncStatus("Syncing…", true);
+          const userRef = collection(db, "users", user.uid, "expenses");
+          const snap = await getDocs(userRef);
+          const cloudItems = [];
+          snap.forEach(d => cloudItems.push({ id: d.id, ...d.data() }));
+
+          if (cloudItems.length > 0) {
+            // Check if there are local-only entries that were added before signing in
+            const cloudIdSet = new Set(cloudItems.map(i => String(i.id)));
+            const localOnly = S.items.filter(local => !cloudIdSet.has(String(local.id)));
+
+            // Always display Cloud Items first!
+            S.items = cloudItems;
+            saveStorage(false);
+            render();
+            updateSyncStatus("Cloud Synced", true);
+            showToast(`Loaded ${cloudItems.length} entries from Cloud`);
+
+            // If local un-synced entries exist, display non-blocking banner
+            if (localOnly.length > 0) {
+              cachedLocalPreSignIn = localOnly;
+              $("reconcile-banner-msg").textContent = `Showing all ${cloudItems.length} cloud records. You also have ${localOnly.length} local entry(ies) added before signing in.`;
+              $("reconcile-banner").classList.remove("hidden");
+            } else {
+              $("reconcile-banner").classList.add("hidden");
+            }
+          } else if (S.items.length > 0) {
+            // Cloud has 0 items but local has items -> upload them
+            await window.cloudSyncAdd(S.items);
+            updateSyncStatus("Cloud Synced", true);
+          } else {
+            updateSyncStatus("Cloud Synced (Empty)", true);
+          }
+        } catch (err) {
+          console.warn("Pull cloud data error", err);
+          updateSyncStatus(navigator.onLine ? "Cloud Synced" : "Offline", navigator.onLine);
+        }
+      }
+
+      // Banner Button Actions
+      $("btn-banner-merge").onclick = async () => {
+        if (!cachedLocalPreSignIn.length || !auth.currentUser) return;
+        saveRollingSnapshot("Pre-Merge");
+
+        // Upload local entries to Cloud
+        await window.cloudSyncAdd(cachedLocalPreSignIn);
+
+        // Merge into current S.items
+        const idSet = new Set(S.items.map(i => String(i.id)));
+        cachedLocalPreSignIn.forEach(itm => {
+          if (!idSet.has(String(itm.id))) {
+            S.items.unshift(itm);
+          }
+        });
+
+        saveStorage(false);
+        render();
+        $("reconcile-banner").classList.add("hidden");
+        showToast(`✓ Added ${cachedLocalPreSignIn.length} local entries to Cloud!`);
+        cachedLocalPreSignIn = [];
+      };
+
+      $("btn-banner-discard").onclick = () => {
+        saveRollingSnapshot("Discarded-Local");
+        $("reconcile-banner").classList.add("hidden");
+        cachedLocalPreSignIn = [];
+        showToast("Kept cloud entries only (Backup snapshot saved)");
+      };
+
+      // Header Force Pull Button & Pill click
+      $("btn-force-pull-cloud").onclick = () => {
+        if (auth.currentUser) pullCloudData(auth.currentUser);
+        else showToast("Please sign in first");
+      };
+
+      $("sync-status-pill").onclick = () => {
+        if (auth.currentUser) {
+          pullCloudData(auth.currentUser);
+        } else {
+          $("btn-open-auth").click();
+        }
+      };
+
+      // Realtime listener
+      function attachRealtimeListener(user) {
+        const userRef = collection(db, "users", user.uid, "expenses");
+        if (unsub) unsub();
+        unsub = onSnapshot(userRef, snap => {
+          const cloudItems = [];
+          snap.forEach(d => cloudItems.push({ id: d.id, ...d.data() }));
+
+          if (cloudItems.length > 0) {
+            // If banner is not currently open, update live
+            if ($("reconcile-banner").classList.contains("hidden")) {
+              S.items = cloudItems;
+              saveStorage(false);
+              render();
+            }
+          }
+        }, err => {
+          console.warn("Snapshot error", err);
+        });
+      }
 
       onAuthStateChanged(auth, async user => {
         if (user && user.isAnonymous) {
@@ -2762,47 +3174,35 @@
         if (user && user.email) {
           window.fisccCurrentUser = user;
           localStorage.setItem("fiscc_auth_email", user.email);
-          localStorage.removeItem("fiscc_is_local_user");
 
-          $("sync-status-text").textContent = "Cloud Synced";
-          $("sync-dot").style.background = "var(--accent)";
+          updateSyncStatus("Cloud Synced", navigator.onLine);
           $("btn-open-auth").classList.add("hidden");
           $("account-box").classList.remove("hidden");
           $("account-box").classList.add("inline-flex");
           $("user-badge").textContent = user.email;
 
-          const userRef = collection(db, "users", user.uid, "expenses");
-          if (unsub) unsub();
-          unsub = onSnapshot(userRef, snap => {
-            const cloudItems = [];
-            snap.forEach(d => cloudItems.push({ id: d.id, ...d.data() }));
-            if (cloudItems.length > 0) {
-              S.items = cloudItems;
-              saveStorage();
-              render();
-            } else if (S.items.length > 0) {
-              window.cloudSyncAdd(S.items);
-            }
-          });
-        } else if (!window.fisccCurrentUser || !window.fisccCurrentUser.isLocalSession) {
+          // Pull all data from cloud immediately and attach live listener
+          await pullCloudData(user);
+          attachRealtimeListener(user);
+
+        } else {
           window.fisccCurrentUser = null;
           localStorage.removeItem("fiscc_auth_email");
-          localStorage.removeItem("fiscc_is_local_user");
-          $("sync-status-text").textContent = "Local Mode";
+          updateSyncStatus("Local Mode", true);
           $("btn-open-auth").classList.remove("hidden");
           $("account-box").classList.add("hidden");
           $("account-box").classList.remove("inline-flex");
+          $("reconcile-banner").classList.add("hidden");
           if (unsub) { unsub(); unsub = null; }
         }
       });
 
       window.cloudSyncAdd = async (items) => {
-        const u = window.fisccCurrentUser;
-        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
         try {
           for (const itm of items) {
             const { id, ...data } = itm;
-            // Use setDoc with the existing unique ID to avoid ghost duplicates
             await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
           }
         } catch (e) {
@@ -2811,11 +3211,10 @@
       };
 
       window.cloudSyncUpdate = async (itm) => {
-        const u = window.fisccCurrentUser;
-        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
         try {
           const { id, ...data } = itm;
-          // Strictly updates the existing Firestore document in place
           await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
         } catch (e) {
           console.warn("Cloud sync update failed", e);
@@ -2823,22 +3222,22 @@
       };
 
       window.cloudSyncTrigger = async () => {
-        const u = window.fisccCurrentUser;
-        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
         try {
           for (const itm of S.items) {
             const { id, ...data } = itm;
             await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
           }
-          saveStorage();
+          saveStorage(false);
         } catch (e) {
           console.warn("Cloud sync trigger error", e);
         }
       };
 
       window.cloudSyncDelete = async (id) => {
-        const u = window.fisccCurrentUser;
-        if (!u || !u.email || u.isLocalSession || String(u.uid).startsWith("local_")) return;
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
         try {
           await deleteDoc(doc(db, "users", u.uid, "expenses", String(id)));
         } catch (e) {
@@ -2859,13 +3258,6 @@
         $("auth-submit-btn").disabled = true;
         $("auth-submit-btn").textContent = isSignUp ? "Creating account…" : "Signing in…";
         $("auth-error-msg").innerHTML = "";
-
-        if (window.location.protocol === "file:") {
-          $("auth-submit-btn").disabled = false;
-          $("auth-submit-btn").textContent = isSignUp ? "Create Account" : "Sign In";
-          loginAsLocalSession(email);
-          return false;
-        }
 
         try {
           if (isSignUp) {
@@ -2901,16 +3293,16 @@
         try { await signOut(auth); } catch (e) {}
         window.fisccCurrentUser = null;
         localStorage.removeItem("fiscc_auth_email");
-        localStorage.removeItem("fiscc_is_local_user");
-        $("sync-status-text").textContent = "Local Mode";
+        updateSyncStatus("Local Mode", true);
         $("btn-open-auth").classList.remove("hidden");
         $("account-box").classList.add("hidden");
         $("account-box").classList.remove("inline-flex");
+        $("reconcile-banner").classList.add("hidden");
         showToast("Signed out to Local Mode");
       };
 
     } catch (err) {
-      console.warn("Firebase running in local mode", err);
+      console.warn("Firebase initialization error", err);
     }
   </script>
 </body>
