@@ -1,0 +1,3309 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="obsidian">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  
+  <!-- PWA & Mobile Web App Meta Tags (Android APK & iOS) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fiscc">
+  <meta name="application-name" content="Fiscc Money Logs">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#07090e">
+  <meta name="description" content="Fiscc Money Logs — Minimal Daily Log with Automated Backups & APK Standalone Packaging.">
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="logo.png">
+  <link rel="icon" id="favicon-link" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Cpath d='M22 14H68L84 30V68L50 96L16 68V20L22 14Z' stroke='%23006466' stroke-width='8' fill='%2307090e'/%3E%3Cpath d='M16 48L30 62L62 30' stroke='%23006466' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+
+  <!-- Embedded Web App Manifest for Android APK / TWA -->
+  <link rel="manifest" id="manifest-placeholder">
+
+  <title>Fiscc Money Logs v3.7 — Always Cloud Synced & Backup Vault</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter, Newsreader & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['"Newsreader"', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root, [data-theme="obsidian"] {
+      --bg-base: #07090e;
+      --bg-surface: #0f131c;
+      --bg-card: rgba(18, 23, 34, 0.82);
+      --bg-subtle: #161c2a;
+      --bg-input: #0b0e15;
+      --text-main: #f4f4f6;
+      --text-muted: #8b92a5;
+      --text-faint: #525a70;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-highlight: rgba(255, 255, 255, 0.16);
+      --accent: #006466;
+      --accent-hover: #065a60;
+      --accent-soft: rgba(0, 100, 102, 0.16);
+      --gold: #d4af37;
+      --gold-soft: rgba(212, 175, 55, 0.14);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.12);
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.12);
+      --glass-glow: radial-gradient(circle at 50% 0%, rgba(0, 100, 102, 0.08) 0%, transparent 60%);
+    }
+
+    [data-theme="white"] {
+      --bg-base: #f8f8fa;
+      --bg-surface: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.94);
+      --bg-subtle: #f1f2f5;
+      --bg-input: #ffffff;
+      --text-main: #090a0d;
+      --text-muted: #5e6473;
+      --text-faint: #989eaf;
+      --border-subtle: #e4e6eb;
+      --border-highlight: #c8cbd4;
+      --accent: #0b525b;
+      --accent-hover: #003f47;
+      --accent-soft: rgba(11, 82, 91, 0.10);
+      --gold: #b48a1c;
+      --gold-soft: rgba(180, 138, 28, 0.12);
+      --danger: #dc2626;
+      --danger-soft: #fee2e2;
+      --success: #059669;
+      --success-soft: #d1fae5;
+      --glass-glow: radial-gradient(circle at 50% 0%, rgba(11, 82, 91, 0.03) 0%, transparent 60%);
+    }
+
+    [data-theme="cream"] {
+      --bg-base: #f4efe6;
+      --bg-surface: #fbf8f2;
+      --bg-card: rgba(251, 248, 242, 0.92);
+      --bg-subtle: #ece5d8;
+      --bg-input: #ffffff;
+      --text-main: #1f1d1a;
+      --text-muted: #736c62;
+      --text-faint: #a69f94;
+      --border-subtle: #e2dbce;
+      --border-highlight: #cfc6b5;
+      --accent: #1b4965;
+      --accent-hover: #133a52;
+      --accent-soft: rgba(27, 73, 101, 0.12);
+      --gold: #aa7c11;
+      --gold-soft: rgba(170, 124, 17, 0.12);
+      --danger: #c0392b;
+      --danger-soft: #fadbd8;
+      --success: #0d9488;
+      --success-soft: #ccfbf1;
+      --glass-glow: radial-gradient(circle at 50% 0%, rgba(27, 73, 101, 0.04) 0%, transparent 60%);
+    }
+
+    [data-theme="slate"] {
+      --bg-base: #0b101b;
+      --bg-surface: #121a2b;
+      --bg-card: rgba(18, 26, 43, 0.88);
+      --bg-subtle: #19243b;
+      --bg-input: #0d1320;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(56, 189, 248, 0.25);
+      --accent: #38bdf8;
+      --accent-hover: #7dd3fc;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --gold: #f59e0b;
+      --gold-soft: rgba(245, 158, 11, 0.12);
+      --danger: #f43f5e;
+      --danger-soft: rgba(244, 63, 94, 0.12);
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.12);
+      --glass-glow: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.06) 0%, transparent 60%);
+    }
+
+    [data-theme="emerald"] {
+      --bg-base: #04120e;
+      --bg-surface: #0a1f19;
+      --bg-card: rgba(10, 31, 25, 0.88);
+      --bg-subtle: #102d24;
+      --bg-input: #061712;
+      --text-main: #f0fdf4;
+      --text-muted: #86efac;
+      --text-faint: #4ade80;
+      --border-subtle: rgba(255, 255, 255, 0.09);
+      --border-highlight: rgba(52, 211, 153, 0.3);
+      --accent: #34d399;
+      --accent-hover: #6ee7b7;
+      --accent-soft: rgba(52, 211, 153, 0.14);
+      --gold: #fbbf24;
+      --gold-soft: rgba(251, 191, 36, 0.14);
+      --danger: #f87171;
+      --danger-soft: rgba(248, 113, 113, 0.14);
+      --success: #34d399;
+      --success-soft: rgba(52, 211, 153, 0.14);
+      --glass-glow: radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.08) 0%, transparent 60%);
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: max(32px, env(safe-area-inset-bottom));
+      padding-left: max(12px, env(safe-area-inset-left));
+      padding-right: max(12px, env(safe-area-inset-right));
+      transition: background-color 0.25s ease, color 0.25s ease;
+      touch-action: manipulation;
+    }
+
+    @media screen and (max-width: 768px) {
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    .fiscc-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+    .fiscc-card:hover {
+      border-color: var(--border-highlight);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.18); }
+    }
+    .pulse-glow { animation: pulseGlow 2.4s infinite ease-in-out; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      z-index: 999; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-highlight);
+      border-radius: 20px;
+      padding: 20px sm:24px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px -15px rgba(0,0,0,0.6);
+      transform: scale(0.96);
+      transition: transform 0.2s ease;
+    }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+
+    input, select, textarea {
+      background: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .category-scroll {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+    }
+
+    #toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--bg-surface); color: var(--text-main);
+      border: 1px solid var(--border-highlight);
+      border-radius: 999px; padding: 10px 20px;
+      font-size: 13px; font-weight: 500;
+      box-shadow: 0 12px 35px -8px rgba(0,0,0,0.4);
+      display: flex; align-items: center; gap: 8px;
+      transform: translateY(30px); opacity: 0; pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1050;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    #app-lock-screen {
+      position: fixed; inset: 0;
+      background: var(--bg-base);
+      z-index: 2000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    #app-lock-screen.active {
+      opacity: 1; pointer-events: auto;
+    }
+
+    .fiscc-logo-symbol {
+      width: 44px;
+      height: 48px;
+      display: inline-block;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fiscc-logo-symbol:hover {
+      transform: scale(1.05);
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .pill-btn:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-0.5px);
+    }
+    .pill-btn:active {
+      transform: scale(0.96);
+    }
+  </style>
+</head>
+
+<body class="font-sans antialiased min-h-screen selection:bg-teal-500/20 relative overflow-x-hidden pb-16">
+
+  <!-- Ambient Glow Background -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[380px] pointer-events-none -z-10" style="background: var(--glass-glow); filter: blur(80px);"></div>
+
+  <!-- Toast Notification -->
+  <div id="toast">
+    <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
+    <span id="toast-text">Message</span>
+  </div>
+
+  <!-- =====================================================================
+       APP LOCK FULL SCREEN (Face ID / Biometrics & PIN)
+       ===================================================================== -->
+  <div id="app-lock-screen">
+    <div class="max-w-xs w-full text-center space-y-5">
+      <div class="flex flex-col items-center justify-center gap-2 mb-1">
+        <svg class="w-14 h-16" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 14H68L84 30V68L50 96L16 68V20L22 14Z" stroke="currentColor" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
+          <path d="M68 14V30H84" stroke="currentColor" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
+          <path d="M16 48L30 62L62 30H46" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
+          <path d="M46 30V44" stroke="currentColor" stroke-width="7" stroke-linecap="round" style="color: var(--accent);"/>
+          <circle cx="50" cy="48" r="3.5" fill="currentColor" style="color: var(--accent);"/>
+          <path d="M57 48H72M72 48L66 43M72 48L66 53" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
+          <circle cx="45" cy="65" r="3.5" fill="currentColor" style="color: var(--accent);"/>
+          <path d="M52 65H68M68 65L62 60M68 65L62 70" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
+        </svg>
+        <div class="text-center">
+          <h2 class="text-base font-semibold tracking-tight" style="color: var(--text-main)">Fiscc Money Logs</h2>
+          <p class="text-xs font-medium" style="color: var(--text-muted)">Secure Local Ledger &amp; Backup</p>
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <p class="text-xs" style="color: var(--text-faint)">Enter your PIN or use biometrics to unlock</p>
+      </div>
+
+      <div id="lock-biometric-section" class="hidden">
+        <button id="btn-unlock-biometric" class="w-full py-2.5 px-4 rounded-xl font-medium text-xs flex items-center justify-center gap-2 border transition hover:scale-[1.02] active:scale-95 shadow" style="background: var(--bg-surface); border-color: var(--border-highlight); color: var(--text-main)">
+          <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+          </svg>
+          <span>Unlock with Face ID / Biometrics</span>
+        </button>
+        <div class="relative my-3 text-[11px]" style="color: var(--text-faint)">
+          <span class="px-2" style="background: var(--bg-base)">or enter PIN</span>
+        </div>
+      </div>
+
+      <form id="lock-pin-form" class="space-y-3" onsubmit="return false;">
+        <input type="password" id="lock-pin-input" class="w-full text-center tracking-[0.3em] font-mono text-base p-2.5 rounded-xl" placeholder="••••" autocomplete="current-password">
+        <button type="submit" id="btn-unlock-pin" class="w-full py-2.5 rounded-xl font-semibold text-xs text-white transition active:scale-95 shadow" style="background: var(--accent)">
+          Unlock
+        </button>
+      </form>
+      <p id="lock-error-msg" class="text-xs text-rose-400 empty:hidden"></p>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl lg:max-w-5xl mx-auto px-2 sm:px-6 py-4 sm:py-8 space-y-5 sm:space-y-6">
+
+    <!-- =====================================================================
+         1. FISCC BRAND HEADER & NAVIGATION (APK Ready + Backup Vault)
+         ===================================================================== -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b" style="border-color: var(--border-subtle)">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc Money Logs v3.7 — Always Cloud Synced')" title="Fiscc v3.7">
+          <svg class="fiscc-logo-symbol flex-shrink-0" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 14H68L84 30V68L50 96L16 68V20L22 14Z" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
+            <path d="M68 14V30H84" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
+            <path d="M16 48L30 62L62 30H46" stroke="currentColor" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
+            <path d="M46 30V44" stroke="currentColor" stroke-width="7.5" stroke-linecap="round" style="color: var(--accent);"/>
+            <circle cx="50" cy="48" r="3.5" fill="currentColor" style="color: var(--accent);"/>
+            <path d="M57 48H72M72 48L66 43M72 48L66 53" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
+            <circle cx="45" cy="65" r="3.5" fill="currentColor" style="color: var(--accent);"/>
+            <path d="M52 65H68M68 65L62 60M68 65L62 70" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);"/>
+          </svg>
+
+          <div class="flex flex-col">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight" style="color: var(--text-main);">
+              Fiscc: <span class="font-normal" style="color: var(--text-muted);">Money Logs</span>
+            </h1>
+            <p class="text-xs font-medium tracking-wide flex items-center gap-1.5" style="color: var(--text-faint);">
+              <span>v3.7 Always Synced</span>
+              <span>&bull;</span>
+              <span id="header-backup-status" class="text-emerald-400 font-mono text-[10px]">Cloud Active</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center flex-wrap gap-2 self-start md:self-auto">
+        <!-- Live Sync Pill with Click-to-Refresh -->
+        <button id="sync-status-pill" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border cursor-pointer hover:border-teal-500 transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" title="Click to refresh Cloud Sync">
+          <span class="relative flex h-2 w-2">
+            <span id="sync-pulse" class="pulse-glow absolute inline-flex h-full w-full rounded-full opacity-75" style="background: var(--accent);"></span>
+            <span id="sync-dot" class="relative inline-flex rounded-full h-2 w-2" style="background: var(--accent);"></span>
+          </span>
+          <span id="sync-status-text">Connecting…</span>
+        </button>
+
+        <!-- Quick Lock Button -->
+        <button id="btn-quick-lock" class="hidden items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-full text-xs font-medium border transition duration-200" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);" title="Lock Application Now">
+          <span>🔒</span>
+          <span class="hidden sm:inline">Lock</span>
+        </button>
+
+        <!-- Scan / Receipt Button -->
+        <button id="scan-receipt-btn" class="pill-btn min-h-[36px]" title="Scan or simulate physical receipt">
+          <svg class="w-3.5 h-3.5" style="color: var(--accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="hidden xs:inline">Scan</span>
+        </button>
+
+        <!-- Settings Modal Trigger (Houses Backup, PWA/APK & Configuration) -->
+        <button id="btn-open-settings" class="pill-btn min-h-[36px]" title="Settings & Preferences">
+          <span>⚙️</span>
+          <span>Settings</span>
+        </button>
+
+        <!-- Cloud Auth Button / Account Box -->
+        <button id="btn-open-auth" class="px-3.5 py-1.5 min-h-[36px] rounded-full text-xs font-semibold border transition duration-200" style="background: var(--accent); color: #fff; border-color: var(--accent);">
+          Sign In / Cloud
+        </button>
+        <div id="account-box" class="hidden items-center gap-2">
+          <span id="user-badge" class="text-xs truncate max-w-[100px] sm:max-w-[140px] font-mono" style="color: var(--text-muted);">user@mail.com</span>
+          <button id="btn-force-pull-cloud" class="text-xs px-2 py-1 rounded-lg border hover:border-teal-400 text-teal-400" style="background: var(--bg-surface); border-color: var(--border-subtle)" title="Pull latest from Cloud">🔄</button>
+          <button id="btn-sign-out" class="text-xs px-2.5 py-1 rounded-lg border" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted)">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- =====================================================================
+         RECONCILE FLOATING BANNER (v3.7 Non-blocking Smart Merge)
+         ===================================================================== -->
+    <div id="reconcile-banner" class="hidden p-3.5 rounded-xl border transition-all animate-pulse-once" style="background: var(--bg-card); border-color: var(--gold); box-shadow: 0 4px 20px -5px rgba(212,175,55,0.25);">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl">⚠️</span>
+          <div>
+            <b class="text-xs block" style="color: var(--gold)">Local Entries Found Before Sign-In</b>
+            <span id="reconcile-banner-msg" class="text-[11px]" style="color: var(--text-muted)">
+              Showing all server data now. Choose what to do with your 1 local dummy entry:
+            </span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-end sm:self-auto flex-shrink-0">
+          <button type="button" id="btn-banner-merge" class="px-3 py-1.5 rounded-lg font-medium text-xs text-white shadow" style="background: var(--accent);">
+            ➕ Add Local to Cloud
+          </button>
+          <button type="button" id="btn-banner-discard" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted);" title="Keep only cloud data">
+            Keep Cloud Only
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         2. OMNI NATURAL LANGUAGE INPUT CARD
+         ===================================================================== -->
+    <section class="fiscc-card p-3.5 sm:p-5 relative">
+      <div class="flex items-center justify-between mb-2">
+        <label for="expense-omni-input" class="text-xs font-medium uppercase tracking-wider flex items-center gap-1.5" style="color: var(--text-muted);">
+          <svg class="w-3.5 h-3.5" style="color: var(--accent)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Smart Natural Omniparser (Dates, Modes, Dues & Reimbursements)
+        </label>
+        <div class="flex items-center gap-2 text-[11px]" style="color: var(--text-faint);">
+          <span class="hidden sm:inline font-mono">Press ⌘/Ctrl + Enter to add</span>
+          <button id="clear-input-btn" class="hover:underline p-1">Clear</button>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+        <div class="relative flex-1">
+          <textarea 
+            id="expense-omni-input" 
+            rows="3"
+            placeholder="e.g. Spent Rs 601 on 1st Nov on Patrol via UPI, Salary 75000 yesterday, lent 500 to Rahul, or Received 300 against Patrol"
+            class="w-full text-base sm:text-base rounded-xl p-3 sm:p-4 pr-10 resize-none transition-all leading-relaxed"
+          ></textarea>
+          
+          <button 
+            type="button" 
+            id="btn-voice-dictate" 
+            class="absolute top-3 right-3 p-1.5 rounded-lg border transition hover:scale-105 active:scale-95" 
+            style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" 
+            title="Speak your expense (Voice Dictation)"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+          </button>
+          
+          <div id="live-parse-badge" class="absolute bottom-2.5 left-2.5 text-[11px] font-mono px-2.5 py-0.5 rounded-full border hidden items-center gap-1.5 backdrop-blur-sm" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent);">
+            <span class="w-1.5 h-1.5 rounded-full" style="background: var(--accent)"></span>
+            <span id="live-parse-text">Ready</span>
+          </div>
+        </div>
+
+        <button 
+          id="btn-add-expense"
+          class="sm:w-28 py-3 sm:py-0 min-h-[46px] rounded-xl font-semibold text-sm sm:text-base shadow-lg transition-all flex flex-row sm:flex-col items-center justify-center gap-1 active:scale-95 duration-150"
+          style="background: var(--accent); color: #fff;"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span class="tracking-wide">Add</span>
+        </button>
+      </div>
+
+      <div class="mt-3.5 pt-3 border-t" style="border-color: var(--border-subtle)">
+        <div class="flex items-center justify-between mb-2 text-[11px]" style="color: var(--text-faint)">
+          <span class="uppercase tracking-wider font-medium">Quick Categories</span>
+          <span class="hidden xs:inline">Click to append tag</span>
+        </div>
+        <div id="category-pills-container" class="category-scroll flex items-center gap-1.5 overflow-x-auto pb-1 scroll-smooth"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         3. FINANCIAL STATEMENT & MONTHLY METRICS
+         ===================================================================== -->
+    <section class="fiscc-card p-4 sm:p-7 relative overflow-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button id="prev-month-btn" class="p-2 sm:p-1.5 rounded-lg border transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" title="Previous Month">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          
+          <div class="flex items-center gap-2">
+            <span id="current-month-display" class="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase">
+              NOVEMBER 2026
+            </span>
+          </div>
+
+          <button id="next-month-btn" class="p-2 sm:p-1.5 rounded-lg border transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" title="Next Month">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <span class="text-xs font-medium" style="color: var(--text-faint)">Currency:</span>
+          <select id="currency-selector" class="rounded-lg px-2.5 py-1 text-xs font-mono font-medium border cursor-pointer min-h-[32px]">
+            <option value="₹">₹ INR</option>
+            <option value="$">$ USD</option>
+            <option value="€">€ EUR</option>
+            <option value="£">£ GBP</option>
+            <option value="AED">AED</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Main Financial Metric Row -->
+      <div class="pt-5 sm:pt-6 grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 items-end">
+        <div id="main-metrics-col" class="col-span-12 md:col-span-12 transition-all">
+          <p class="text-xs uppercase font-mono tracking-widest mb-1" style="color: var(--text-faint)">Total Monthly Spend</p>
+          <div class="flex items-baseline gap-2">
+            <h2 id="total-spend-display" class="font-serif text-3xl sm:text-5xl lg:text-6xl font-medium tracking-tight">
+              0.00
+            </h2>
+          </div>
+          
+          <div class="flex items-center flex-wrap gap-2 sm:gap-2.5 mt-3">
+            <div id="yoy-badge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border" style="background: var(--bg-subtle); border-color: var(--border-subtle); color: var(--text-muted);">
+              <span>📊 Comparing YoY…</span>
+            </div>
+
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono border" style="background: var(--bg-subtle); border-color: var(--border-subtle); color: var(--text-muted)">
+              <span class="w-1.5 h-1.5 rounded-full" style="background: var(--gold)"></span>
+              <span id="daily-avg-display">Avg: 0 / day</span>
+            </div>
+
+            <span id="entry-count-pill" class="text-xs" style="color: var(--text-faint)">
+              0 transactions
+            </span>
+          </div>
+        </div>
+
+        <!-- Optional Monthly Cap Target (Off by Default) -->
+        <div id="monthly-cap-card" class="col-span-12 md:col-span-5 p-4 rounded-xl border transition-all" style="background: var(--bg-subtle); border-color: var(--border-subtle); display: none;">
+          <div class="flex justify-between items-center text-xs mb-2">
+            <span class="font-medium" style="color: var(--text-muted)">Monthly Cap Target</span>
+            <span id="budget-ratio-text" class="font-mono font-semibold" style="color: var(--text-main);">0 / 45,000</span>
+          </div>
+          <div class="w-full rounded-full h-2 overflow-hidden border" style="background: var(--bg-input); border-color: var(--border-subtle)">
+            <div id="budget-progress-bar" class="h-full rounded-full transition-all duration-500" style="width: 0%; background: var(--accent);"></div>
+          </div>
+          <div class="flex justify-between items-center text-[11px] mt-2" style="color: var(--text-faint)">
+            <span id="budget-util-text">0% utilized</span>
+            <span id="budget-remaining-text" class="font-medium" style="color: var(--accent)">0 left</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accounting Overview: Incomes vs Spends -->
+      <div id="balance-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-5 pt-4 border-t" style="border-color: var(--border-subtle); display: none;">
+        <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Total Income (+)</span>
+          <b id="stat-income" class="block text-sm sm:text-base mt-0.5 text-emerald-400">0</b>
+        </div>
+        <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Total Spends (-)</span>
+          <b id="stat-expense" class="block text-sm sm:text-base mt-0.5" style="color: var(--text-main)">0</b>
+        </div>
+        <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Net Cashflow</span>
+          <b id="stat-balance" class="block text-sm sm:text-base mt-0.5">0</b>
+        </div>
+        <div class="p-2 sm:p-2.5 rounded-xl text-center border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <span class="block text-[10px] font-mono uppercase font-semibold" style="color: var(--text-faint)">Savings Rate</span>
+          <b id="stat-savings-rate" class="block text-sm sm:text-base mt-0.5 font-mono text-teal-400">0%</b>
+        </div>
+      </div>
+
+      <!-- Category Breakdown Progress Bars -->
+      <div id="category-breakdown-box" class="mt-5 pt-4 border-t space-y-2" style="border-color: var(--border-subtle)"></div>
+    </section>
+
+    <!-- =====================================================================
+         4. ACTIVE DUES & EMI REMINDERS
+         ===================================================================== -->
+    <section id="dues-reminders-card" class="fiscc-card p-5 transition duration-300" style="display: none;">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-xs uppercase font-mono tracking-widest font-semibold" style="color: var(--gold)">
+          ⚡ Reminders: Dues, Loans & EMIs
+        </h3>
+        <span class="text-[11px]" style="color: var(--text-faint)">Lent money expecting return</span>
+      </div>
+      <div id="dues-list" class="divide-y" style="border-color: var(--border-subtle)"></div>
+    </section>
+
+    <!-- =====================================================================
+         5. 6-MONTH TRAJECTORY CHART
+         ===================================================================== -->
+    <section class="fiscc-card p-5 sm:p-6 transition duration-300">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-xs uppercase font-mono tracking-widest" style="color: var(--text-faint)">Trend Analysis</h3>
+          <p class="text-sm font-serif font-medium">Last 6 Months Trajectory</p>
+        </div>
+        <div class="flex items-center gap-3 text-xs font-mono text-[11px]" style="color: var(--text-faint)">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-sm" style="background: var(--accent)"></span>
+            Monthly Spend
+          </div>
+        </div>
+      </div>
+
+      <div class="relative w-full h-44 sm:h-48 pt-4 pb-2">
+        <div id="six-months-bars-container" class="h-full flex items-end justify-between gap-2 sm:gap-4 relative z-10 px-2"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         6. ACTIVITY STATEMENT & ENTRIES LEDGER
+         ===================================================================== -->
+    <section class="fiscc-card p-5 sm:p-6 transition duration-300">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b" style="border-color: var(--border-subtle)">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-xs uppercase font-mono tracking-widest" style="color: var(--text-faint)">Activity Ledger</h3>
+            <span id="ledger-badge-count" class="px-2 py-0.5 rounded-full text-[10px] font-mono border" style="background: var(--bg-subtle); border-color: var(--border-subtle); color: var(--text-muted)">
+              0 entries
+            </span>
+          </div>
+          <p class="text-sm font-serif font-medium">This Month's Statement</p>
+        </div>
+
+        <div class="flex items-center flex-wrap gap-2">
+          <!-- Filter Tabs for Incomes / Expenses -->
+          <div class="flex rounded-lg border p-0.5 text-xs" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+            <button id="filter-type-all" class="px-2 py-1 rounded font-semibold text-white" style="background: var(--accent);">All</button>
+            <button id="filter-type-expense" class="px-2 py-1 rounded text-zinc-400">Spends</button>
+            <button id="filter-type-income" class="px-2 py-1 rounded text-zinc-400">Income</button>
+          </div>
+
+          <!-- Search input -->
+          <div class="relative">
+            <input 
+              id="search-transactions" 
+              type="text" 
+              placeholder="Search note, category..." 
+              class="w-32 sm:w-44 text-xs rounded-lg px-2.5 py-1.5 pl-7 border"
+            />
+            <svg class="w-3.5 h-3.5 absolute left-2 top-2" style="color: var(--text-faint)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="flex items-center gap-1.5">
+            <button id="btn-quick-backup" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition flex items-center gap-1" style="background: var(--bg-subtle); border-color: var(--border-subtle);" title="Save snapshot now">
+              <span>💾</span> <span>Backup</span>
+            </button>
+            <button id="btn-quick-csv" class="px-2.5 py-1.5 rounded-lg border text-xs font-medium transition" style="background: var(--bg-subtle); border-color: var(--border-subtle);">CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction List Items -->
+      <div class="mt-4">
+        <div id="empty-state-view" class="py-14 px-4 text-center">
+          <p class="font-serif text-lg font-medium">No expenses logged for this month</p>
+          <p class="text-xs max-w-sm mx-auto mt-1" style="color: var(--text-faint)">
+            Type something like <span class="font-mono" style="color: var(--text-main);">"Spent Rs 601 on 1st Nov on Patrol"</span> above to add.
+          </p>
+        </div>
+        <div id="transactions-list" class="divide-y" style="border-color: var(--border-subtle)"></div>
+      </div>
+    </section>
+
+    <!-- Footer Quote -->
+    <footer class="pt-6 pb-6 text-center text-xs flex flex-col items-center gap-1 border-t" style="border-color: var(--border-subtle); color: var(--text-faint);">
+      <span class="font-serif italic">“Fiscc &bull; Architectural Minimalist Finance System &bull; Standalone APK &amp; Backup Vault”</span>
+    </footer>
+  </main>
+
+  <!-- =====================================================================
+       MODAL: DEDICATED BACKUP & DATA VAULT HUB (Automatic Snapshots & Restore)
+       ===================================================================== -->
+  <div id="backup-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💾</span>
+          <div>
+            <h3 class="font-serif text-lg font-semibold">Fiscc Backup Vault</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Secure manual &amp; automated snapshots</p>
+          </div>
+        </div>
+        <button id="close-backup-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- 1. Quick Backup Actions -->
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="btn-download-json-backup" class="p-3 rounded-xl border flex flex-col items-start gap-1 text-left transition hover:scale-[1.01]" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+            <div class="flex items-center gap-1.5 font-semibold text-emerald-400">
+              <span>📥</span>
+              <span>Download JSON Backup</span>
+            </div>
+            <span class="text-[11px]" style="color: var(--text-muted)">Save full database with all settings &amp; custom categories.</span>
+          </button>
+
+          <button type="button" id="btn-trigger-restore-json" class="p-3 rounded-xl border flex flex-col items-start gap-1 text-left transition hover:scale-[1.01]" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+            <div class="flex items-center gap-1.5 font-semibold text-sky-400">
+              <span>📤</span>
+              <span>Restore from File</span>
+            </div>
+            <span class="text-[11px]" style="color: var(--text-muted)">Import previously saved .json backup file.</span>
+          </button>
+          <input type="file" id="backup-file-input" class="hidden" accept=".json">
+        </div>
+
+        <!-- 2. Export Formats (CSV / Spreadsheet) -->
+        <div class="p-3 rounded-xl border space-y-2" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex justify-between items-center">
+            <b>Spreadsheet Exports (Excel / Sheets)</b>
+            <span class="text-[10px] font-mono" style="color: var(--text-faint)">RFC 4180 CSV</span>
+          </div>
+          <div class="flex gap-2">
+            <button type="button" id="btn-export-month-csv" class="flex-1 py-1.5 px-2 rounded-lg border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              Export Current Month
+            </button>
+            <button type="button" id="btn-export-all-csv" class="flex-1 py-1.5 px-2 rounded-lg border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              Export All Entries
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Automated Rolling Snapshots (Local Safe-Vault) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex justify-between items-center">
+            <div>
+              <b class="text-xs block">Rolling Auto-Snapshots</b>
+              <span class="text-[11px]" style="color: var(--text-muted)">Stores last 5 safe checkpoints automatically</span>
+            </div>
+            <button type="button" id="btn-create-manual-snapshot" class="px-2.5 py-1 rounded-lg border text-[11px] font-medium" style="background: var(--accent); color: #fff;">
+              + Create Now
+            </button>
+          </div>
+
+          <div id="snapshot-history-list" class="space-y-1.5 pt-1"></div>
+        </div>
+
+        <!-- 4. Danger Area -->
+        <div class="pt-2 border-t flex items-center justify-between" style="border-color: var(--border-subtle)">
+          <div>
+            <b class="text-rose-400">Erase All Data</b>
+            <span class="block text-[11px]" style="color: var(--text-muted)">Reset ledger to blank state</span>
+          </div>
+          <button type="button" id="btn-vault-reset-data" class="px-3 py-1.5 rounded-lg border text-xs text-rose-400 border-rose-500/30 hover:bg-rose-500/10">
+            Reset All
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
+        <button type="button" id="btn-close-backup-modal" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: ANDROID APK HUB & STANDALONE INSTALLATION
+       ===================================================================== -->
+  <div id="apk-hub-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🤖</span>
+          <div>
+            <h3 class="font-serif text-lg font-semibold">Android APK &amp; Installation Hub</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Run Fiscc as a standalone native app</p>
+          </div>
+        </div>
+        <button id="close-apk-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- 1-Tap PWA Install Trigger -->
+        <div class="p-3 rounded-xl border space-y-2" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+          <div class="flex items-start gap-2.5">
+            <span class="text-xl">⚡</span>
+            <div class="flex-1">
+              <b class="text-xs block">Option 1: Direct 1-Tap Home Screen App</b>
+              <p class="text-[11px] mt-0.5" style="color: var(--text-muted)">
+                Installed directly through your mobile browser. Works 100% offline, gives full screen experience without address bar, and uses 0MB storage.
+              </p>
+            </div>
+          </div>
+          <button type="button" id="btn-apk-native-install" class="w-full py-2.5 rounded-xl font-semibold text-xs text-white transition active:scale-95 shadow flex items-center justify-center gap-2" style="background: var(--accent);">
+            <span>📲</span> <span>Install Direct App</span>
+          </button>
+        </div>
+
+        <!-- Convert to Signed .APK File (PWABuilder / Bubblewrap) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex items-start gap-2.5">
+            <span class="text-xl">📦</span>
+            <div class="flex-1">
+              <b class="text-xs block">Option 2: Generate Installable .APK File</b>
+              <p class="text-[11px] mt-0.5" style="color: var(--text-muted)">
+                Want an actual <code>.apk</code> file to install via Android package installer or share with others?
+              </p>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-[11px]" style="color: var(--text-muted)">
+            <div class="p-2 rounded-lg border" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              <b>Method A: Free 1-Minute APK Generator (PWABuilder)</b>
+              <ol class="list-decimal ml-4 mt-1 space-y-0.5">
+                <li>Host this file on GitHub Pages, Vercel, or Netlify.</li>
+                <li>Go to <a href="https://www.pwabuilder.com" target="_blank" class="text-teal-400 underline font-semibold">PWABuilder.com</a>.</li>
+                <li>Paste your URL &rarr; Click <b>Package for Android</b>.</li>
+                <li>Download your ready-to-install <b>signed .apk</b> file!</li>
+              </ol>
+            </div>
+
+            <div class="p-2 rounded-lg border" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              <b>Method B: Capacitor / Android Studio</b>
+              <p class="mt-0.5">Run <code>npx cap add android</code> and <code>npx cap build</code> to build a native Android APK binary directly in Android Studio.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Manifest & Asset Bundle -->
+        <div class="flex gap-2">
+          <button type="button" id="btn-download-manifest" class="flex-1 py-2 px-3 rounded-xl border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+            📄 Download manifest.json
+          </button>
+          <button type="button" id="btn-copy-manifest" class="py-2 px-3 rounded-xl border text-center transition" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+            📋 Copy Config
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
+        <button type="button" id="btn-close-apk-modal" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: SETTINGS (Themes, Income, Cap Target, Custom Categories, About)
+       ===================================================================== -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <h3 class="font-serif text-lg font-semibold">Settings &amp; Preferences</h3>
+        <button id="close-settings-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <!-- 1. BACKUP VAULT & DATA HUB (MOVED UNDER SETTINGS) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-base">💾</span>
+              <div>
+                <b class="text-xs block">Backup Vault &amp; Snapshots</b>
+                <span class="text-[11px]" style="color: var(--text-muted)">Download JSON, restore files, and view auto-snapshots</span>
+              </div>
+            </div>
+            <button type="button" id="btn-settings-open-vault" class="px-3 py-1.5 rounded-lg border text-xs font-medium text-teal-400 hover:scale-[1.02] transition" style="background: var(--bg-surface); border-color: var(--accent)">
+              Open Vault &rarr;
+            </button>
+          </div>
+          <div class="flex items-center gap-2 pt-1 border-t" style="border-color: var(--border-subtle)">
+            <button type="button" id="btn-settings-quick-json" class="flex-1 py-1.5 rounded-lg border text-center transition hover:border-teal-400" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              📥 Save JSON Backup
+            </button>
+            <button type="button" id="btn-settings-quick-restore" class="flex-1 py-1.5 rounded-lg border text-center transition hover:border-sky-400" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+              📤 Restore File
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. PWA & ANDROID APK HUB (MOVED UNDER SETTINGS) -->
+        <div class="p-3 rounded-xl border space-y-2.5" style="background: var(--bg-subtle); border-color: var(--border-highlight)">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🤖</span>
+              <div>
+                <b class="text-xs block">Install App &amp; Android APK</b>
+                <span class="text-[11px]" style="color: var(--text-muted)">Install to home screen or package into standalone .apk</span>
+              </div>
+            </div>
+            <button type="button" id="btn-settings-open-apk" class="px-3 py-1.5 rounded-lg border text-xs font-medium text-emerald-400 hover:scale-[1.02] transition" style="background: var(--bg-surface); border-color: var(--accent)">
+              APK Hub &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Theme Palette Selector -->
+        <div>
+          <label class="block font-semibold uppercase tracking-wider mb-2" style="color: var(--text-muted)">Color Palette / Themes</label>
+          <div class="grid grid-cols-2 gap-2" id="theme-selector-grid">
+            <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2" data-th="obsidian">
+              <span class="w-3.5 h-3.5 rounded-full bg-zinc-950 border border-white/20"></span>
+              <span>Obsidian Noir</span>
+            </button>
+            <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2" data-th="white">
+              <span class="w-3.5 h-3.5 rounded-full bg-white border border-black/20"></span>
+              <span>Alabaster White</span>
+            </button>
+            <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2" data-th="cream">
+              <span class="w-3.5 h-3.5 rounded-full bg-[#f4efe6] border border-amber-900/20"></span>
+              <span>Warm Linen</span>
+            </button>
+            <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2" data-th="slate">
+              <span class="w-3.5 h-3.5 rounded-full bg-[#0b101b] border border-sky-400/40"></span>
+              <span>Midnight Slate</span>
+            </button>
+            <button class="theme-btn p-2 rounded-xl border text-left flex items-center gap-2 col-span-2" data-th="emerald">
+              <span class="w-3.5 h-3.5 rounded-full bg-[#04120e] border border-emerald-400/40"></span>
+              <span>Emerald Velvet</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Categories Manager -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="mb-2">
+            <b class="text-sm block">Custom Categories</b>
+            <span style="color: var(--text-muted);">Create your own custom expense tags</span>
+          </div>
+          <div class="flex gap-2">
+            <input type="text" id="new-custom-cat-input" class="flex-1 p-2 rounded-lg text-xs" placeholder="e.g. Investment, Freelance, Taxes">
+            <button type="button" id="btn-add-custom-cat" class="px-3 py-1.5 rounded-lg text-white font-medium" style="background: var(--accent);">+ Add</button>
+          </div>
+          <div id="custom-cat-chips" class="flex flex-wrap gap-1.5 mt-2.5"></div>
+        </div>
+
+        <!-- Monthly Cap Target -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <b class="text-sm block">Monthly Cap Target</b>
+              <span style="color: var(--text-muted);">Set a monthly spending ceiling progress bar (Off by default)</span>
+            </div>
+            <input type="checkbox" id="setting-toggle-cap" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);">
+          </div>
+          <div id="cap-input-row" class="flex items-center gap-2 mt-2" style="display: none;">
+            <span class="font-mono text-xs" style="color: var(--text-faint)">Target Amount:</span>
+            <input type="number" id="setting-cap-amount" class="flex-1 p-2 rounded-lg text-xs font-mono border" placeholder="e.g. 45000" min="500" step="500">
+          </div>
+        </div>
+
+        <!-- Income Facility Toggle -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="flex items-center justify-between">
+            <div>
+              <b class="text-sm block">Income Tracking Facility</b>
+              <span style="color: var(--text-muted);">Accounting overview: Incomes vs. Expenses & Savings Rate</span>
+            </div>
+            <input type="checkbox" id="setting-toggle-income" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);">
+          </div>
+        </div>
+
+        <!-- EMI & Dues Reminders Toggle -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="flex items-center justify-between">
+            <div>
+              <b class="text-sm block">EMI & Dues Reminders</b>
+              <span style="color: var(--text-muted);">Track money lent, borrower debts & EMIs</span>
+            </div>
+            <input type="checkbox" id="setting-toggle-dues" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);">
+          </div>
+        </div>
+
+        <!-- App Lock & Security -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <b class="text-sm block">App Lock & Security</b>
+              <span style="color: var(--text-muted);">Lock app with Face ID, Biometrics or PIN</span>
+            </div>
+            <input type="checkbox" id="setting-toggle-lock" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);">
+          </div>
+          <div id="lock-config-panel" class="space-y-2 mt-2 p-3 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle); display: none;">
+            <div>
+              <label class="block font-medium mb-1" style="color: var(--text-muted)">Passcode / PIN</label>
+              <input type="password" id="setting-lock-pin" class="w-full p-2 rounded-lg text-xs font-mono" placeholder="Set 4+ digit PIN or password">
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span style="color: var(--text-muted);">Enable Face ID / Touch ID</span>
+              <input type="checkbox" id="setting-toggle-biometric" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);">
+            </div>
+            <div class="pt-2 flex justify-end">
+              <button type="button" id="btn-trigger-lock-now" class="px-3 py-1 rounded-lg border text-xs" style="border-color: var(--border-highlight); color: var(--text-main)">
+                🔒 Lock App Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Version & Build Info -->
+        <div class="pt-3 border-t" style="border-color: var(--border-subtle)">
+          <div class="p-3.5 rounded-xl border space-y-1.5" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+            <div class="flex justify-between items-center">
+              <span class="font-serif font-semibold text-sm">Fiscc Money Logs</span>
+              <span class="font-mono text-[10px] px-2.5 py-0.5 rounded-full font-semibold border" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent)">
+                v3.7 Cloud Always
+              </span>
+            </div>
+            <p style="color: var(--text-muted);">
+              v3.7 Release: Guaranteed instant server priority. When signed in, older cloud entries display immediately with automatic network reconnection and local entry reconcile.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t flex justify-end" style="border-color: var(--border-subtle)">
+        <button id="btn-save-settings" class="px-5 py-2 min-h-[40px] rounded-xl font-medium text-xs text-white" style="background: var(--accent);">
+          Save Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: EDIT & MODIFY DATE (In-Place Update)
+       ===================================================================== -->
+  <div id="edit-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-serif text-lg font-semibold">Modify Entry & Date</h3>
+        <button id="close-edit-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+      <form id="edit-form" class="space-y-3 text-xs" onsubmit="return false;">
+        <input type="hidden" id="edit-id">
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Description</label>
+          <input type="text" id="edit-desc" class="w-full p-2 rounded-lg text-sm" required>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-medium mb-1" style="color: var(--text-muted)">Amount</label>
+            <input type="number" step="0.01" min="0.01" id="edit-amount" class="w-full p-2 rounded-lg font-mono text-sm" required>
+          </div>
+          <div>
+            <label class="block font-medium mb-1" style="color: var(--text-muted)">Type</label>
+            <select id="edit-type" class="w-full p-2 rounded-lg text-xs">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+              <option value="lent">Lent / Due</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-medium mb-1" style="color: var(--text-muted)">Date (Modify When)</label>
+            <input type="date" id="edit-date" class="w-full p-2 rounded-lg text-xs font-mono" required>
+          </div>
+          <div>
+            <label class="block font-medium mb-1" style="color: var(--text-muted)">Payment Mode</label>
+            <select id="edit-pay" class="w-full p-2 rounded-lg text-xs">
+              <option value="">(None)</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="UPI">UPI</option>
+              <option value="Cash">Cash</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="NetBanking">NetBanking</option>
+              <option value="Wallet">Wallet</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Category</label>
+          <select id="edit-cat" class="w-full p-2 rounded-lg text-xs"></select>
+        </div>
+        <div id="edit-manual-cat-row" class="hidden">
+          <label class="block font-medium mb-1 text-teal-400">Manual / Custom Category Name</label>
+          <input type="text" id="edit-manual-cat" class="w-full p-2 rounded-lg text-xs" placeholder="Type custom category name...">
+        </div>
+
+        <div id="edit-borrower-row" class="hidden">
+          <label class="block font-medium mb-1" style="color: var(--gold)">Borrower / Person Owing</label>
+          <input type="text" id="edit-borrower" class="w-full p-2 rounded-lg text-xs" placeholder="e.g. Rahul">
+        </div>
+
+        <div class="pt-3 border-t flex justify-between items-center gap-2" style="border-color: var(--border-subtle)">
+          <button type="button" id="btn-edit-duplicate" class="px-3 py-1.5 rounded-lg border text-xs flex items-center gap-1.5" style="border-color: var(--border-subtle); color: var(--text-muted);" title="Clone this entry">
+            <span>⎘</span> <span>Duplicate</span>
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" id="btn-cancel-edit" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle);">Cancel</button>
+            <button type="submit" class="px-4 py-1.5 rounded-lg font-medium text-xs text-white" style="background: var(--accent);">Save Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: REIMBURSEMENT / DEDUCTION FROM EXISTING ENTRY
+       ===================================================================== -->
+  <div id="reimburse-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div>
+          <h3 class="font-serif text-lg font-semibold">Deduct / Reimburse Entry</h3>
+          <p class="text-xs" style="color: var(--text-muted)">Subtract friend shares, refunds, or repayments</p>
+        </div>
+        <button id="close-reimburse-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+      <form id="reimburse-form" class="space-y-3 text-xs" onsubmit="return false;">
+        <input type="hidden" id="reimburse-id">
+        <div class="p-2.5 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="flex justify-between items-center">
+            <b id="reimburse-entry-title" class="text-sm truncate">Hotel X</b>
+            <span id="reimburse-entry-current" class="font-mono text-sm font-semibold">₹ 4,000.00</span>
+          </div>
+          <p id="reimburse-entry-meta" class="text-[11px] mt-0.5" style="color: var(--text-faint)">Date &bull; Food &bull; Card</p>
+        </div>
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Amount Received / Reimbursed (-)</label>
+          <input type="number" step="0.01" min="0.01" id="reimburse-amount" class="w-full p-2.5 rounded-lg font-mono text-sm" placeholder="e.g. 1000" required>
+        </div>
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Note / Contributor (Optional)</label>
+          <input type="text" id="reimburse-note" class="w-full p-2 rounded-lg text-xs" placeholder="e.g. Rahul's share, Friend repayment">
+        </div>
+        <div>
+          <label class="block font-medium mb-1" style="color: var(--text-muted)">Received Mode</label>
+          <select id="reimburse-pay" class="w-full p-2 rounded-lg text-xs">
+            <option value="UPI">UPI / GPay / PhonePe</option>
+            <option value="Cash">Cash</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Credit Card">Credit Card Refund</option>
+            <option value="Debit Card">Debit Card</option>
+            <option value="Wallet">Wallet</option>
+          </select>
+        </div>
+        <div class="pt-3 border-t flex justify-end gap-2" style="border-color: var(--border-subtle)">
+          <button type="button" id="btn-cancel-reimburse" class="px-3 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle);">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 rounded-lg font-medium text-xs text-white" style="background: var(--accent);">Apply Deduction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: SCAN RECEIPT SIMULATION
+       ===================================================================== -->
+  <div id="scan-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <span class="p-1.5 rounded-lg border text-base" style="background: var(--accent-soft); border-color: var(--accent)">📸</span>
+          <h3 class="font-serif text-lg font-semibold">Receipt Intelligence</h3>
+        </div>
+        <button id="close-scan-x" class="text-sm" style="color: var(--text-faint)">✕</button>
+      </div>
+      <div id="dropzone" class="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition relative overflow-hidden" style="border-color: var(--border-highlight); background: var(--bg-subtle)">
+        <p class="text-sm font-medium">Click to upload or drop receipt photo</p>
+        <p class="text-xs mt-1" style="color: var(--text-faint)">OCR automatically fills merchant, amount &amp; date</p>
+      </div>
+      <div class="mt-4 pt-3 border-t flex justify-between items-center text-xs" style="border-color: var(--border-subtle)">
+        <button id="simulate-sample-btn" class="font-semibold underline" style="color: var(--accent);">
+          Simulate Blue Tokai Cafe Bill
+        </button>
+        <button id="cancel-scan-btn" class="px-3 py-1.5 rounded-lg border" style="border-color: var(--border-subtle)">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODALS: CLOUD AUTHENTICATION (Firebase Sync)
+       ===================================================================== -->
+  <div id="auth-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-1">
+        <h3 id="auth-title" class="font-serif text-lg font-semibold">Sign In to Fiscc Cloud</h3>
+        <button id="close-auth-x" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+      <p class="text-xs mb-3" style="color: var(--text-muted)">Sync across phone and desktop automatically.</p>
+      <div class="flex rounded-lg border p-1 mb-3 text-xs" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+        <button type="button" id="tab-signin" class="flex-1 py-1 rounded font-medium" style="background: var(--bg-surface); color: var(--text-main);">Sign In</button>
+        <button type="button" id="tab-signup" class="flex-1 py-1 rounded font-medium" style="color: var(--text-muted)">Create Account</button>
+      </div>
+      <form id="auth-form" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-medium mb-1">Email</label>
+          <input type="email" id="auth-email" required class="w-full p-2 rounded-lg" placeholder="name@domain.com" autocomplete="username">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Password</label>
+          <input type="password" id="auth-password" required minlength="6" class="w-full p-2 rounded-lg" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div class="flex items-center justify-between text-xs pt-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none" style="color: var(--text-muted)">
+            <input type="checkbox" id="auth-remember-me" class="w-4 h-4 rounded cursor-pointer" style="accent-color: var(--accent);" checked>
+            <span>Remember Me</span>
+          </label>
+          <a id="btn-forgot-pass" class="underline cursor-pointer" style="color: var(--accent);">Forgot password?</a>
+        </div>
+        <button type="submit" id="auth-submit-btn" class="w-full py-2.5 rounded-xl text-white font-medium cursor-pointer transition mt-2" style="background: var(--accent)">Sign In</button>
+      </form>
+      <div id="auth-error-msg" class="text-xs mt-3 p-2.5 rounded-lg leading-relaxed empty:hidden" style="background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger);"></div>
+      <div class="mt-4 pt-2 border-t flex justify-end text-xs" style="border-color: var(--border-subtle)">
+        <a id="btn-close-auth" class="cursor-pointer" style="color: var(--text-faint);">Stay Local</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL: CLOUD SYNC RECONCILIATION & MERGE CONFLICT (v3.6)
+       ===================================================================== -->
+  <div id="cloud-merge-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔄</span>
+          <div>
+            <h3 class="font-serif text-lg font-semibold">Cloud Sync: Data Reconcile</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Choose how to combine your local and cloud records</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3.5 text-xs">
+        <p style="color: var(--text-muted)">
+          You signed in while having entries stored locally on this device. We found existing data already stored on your cloud account.
+        </p>
+
+        <!-- Comparison Summary Card -->
+        <div class="grid grid-cols-2 gap-2 p-3 rounded-xl border" style="background: var(--bg-subtle); border-color: var(--border-subtle)">
+          <div class="p-2 rounded-lg" style="background: var(--bg-surface)">
+            <span class="text-[10px] font-mono uppercase font-semibold block" style="color: var(--text-faint)">Local on Device</span>
+            <b id="reconcile-local-count" class="text-sm font-mono text-amber-400 block mt-0.5">1 entry</b>
+            <span id="reconcile-local-desc" class="text-[11px] truncate block text-zinc-400">Patrol Rs 601...</span>
+          </div>
+
+          <div class="p-2 rounded-lg" style="background: var(--bg-surface)">
+            <span class="text-[10px] font-mono uppercase font-semibold block" style="color: var(--text-faint)">Cloud Account</span>
+            <b id="reconcile-cloud-count" class="text-sm font-mono text-emerald-400 block mt-0.5">0 entries</b>
+            <span id="reconcile-cloud-desc" class="text-[11px] truncate block text-zinc-400">Saved on server</span>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="space-y-2 pt-1">
+          <!-- Option 1: Merge Both -->
+          <button type="button" id="btn-reconcile-merge" class="w-full p-3 rounded-xl border text-left transition hover:scale-[1.01] flex items-start gap-3" style="background: var(--accent-soft); border-color: var(--accent)">
+            <span class="text-lg mt-0.5">➕</span>
+            <div>
+              <b class="text-xs block" style="color: var(--accent)">Merge &amp; Add Both (Recommended)</b>
+              <span class="text-[11px]" style="color: var(--text-muted)">Keep both your older cloud entries AND your local additions. All records will be merged without losing anything.</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Replace Local with Cloud -->
+          <button type="button" id="btn-reconcile-replace" class="w-full p-3 rounded-xl border text-left transition hover:scale-[1.01] flex items-start gap-3" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+            <span class="text-lg mt-0.5">☁️</span>
+            <div>
+              <b class="text-xs block">Use Cloud Data (Replace Local)</b>
+              <span class="text-[11px]" style="color: var(--text-muted)">Discard the temporary local entries and restore your full cloud ledger. (A safety backup snapshot will be saved first).</span>
+            </div>
+          </button>
+
+          <!-- Option 3: Overwrite Cloud with Local -->
+          <button type="button" id="btn-reconcile-overwrite" class="w-full p-2.5 rounded-xl border text-left transition text-zinc-400 hover:text-zinc-200" style="background: transparent; border-color: var(--border-subtle)">
+            <span class="text-[11px] block font-medium">Overwrite Server with this Device's Data only</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       JAVASCRIPT APPLICATION CORE (v3.6 APK & Backup Vault)
+       ===================================================================== -->
+  <script>
+    // --- 1. DYNAMIC WEB APP MANIFEST & OFFLINE SERVICE WORKER ---
+    let manifestDataUri = "";
+    (function setupPWAEnvironment() {
+      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="36" fill="#07090e"/><path d="M42 26H130L160 56V130L96 172L32 130V36L42 26Z" stroke="#006466" stroke-width="12" fill="none" stroke-linejoin="round"/><path d="M32 90L60 118L124 54" stroke="#006466" stroke-width="14" stroke-linecap="round" fill="none"/></svg>`;
+      const iconDataUrl = "data:image/svg+xml;base64," + btoa(iconSvg);
+
+      const manifestObj = {
+        name: "Fiscc Money Logs",
+        short_name: "Fiscc",
+        description: "Minimal Daily Log & Financial Statement. Type naturally. Track instantly.",
+        start_url: "./",
+        display: "standalone",
+        background_color: "#07090e",
+        theme_color: "#006466",
+        orientation: "portrait-primary",
+        icons: [
+          {
+            src: iconDataUrl,
+            sizes: "192x192 512x512",
+            type: "image/svg+xml",
+            purpose: "any maskable"
+          }
+        ]
+      };
+
+      manifestDataUri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(manifestObj, null, 2));
+      const manifestLink = document.getElementById("manifest-placeholder");
+      if (manifestLink) {
+        manifestLink.setAttribute("href", manifestDataUri);
+      }
+
+      // Register Offline Caching Service Worker for Native APK Run
+      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost')) {
+        const swScript = `
+          const CACHE_NAME = 'fiscc-v36-cache';
+          self.addEventListener('install', e => {
+            self.skipWaiting();
+          });
+          self.addEventListener('activate', e => {
+            e.waitUntil(clients.claim());
+          });
+          self.addEventListener('fetch', e => {
+            e.respondWith(
+              fetch(e.request).catch(() => caches.match(e.request))
+            );
+          });
+        `;
+        const blob = new Blob([swScript], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(blob))
+          .catch(() => {});
+      }
+    })();
+
+    // --- STANDARD CATEGORIES & KEYWORDS ---
+    const BASE_CAT_ICONS = {
+      "Food": "🍔", "Groceries": "🛒", "Vehicle": "🚗", "Transport": "🚕", 
+      "Shopping": "🛍️", "Subscriptions": "📱", "Bills": "💡", "Health": "💊", 
+      "Entertainment": "🎬", "Travel": "✈️", "Education": "📚", "Investments": "📈", 
+      "Personal Care": "✨", "Home": "🏡", "Gifts & Charity": "🎁", "Pets": "🐾", "Other": "🏷️"
+    };
+
+    const KW = {
+      "Vehicle": /vehicle|car|bike|motorcycle|scooter|service|servicing|tyre|tire|mechanic|challan|rto|toll|fastag|diesel|petrol|patrol|cng|engine oil|ev charge|ev charging|repair car|repair bike/i,
+      "Subscriptions": /netflix|spotify|youtube|prime video|amazon prime|icloud|apple music|chatgpt|openai|hulu|disney|patreon|discord|subscription|saas|github|audible/i,
+      "Investments": /sip|mutual fund|stock|stocks|share|shares|zerodha|groww|crypto|bitcoin|eth|gold|deposit|fd|rd|trading|etf|equity/i,
+      "Education": /course|udemy|coursera|books|book|tuition|school|college|exam|coaching|cert|bootcamp|training|kindle|stationery|pen|pencil|notes/i,
+      "Personal Care": /salon|haircut|barber|spa|massage|skincare|cosmetics|makeup|facial|perfume|grooming|waxing|shaving|shampoo/i,
+      "Home": /furniture|repair|plumber|electrician|appliance|cleaning|laundry|dry clean|decor|hardware|pest|kitchen|ikea|utensil/i,
+      "Gifts & Charity": /gift|charity|donation|donate|tip|temple|church|mosque|ngo|present|birthday gift|anniversary/i,
+      "Pets": /pet|dog|cat|vet|veterinary|puppy|kitten|pet food|pedigree|whiskas|litter/i,
+      "Health": /doctor|medicine|pharmacy|hospital|gym|fitness|workout|medical|clinic|protein|dentist|tablet|therapy|test|pathology|blood test|apollo/i,
+      "Entertainment": /movie|cinema|theatre|concert|game|gaming|steam|playstation|xbox|event|party|club|pub|bowling|amusement/i,
+      "Travel": /flight|hotel|airbnb|resort|vacation|trip|tour|visa|airfare|hostel|luggage|makemytrip|goibibo/i,
+      "Groceries": /grocer|vegetable|veggie|fruit|milk|supermarket|bigbasket|blinkit|zepto|ration|dal|rice|bread|instamart|pantry|egg|chicken|meat|fish/i,
+      "Transport": /cab|uber|ola|taxi|bus|metro|train|auto|rickshaw|rapido|fare/i,
+      "Shopping": /shirt|shoes|clothes|shopping|mall|jeans|pants|apparel|electronics|gadget|amazon|flipkart|myntra|zara|h&m|dress|tshirt/i,
+      "Bills": /rent|electric|electricity|power|wifi|broadband|internet|recharge|emi|insurance|water bill|gas bill|piped gas|maintenance|society/i,
+      "Food": /lunch|dinner|breakfast|coffee|tea|cafe|restaurant|snack|pizza|swiggy|zomato|meal|biryani|burger|eat|drinks|bakery|dessert|takeout|starbucks|chai/i
+    };
+
+    const MONTHS_MAP = {
+      jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4,
+      may: 5, jun: 6, june: 6, jul: 7, july: 7, aug: 8, august: 8, sep: 9, september: 9,
+      oct: 10, october: 10, nov: 11, november: 11, dec: 12, december: 12
+    };
+
+    const DAYS_MAP = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
+
+    const $ = id => document.getElementById(id);
+
+    // --- APPLICATION STATE (v3.6) ---
+    let S = {
+      items: [],
+      cur: "₹",
+      theme: "obsidian",
+      customCategories: [],
+      lastBackupTimestamp: 0,
+      settings: {
+        enableIncome: true,
+        showDues: true,
+        enableCap: false,
+        monthlyCap: 45000,
+        enableLock: false,
+        lockPin: "",
+        enableBiometric: true
+      }
+    };
+
+    let isAppLocked = false;
+    let lastDeletedItem = null;
+    let activeCategoryFilter = null;
+    let activeTypeFilter = "all";
+    let deferredPrompt = null;
+
+    const iso = d => {
+      const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+      return z.toISOString().slice(0, 10);
+    };
+
+    let vm = iso(new Date()).slice(0, 7);
+
+    function fmt(n, customCur) {
+      return (customCur || S.cur) + " " + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function monthName(mStr) {
+      const [y, m] = mStr.split("-").map(Number);
+      const d = new Date(y, m - 1, 1);
+      return d.toLocaleString(undefined, { month: "long", year: "numeric" });
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function getCatIcon(catName) {
+      if (BASE_CAT_ICONS[catName]) return BASE_CAT_ICONS[catName];
+      return "🏷️";
+    }
+
+    function showToast(msg) {
+      const t = $("toast");
+      $("toast-text").textContent = msg;
+      t.classList.add("show");
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove("show"), 2800);
+    }
+
+    function showUndoToast(msg, itemToRestore) {
+      lastDeletedItem = itemToRestore;
+      const t = $("toast");
+      t.innerHTML = `
+        <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
+        <span>${escapeHtml(msg)}</span>
+        <button id="btn-toast-undo" class="underline font-bold ml-2 cursor-pointer text-teal-400">Undo</button>
+      `;
+      t.classList.add("show");
+      clearTimeout(t._timer);
+
+      const undoBtn = document.getElementById("btn-toast-undo");
+      if (undoBtn) {
+        undoBtn.onclick = () => {
+          if (lastDeletedItem) {
+            S.items.unshift(lastDeletedItem);
+            saveStorage();
+            render();
+            if (window.cloudSyncAdd) window.cloudSyncAdd([lastDeletedItem]);
+            lastDeletedItem = null;
+            t.classList.remove("show");
+            showToast("Restored entry");
+          }
+        };
+      }
+
+      t._timer = setTimeout(() => {
+        t.classList.remove("show");
+        t.innerHTML = `
+          <span class="w-2 h-2 rounded-full" style="background: var(--accent);"></span>
+          <span id="toast-text"></span>
+        `;
+      }, 5000);
+    }
+
+    // =========================================================================
+    // 2. AUTOMATED BACKUP & ROLLING SNAPSHOT ENGINE
+    // =========================================================================
+    function getRollingSnapshots() {
+      try {
+        const raw = localStorage.getItem("fiscc_rolling_backups");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveRollingSnapshot(label = "Auto") {
+      try {
+        const snapshots = getRollingSnapshots();
+        const newSnapshot = {
+          id: "snap_" + Date.now(),
+          timestamp: Date.now(),
+          dateStr: new Date().toLocaleString(),
+          label: label,
+          itemCount: S.items.length,
+          data: JSON.parse(JSON.stringify(S))
+        };
+
+        // Keep last 5 snapshots
+        snapshots.unshift(newSnapshot);
+        const trimmed = snapshots.slice(0, 5);
+        localStorage.setItem("fiscc_rolling_backups", JSON.stringify(trimmed));
+        S.lastBackupTimestamp = Date.now();
+        updateBackupStatusDisplay();
+      } catch (e) {
+        console.warn("Could not save snapshot", e);
+      }
+    }
+
+    function restoreFromSnapshot(snapshotId) {
+      const snapshots = getRollingSnapshots();
+      const snap = snapshots.find(s => s.id === snapshotId);
+      if (!snap) {
+        showToast("Snapshot not found");
+        return;
+      }
+      if (confirm(`Restore snapshot from ${snap.dateStr} (${snap.itemCount} items)? Current entries will be replaced.`)) {
+        S = snap.data;
+        saveStorage(false); // don't overwrite the snapshot we just restored
+        applyTheme(S.theme || "obsidian");
+        render();
+        renderSnapshotList();
+        showToast(`✓ Restored snapshot from ${snap.dateStr}`);
+        if (window.cloudSyncTrigger) window.cloudSyncTrigger();
+      }
+    }
+
+    function renderSnapshotList() {
+      const container = $("snapshot-history-list");
+      if (!container) return;
+      const snapshots = getRollingSnapshots();
+      if (!snapshots.length) {
+        container.innerHTML = `<p class="text-[11px]" style="color: var(--text-faint)">No safe snapshots recorded yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = snapshots.map(s => `
+        <div class="flex items-center justify-between p-2 rounded-lg border text-[11px]" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+          <div>
+            <b class="text-teal-400 font-mono">${escapeHtml(s.label)}</b>
+            <span style="color: var(--text-faint)"> &bull; ${escapeHtml(s.dateStr)}</span>
+            <span class="block text-[10px]" style="color: var(--text-muted)">${s.itemCount} transactions</span>
+          </div>
+          <button type="button" onclick="restoreFromSnapshot('${s.id}')" class="px-2.5 py-1 rounded border text-xs font-medium hover:border-teal-400" style="background: var(--bg-subtle); border-color: var(--border-highlight); color: var(--text-main);">
+            Restore
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function updateBackupStatusDisplay() {
+      const el = $("header-backup-status");
+      if (!el) return;
+      if (!S.lastBackupTimestamp) {
+        el.textContent = "Safe: Active";
+        return;
+      }
+      const mins = Math.floor((Date.now() - S.lastBackupTimestamp) / 60000);
+      if (mins < 1) el.textContent = "Backed up just now";
+      else if (mins < 60) el.textContent = `Backed up ${mins}m ago`;
+      else el.textContent = "Backup Safe";
+    }
+
+    // --- STORAGE MANAGEMENT ---
+    function loadStorage() {
+      try {
+        const raw = localStorage.getItem("fiscc_ledger") || localStorage.getItem("exp-agent");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            S.items = parsed;
+          } else if (parsed && typeof parsed === "object") {
+            S.items = Array.isArray(parsed.items) ? parsed.items : [];
+            S.cur = parsed.cur || "₹";
+            S.theme = parsed.theme || "obsidian";
+            S.customCategories = Array.isArray(parsed.customCategories) ? parsed.customCategories : [];
+            S.lastBackupTimestamp = parsed.lastBackupTimestamp || 0;
+            S.settings = Object.assign({ 
+              enableIncome: true, 
+              showDues: true, 
+              enableCap: false, 
+              monthlyCap: 45000,
+              enableLock: false,
+              lockPin: "",
+              enableBiometric: true
+            }, parsed.settings || {});
+          }
+        }
+      } catch (e) {
+        console.warn("Storage load warning", e);
+      }
+
+      applyTheme(S.theme || "obsidian");
+      initAppLock();
+      checkPWAInstallState();
+      updateBackupStatusDisplay();
+    }
+
+    function saveStorage(createAutoSnapshot = true) {
+      try {
+        const str = JSON.stringify(S);
+        localStorage.setItem("fiscc_ledger", str);
+        localStorage.setItem("exp-agent", str);
+        if (createAutoSnapshot) {
+          saveRollingSnapshot("Auto");
+        }
+      } catch (e) {
+        console.warn("Storage save error", e);
+      }
+    }
+
+    // --- PWA INSTALL & STANDALONE DETECTION ---
+    function isRunningStandalone() {
+      return (window.navigator.standalone === true) || 
+             (window.matchMedia("(display-mode: standalone)").matches) ||
+             (window.matchMedia("(display-mode: fullscreen)").matches);
+    }
+
+    function checkPWAInstallState() {
+      const btn = $("btn-open-apk-hub");
+      if (isRunningStandalone()) {
+        if (btn) btn.innerHTML = `<span>⚡</span> <span class="font-semibold">APK Mode</span>`;
+      }
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredPrompt = null;
+      showToast("✓ Fiscc installed as Standalone App!");
+      checkPWAInstallState();
+    });
+
+    // --- APP LOCK ---
+    function initAppLock() {
+      if (!S.settings.enableLock || !S.settings.lockPin) {
+        $("btn-quick-lock").classList.add("hidden");
+        $("btn-quick-lock").classList.remove("inline-flex");
+        return;
+      }
+      $("btn-quick-lock").classList.remove("hidden");
+      $("btn-quick-lock").classList.add("inline-flex");
+
+      const isSessionUnlocked = sessionStorage.getItem("fiscc_session_unlocked") === "true";
+      if (!isSessionUnlocked) {
+        lockApp();
+      }
+    }
+
+    function lockApp() {
+      isAppLocked = true;
+      sessionStorage.removeItem("fiscc_session_unlocked");
+      $("app-lock-screen").classList.add("active");
+      $("lock-pin-input").value = "";
+      $("lock-error-msg").textContent = "";
+
+      const hasBiometric = S.settings.enableBiometric && window.PublicKeyCredential;
+      if (hasBiometric) {
+        $("lock-biometric-section").classList.remove("hidden");
+        triggerBiometricPrompt();
+      } else {
+        $("lock-biometric-section").classList.add("hidden");
+      }
+    }
+
+    function unlockApp() {
+      isAppLocked = false;
+      sessionStorage.setItem("fiscc_session_unlocked", "true");
+      $("app-lock-screen").classList.remove("active");
+      showToast("App Unlocked");
+    }
+
+    async function triggerBiometricPrompt() {
+      if (!window.PublicKeyCredential) return;
+      try {
+        const challenge = new Uint8Array(32);
+        window.crypto.getRandomValues(challenge);
+        await navigator.credentials.get({
+          publicKey: { challenge, timeout: 60000, userVerification: "preferred" }
+        });
+        unlockApp();
+      } catch (err) {}
+    }
+
+    function applyTheme(themeKey) {
+      document.documentElement.setAttribute("data-theme", themeKey);
+      S.theme = themeKey;
+      document.querySelectorAll(".theme-btn").forEach(btn => {
+        if (btn.dataset.th === themeKey) {
+          btn.style.borderColor = "var(--accent)";
+          btn.style.background = "var(--bg-subtle)";
+        } else {
+          btn.style.borderColor = "var(--border-subtle)";
+          btn.style.background = "transparent";
+        }
+      });
+    }
+
+    // =========================================================================
+    // 3. UNIVERSAL NATURAL LANGUAGE DATE & CURRENCY PARSER
+    // =========================================================================
+    function extractPaymentMode(text) {
+      if (/\b(?:credit\s*card|c\.?c\.?|amex|mastercard\s+credit|visa\s+credit)\b/i.test(text)) return "Credit Card";
+      if (/\b(?:debit\s*card|d\.?c\.?|atm\s*card|visa\s+debit|mastercard\s+debit)\b/i.test(text)) return "Debit Card";
+      if (/\b(?:upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|qr\s*code|qr|scan\s*and\s*pay)\b/i.test(text)) return "UPI";
+      if (/\b(?:cash|in\s*cash|currency\s*notes)\b/i.test(text)) return "Cash";
+      if (/\b(?:netbanking|net\s*banking)\b/i.test(text)) return "NetBanking";
+      if (/\b(?:direct\s*bank|bank\s*transfer|neft|rtgs|imps|wire\s*transfer|hdfc|icici|sbi|axis|kotak|pnb)\b/i.test(text)) return "Bank Transfer";
+      if (/\b(?:wallet|amazon\s*pay|apple\s*pay)\b/i.test(text)) return "Wallet";
+      if (/\b(?:cheque|check)\b/i.test(text)) return "Cheque";
+      return "";
+    }
+
+    function findMatchingEntryForReimbursement(targetKeyword) {
+      if (!targetKeyword || !targetKeyword.trim()) return null;
+      const cleanKeyword = targetKeyword.toLowerCase().replace(/^(?:the|for|against|on|at)\s+/i, "").trim();
+      if (!cleanKeyword) return null;
+
+      return S.items.find(item => {
+        if (item.type === "income") return false;
+        const desc = (item.description || "").toLowerCase();
+        const cat = (item.category || "").toLowerCase();
+        return desc.includes(cleanKeyword) || cleanKeyword.includes(desc) || cat.includes(cleanKeyword);
+      }) || null;
+    }
+
+    function parseExpenseText(text) {
+      const now = new Date();
+      const defaultYear = parseInt(vm.slice(0, 4), 10) || now.getFullYear();
+
+      const out = [];
+      const parts = text.split(/\s*(?:,|\band\b|\n|;)\s*/i).filter(Boolean);
+
+      for (let p of parts) {
+        const isReimbursementPhrase = /\b(received|got back|reimbursement|reimbursed|refund|refunded|minus|deduct|share from|paid back)\b/i.test(p);
+        const targetMatch = p.match(/(?:against|for|on|from|towards)\s+([A-Za-z0-9\s&'-]+?)(?:\s+(?:via|through|by|with|using|yesterday|today|on|\d)|$)/i);
+
+        let pDate = iso(now);
+        let dateMatchedString = "";
+
+        const tagDmyMatch = p.match(/\b(\d{1,2})\s*\([dD]\)[-/.\s]*(\d{1,2})\s*\([mM]\)[-/.\s]*(\d{2,4})\s*\([yY]\)\b/i);
+        const numericDmyMatch = p.match(/\b(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})\b/);
+        const dayMonthMatch = p.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\s*,?\s*(\d{2,4}))?\b/i);
+        const monthDayMatch = p.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s*,?\s*(\d{2,4}))?\b/i);
+        const lastDayMatch = p.match(/\blast\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i);
+        const dayBeforeYesterdayMatch = p.match(/\bday\s+before\s+yesterday\b/i);
+        const yesterdayMatch = p.match(/\byesterday\b/i);
+        const todayMatch = p.match(/\btoday\b/i);
+
+        if (tagDmyMatch) {
+          const day = parseInt(tagDmyMatch[1], 10);
+          const mon = parseInt(tagDmyMatch[2], 10);
+          let yr = parseInt(tagDmyMatch[3], 10);
+          if (yr < 100) yr = 2000 + yr;
+          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          dateMatchedString = tagDmyMatch[0];
+        } else if (numericDmyMatch) {
+          const day = parseInt(numericDmyMatch[1], 10);
+          const mon = parseInt(numericDmyMatch[2], 10);
+          let yr = parseInt(numericDmyMatch[3], 10);
+          if (yr < 100) yr = 2000 + yr;
+          if (mon >= 1 && mon <= 12 && day >= 1 && day <= 31) {
+            pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            dateMatchedString = numericDmyMatch[0];
+          }
+        } else if (dayMonthMatch) {
+          const day = parseInt(dayMonthMatch[1], 10);
+          const monKey = dayMonthMatch[2].toLowerCase().slice(0, 3);
+          const mon = MONTHS_MAP[monKey] || 1;
+          let yr = dayMonthMatch[3] ? parseInt(dayMonthMatch[3], 10) : defaultYear;
+          if (yr < 100) yr = 2000 + yr;
+          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          dateMatchedString = dayMonthMatch[0];
+        } else if (monthDayMatch) {
+          const monKey = monthDayMatch[1].toLowerCase().slice(0, 3);
+          const day = parseInt(monthDayMatch[2], 10);
+          const mon = MONTHS_MAP[monKey] || 1;
+          let yr = monthDayMatch[3] ? parseInt(monthDayMatch[3], 10) : defaultYear;
+          if (yr < 100) yr = 2000 + yr;
+          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+          dateMatchedString = monthDayMatch[0];
+        } else if (lastDayMatch) {
+          const targetDay = DAYS_MAP[lastDayMatch[1].toLowerCase()];
+          const d = new Date();
+          let diff = d.getDay() - targetDay;
+          if (diff <= 0) diff += 7;
+          d.setDate(d.getDate() - diff);
+          pDate = iso(d);
+          dateMatchedString = lastDayMatch[0];
+        } else if (dayBeforeYesterdayMatch) {
+          const y = new Date(); y.setDate(y.getDate() - 2);
+          pDate = iso(y);
+          dateMatchedString = dayBeforeYesterdayMatch[0];
+        } else if (yesterdayMatch) {
+          const y = new Date(); y.setDate(y.getDate() - 1);
+          pDate = iso(y);
+          dateMatchedString = yesterdayMatch[0];
+        } else if (todayMatch) {
+          pDate = iso(new Date());
+          dateMatchedString = todayMatch[0];
+        }
+
+        let textWithoutDate = p;
+        if (dateMatchedString) {
+          textWithoutDate = p.replace(dateMatchedString, " ");
+        }
+
+        let amt = null;
+        let detectedCur = S.cur;
+        let matchStr = "";
+
+        const curMatch = textWithoutDate.match(/(?:(?:rs\.?|inr|₹)\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:rs\.?|inr|₹))/i);
+        const usdMatch = textWithoutDate.match(/(?:\$\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*usd)/i);
+        const eurMatch = textWithoutDate.match(/(?:€\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*eur)/i);
+        const gbpMatch = textWithoutDate.match(/(?:£\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*gbp)/i);
+        const aedMatch = textWithoutDate.match(/(?:aed\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*aed)/i);
+        const plainNumberMatch = textWithoutDate.match(/\b(\d[\d,]*(?:\.\d+)?)\s*(k)?\b/i);
+
+        if (curMatch) {
+          const val = curMatch[1] || curMatch[3];
+          const isK = curMatch[2] || curMatch[4];
+          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
+          detectedCur = "₹";
+          matchStr = curMatch[0];
+        } else if (usdMatch) {
+          const val = usdMatch[1] || usdMatch[3];
+          const isK = usdMatch[2] || usdMatch[4];
+          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
+          detectedCur = "$";
+          matchStr = usdMatch[0];
+        } else if (eurMatch) {
+          const val = eurMatch[1] || eurMatch[3];
+          const isK = eurMatch[2] || eurMatch[4];
+          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
+          detectedCur = "€";
+          matchStr = eurMatch[0];
+        } else if (gbpMatch) {
+          const val = gbpMatch[1] || gbpMatch[3];
+          const isK = gbpMatch[2] || gbpMatch[4];
+          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
+          detectedCur = "£";
+          matchStr = gbpMatch[0];
+        } else if (aedMatch) {
+          const val = aedMatch[1] || aedMatch[3];
+          const isK = aedMatch[2] || aedMatch[4];
+          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
+          detectedCur = "AED";
+          matchStr = aedMatch[0];
+        } else if (plainNumberMatch) {
+          amt = parseFloat(plainNumberMatch[1].replace(/,/g, "")) * (plainNumberMatch[2] ? 1000 : 1);
+          matchStr = plainNumberMatch[0];
+        }
+
+        if (!amt || isNaN(amt)) continue;
+
+        const pPayment = extractPaymentMode(p);
+
+        if (isReimbursementPhrase && targetMatch) {
+          const matchedTarget = findMatchingEntryForReimbursement(targetMatch[1]);
+          if (matchedTarget) {
+            out.push({
+              isOffsetAction: true,
+              targetItem: matchedTarget,
+              deductAmount: Math.round(amt * 100) / 100,
+              payment: pPayment,
+              date: pDate,
+              note: `Reimbursed from: ${p}`
+            });
+            continue;
+          }
+        }
+
+        let type = "expense";
+        let borrower = "";
+        let isEmi = /\bemi\b/i.test(p);
+
+        const lentMatch = p.match(/\b(?:lent|loaned|gave)\s+(?:to\s+)?([A-Za-z]+)|\b([A-Za-z]+)\s+borrowed|\bdue\s+from\s+([A-Za-z]+)/i);
+        const isLending = /lent|borrowed|loaned|due from|expecting return|pay back/i.test(p);
+        
+        if (isLending) {
+          type = "lent";
+          if (lentMatch) borrower = (lentMatch[1] || lentMatch[2] || lentMatch[3] || "").trim();
+        } else if (/salary|credited|freelance|dividend|bonus|income|received|got paid|cashback|stipend|consulting|sale proceeds/i.test(p)) {
+          type = "income";
+        }
+
+        let desc = textWithoutDate
+          .replace(matchStr, "")
+          .replace(/\b(?:via|through|by|with|using|paid\s+via|paid\s+by|paid\s+through)\s+(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|cash|netbanking|net\s*banking|direct\s*bank|bank\s*transfer|bank|wallet|cheque|check|card)\b/gi, "")
+          .replace(/\b(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|phonepe|paytm|cash|netbanking|direct\s*bank|bank\s*transfer)\b/gi, "")
+          .replace(/\b(spent|on|for|paid|via|by|with|through|using|rs|inr|usd|eur|gbp|aed|lent to|borrowed by|expecting return|salary|income|credited|to)\b|[₹$€£]/gi, "")
+          .replace(/\s+/g, " ")
+          .trim();
+
+        if (!desc) {
+          desc = type === "lent" ? (borrower ? `Lent to ${borrower}` : "Money Lent") : (type === "income" ? "Income" : "Expense");
+        }
+
+        let cat = "Other";
+        if (type === "lent") cat = "Gifts & Charity";
+        else if (type === "income") cat = "Investments";
+        else {
+          for (const c of S.customCategories) {
+            if (new RegExp("\\b" + c + "\\b", "i").test(p)) { cat = c; break; }
+          }
+          if (cat === "Other") {
+            for (const c in KW) {
+              if (KW[c].test(p)) { cat = c; break; }
+            }
+          }
+        }
+
+        out.push({
+          id: "fiscc_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+          amount: Math.round(amt * 100) / 100,
+          currency: detectedCur,
+          category: cat,
+          description: desc.charAt(0).toUpperCase() + desc.slice(1),
+          payment: pPayment,
+          date: pDate,
+          type: type,
+          borrower: borrower,
+          isEmi: isEmi,
+          status: type === "lent" ? "pending" : "completed",
+          createdAt: Date.now()
+        });
+      }
+      return out;
+    }
+
+    function updateLiveBadge() {
+      const val = $("expense-omni-input").value;
+      const badge = $("live-parse-badge");
+      const text = $("live-parse-text");
+      if (!val.trim()) {
+        badge.classList.add("hidden");
+        return;
+      }
+      const parsed = parseExpenseText(val);
+      if (parsed.length > 0) {
+        if (parsed[0].isOffsetAction) {
+          text.textContent = `Deduct ${fmt(parsed[0].deductAmount)} from "${parsed[0].targetItem.description}"`;
+        } else {
+          const total = parsed.reduce((sum, itm) => sum + itm.amount, 0);
+          text.textContent = `Detected ${parsed.length} ${parsed.length === 1 ? 'entry' : 'entries'} (~ ${fmt(total, parsed[0].currency)}) on ${parsed[0].date}`;
+        }
+        badge.classList.remove("hidden");
+        badge.classList.add("inline-flex");
+      } else {
+        badge.classList.add("hidden");
+      }
+    }
+
+    function addExpense() {
+      const input = $("expense-omni-input");
+      const val = input.value.trim();
+      if (!val) {
+        showToast("Please type what you spent first");
+        input.focus();
+        return;
+      }
+
+      const items = parseExpenseText(val);
+      if (!items.length) {
+        showToast("Couldn't find an amount. Try “Spent Rs 601 on 1st Nov on Patrol”");
+        return;
+      }
+
+      let offsetCount = 0;
+      const newItemsToAdd = [];
+
+      items.forEach(it => {
+        if (it.isOffsetAction && it.targetItem) {
+          applyReimbursement(it.targetItem, it.deductAmount, it.note, it.payment);
+          offsetCount++;
+        } else {
+          newItemsToAdd.push(it);
+        }
+      });
+
+      if (newItemsToAdd.length > 0) {
+        newItemsToAdd.forEach(it => S.items.unshift(it));
+        vm = newItemsToAdd[0].date.slice(0, 7);
+      }
+
+      saveStorage();
+      input.value = "";
+      updateLiveBadge();
+      render();
+
+      if (offsetCount === 0 || newItemsToAdd.length > 0) {
+        showToast(`Logged ${newItemsToAdd.length} entry${newItemsToAdd.length > 1 ? "ies" : ""}`);
+        if (window.cloudSyncAdd) window.cloudSyncAdd(newItemsToAdd);
+      }
+    }
+
+    function applyReimbursement(item, deductAmount, note, payment) {
+      if (!item || !deductAmount) return;
+
+      item.originalAmount = item.originalAmount || item.amount;
+      item.reimbursements = item.reimbursements || [];
+      item.reimbursements.push({
+        amount: deductAmount,
+        date: iso(new Date()),
+        note: note || "Reimbursement / Friend share",
+        payment: payment || ""
+      });
+
+      const oldAmount = item.amount;
+      item.amount = Math.max(0, Math.round((item.amount - deductAmount) * 100) / 100);
+
+      saveStorage();
+      render();
+      showToast(`✓ Deducted ${fmt(deductAmount)} from "${item.description}" (${fmt(oldAmount)} → ${fmt(item.amount)})`);
+
+      if (window.cloudSyncUpdate) window.cloudSyncUpdate(item);
+    }
+
+    function openReimburseModal(id) {
+      const itm = S.items.find(x => String(x.id) === String(id));
+      if (!itm) return;
+
+      $("reimburse-id").value = itm.id;
+      $("reimburse-entry-title").textContent = itm.description;
+      $("reimburse-entry-current").textContent = fmt(itm.amount, itm.currency);
+      $("reimburse-entry-meta").textContent = `${itm.date} • ${itm.category} • ${itm.payment || 'Direct'}`;
+      $("reimburse-amount").value = "";
+      $("reimburse-note").value = "";
+
+      $("reimburse-modal").classList.add("open");
+      $("reimburse-amount").focus();
+    }
+
+    $("close-reimburse-x").onclick = () => $("reimburse-modal").classList.remove("open");
+    $("btn-cancel-reimburse").onclick = () => $("reimburse-modal").classList.remove("open");
+
+    $("reimburse-form").onsubmit = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const id = $("reimburse-id").value;
+      const itm = S.items.find(x => String(x.id) === String(id));
+      const amount = parseFloat($("reimburse-amount").value);
+      const note = $("reimburse-note").value.trim();
+      const pay = $("reimburse-pay").value;
+
+      if (!itm || !amount || isNaN(amount)) {
+        showToast("Please enter a valid amount to deduct");
+        return false;
+      }
+
+      applyReimbursement(itm, amount, note, pay);
+      $("reimburse-modal").classList.remove("open");
+      return false;
+    };
+
+    function duplicateEntry(id) {
+      const itm = S.items.find(x => String(x.id) === String(id));
+      if (!itm) return;
+
+      const copy = {
+        ...itm,
+        id: "fiscc_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+        description: itm.description + " (Copy)",
+        createdAt: Date.now()
+      };
+
+      S.items.unshift(copy);
+      saveStorage();
+      render();
+      showToast(`Duplicated "${itm.description}"`);
+
+      if (window.cloudSyncAdd) window.cloudSyncAdd([copy]);
+    }
+
+    function removeEntry(id) {
+      const itm = S.items.find(x => String(x.id) === String(id));
+      S.items = S.items.filter(x => String(x.id) !== String(id));
+      saveStorage();
+      render();
+      if (itm) {
+        showUndoToast(`Removed "${itm.description}"`, itm);
+      } else {
+        showToast("Entry removed");
+      }
+      if (window.cloudSyncDelete) window.cloudSyncDelete(id);
+    }
+
+    function openEditModal(id) {
+      const itm = S.items.find(x => String(x.id) === String(id));
+      if (!itm) return;
+
+      $("edit-id").value = itm.id;
+      $("edit-desc").value = itm.description || "";
+      $("edit-amount").value = itm.amount || "";
+      $("edit-date").value = itm.date || iso(new Date());
+      $("edit-pay").value = itm.payment || "";
+      $("edit-type").value = itm.type || "expense";
+      $("edit-borrower").value = itm.borrower || "";
+
+      const allCats = [...Object.keys(BASE_CAT_ICONS), ...S.customCategories];
+      const uniqueCats = Array.from(new Set(allCats));
+
+      let catOptionsHtml = uniqueCats.map(c => `
+        <option value="${escapeHtml(c)}" ${itm.category === c ? 'selected' : ''}>
+          ${getCatIcon(c)} ${escapeHtml(c)}
+        </option>
+      `).join("");
+
+      catOptionsHtml += `<option value="__manual__">✍️ Custom / Type Manually...</option>`;
+      $("edit-cat").innerHTML = catOptionsHtml;
+
+      const isKnown = uniqueCats.includes(itm.category);
+      if (!isKnown && itm.category) {
+        $("edit-cat").value = "__manual__";
+        $("edit-manual-cat").value = itm.category;
+        $("edit-manual-cat-row").classList.remove("hidden");
+      } else {
+        $("edit-manual-cat-row").classList.add("hidden");
+        $("edit-manual-cat").value = "";
+      }
+
+      $("edit-borrower-row").classList.toggle("hidden", itm.type !== "lent");
+      $("edit-modal").classList.add("open");
+    }
+
+    $("edit-cat").onchange = e => {
+      $("edit-manual-cat-row").classList.toggle("hidden", e.target.value !== "__manual__");
+    };
+
+    $("edit-type").onchange = e => {
+      $("edit-borrower-row").classList.toggle("hidden", e.target.value !== "lent");
+    };
+
+    $("close-edit-x").onclick = () => $("edit-modal").classList.remove("open");
+    $("btn-cancel-edit").onclick = () => $("edit-modal").classList.remove("open");
+
+    $("btn-edit-duplicate").onclick = () => {
+      const id = $("edit-id").value;
+      $("edit-modal").classList.remove("open");
+      duplicateEntry(id);
+    };
+
+    $("edit-form").onsubmit = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      const id = $("edit-id").value;
+      const idx = S.items.findIndex(x => String(x.id) === String(id));
+      if (idx === -1) {
+        showToast("Error: entry not found");
+        return false;
+      }
+
+      const itm = S.items[idx];
+      itm.description = $("edit-desc").value.trim() || "Expense";
+      itm.amount = parseFloat($("edit-amount").value) || itm.amount;
+      itm.date = $("edit-date").value || itm.date;
+      itm.payment = $("edit-pay").value;
+      itm.type = $("edit-type").value;
+
+      let chosenCat = $("edit-cat").value;
+      if (chosenCat === "__manual__") {
+        chosenCat = $("edit-manual-cat").value.trim() || "Other";
+        if (!S.customCategories.includes(chosenCat)) {
+          S.customCategories.push(chosenCat);
+        }
+      }
+      itm.category = chosenCat;
+      itm.borrower = itm.type === "lent" ? $("edit-borrower").value.trim() : "";
+
+      const seen = new Set();
+      S.items = S.items.filter(item => {
+        if (seen.has(String(item.id))) return false;
+        seen.add(String(item.id));
+        return true;
+      });
+
+      saveStorage();
+
+      if (itm.date && itm.date.slice(0, 7) !== vm) {
+        vm = itm.date.slice(0, 7);
+      }
+
+      $("edit-modal").classList.remove("open");
+      render();
+      showToast("✓ Entry updated in-place");
+
+      if (window.cloudSyncUpdate) window.cloudSyncUpdate(itm);
+      return false;
+    };
+
+    function settleDue(id) {
+      const itm = S.items.find(x => x.id === id);
+      if (!itm) return;
+      itm.status = "settled";
+      saveStorage();
+      render();
+      showToast(`✓ Marked settled for ${itm.borrower || itm.description}`);
+      if (window.cloudSyncUpdate) window.cloudSyncUpdate(itm);
+    }
+
+    // =========================================================================
+    // 4. RENDER DASHBOARD & METRICS
+    // =========================================================================
+    function render(filterQuery = "") {
+      $("currency-selector").value = S.cur;
+      $("current-month-display").textContent = monthName(vm);
+
+      const monthItems = S.items.filter(i => (i.date || "").startsWith(vm));
+      const expenses = monthItems.filter(i => i.type !== "income");
+      const incomeItems = monthItems.filter(i => i.type === "income");
+
+      const totalExpense = expenses.reduce((sum, itm) => sum + (Number(itm.amount) || 0), 0);
+      const totalIncome = incomeItems.reduce((sum, itm) => sum + (Number(itm.amount) || 0), 0);
+      const netCashflow = totalIncome - totalExpense;
+
+      const parts = totalExpense.toFixed(2).split(".");
+      $("total-spend-display").innerHTML = `${S.cur} ${Number(parts[0]).toLocaleString()}<span class="text-2xl sm:text-3xl font-light opacity-60">.${parts[1]}</span>`;
+
+      // Year-over-Year comparison
+      const [currY, currM] = vm.split("-").map(Number);
+      const lastYearMonth = `${currY - 1}-${String(currM).padStart(2, "0")}`;
+      const lastYearSpends = S.items
+        .filter(i => (i.date || "").startsWith(lastYearMonth) && i.type !== "income")
+        .reduce((sum, itm) => sum + (Number(itm.amount) || 0), 0);
+
+      const yoyBadge = $("yoy-badge");
+      if (lastYearSpends > 0) {
+        const diffPct = Math.round(((totalExpense - lastYearSpends) / lastYearSpends) * 100);
+        if (diffPct < 0) {
+          yoyBadge.style.color = "var(--success)";
+          yoyBadge.innerHTML = `📉 ${Math.abs(diffPct)}% less than ${monthName(lastYearMonth)}`;
+        } else {
+          yoyBadge.style.color = "var(--danger)";
+          yoyBadge.innerHTML = `📈 ${diffPct}% more than ${monthName(lastYearMonth)}`;
+        }
+      } else {
+        yoyBadge.style.color = "var(--text-muted)";
+        yoyBadge.innerHTML = `📊 No data for ${monthName(lastYearMonth)}`;
+      }
+
+      const dNow = new Date();
+      const isCurrentMonth = vm === iso(dNow).slice(0, 7);
+      const daysCount = isCurrentMonth ? Math.max(1, dNow.getDate()) : 30;
+      const dailyAvg = Math.round(totalExpense / daysCount);
+      $("daily-avg-display").textContent = `Avg: ${fmt(dailyAvg)} / day`;
+      $("entry-count-pill").textContent = `${monthItems.length} transaction${monthItems.length === 1 ? '' : 's'}`;
+      $("ledger-badge-count").textContent = `${monthItems.length} entries`;
+
+      // Monthly Cap Target Progress Bar
+      const capCard = $("monthly-cap-card");
+      const metricsCol = $("main-metrics-col");
+      if (S.settings.enableCap) {
+        capCard.style.display = "block";
+        if (metricsCol) {
+          metricsCol.classList.remove("md:col-span-12");
+          metricsCol.classList.add("md:col-span-7");
+        }
+        const cap = S.settings.monthlyCap || 45000;
+        const utilPct = Math.min(100, Math.round((totalExpense / cap) * 100));
+        const rem = Math.max(0, cap - totalExpense);
+
+        $("budget-ratio-text").textContent = `${fmt(totalExpense)} / ${fmt(cap)}`;
+        $("budget-progress-bar").style.width = `${utilPct}%`;
+        $("budget-util-text").textContent = `${utilPct}% utilized`;
+        $("budget-remaining-text").textContent = `${fmt(rem)} left`;
+
+        if (utilPct >= 95) $("budget-progress-bar").style.background = "var(--danger)";
+        else if (utilPct >= 75) $("budget-progress-bar").style.background = "var(--gold)";
+        else $("budget-progress-bar").style.background = "var(--accent)";
+      } else {
+        capCard.style.display = "none";
+        if (metricsCol) {
+          metricsCol.classList.remove("md:col-span-7");
+          metricsCol.classList.add("md:col-span-12");
+        }
+      }
+
+      // Accounting Income vs Expense Grid
+      const balGrid = $("balance-grid");
+      if (S.settings.enableIncome || incomeItems.length > 0) {
+        balGrid.style.display = "grid";
+        $("stat-income").textContent = fmt(totalIncome);
+        $("stat-expense").textContent = fmt(totalExpense);
+        $("stat-balance").textContent = fmt(netCashflow);
+        $("stat-balance").style.color = netCashflow >= 0 ? "var(--success)" : "var(--danger)";
+
+        let savingsPct = 0;
+        if (totalIncome > 0) {
+          savingsPct = Math.round((netCashflow / totalIncome) * 100);
+        }
+        $("stat-savings-rate").textContent = `${savingsPct}%`;
+        $("stat-savings-rate").style.color = savingsPct >= 20 ? "var(--success)" : (savingsPct >= 0 ? "var(--gold)" : "var(--danger)");
+      } else {
+        balGrid.style.display = "none";
+      }
+
+      // Active Dues & EMI Reminders Card
+      const duesCard = $("dues-reminders-card");
+      const activeDues = S.items.filter(i => (i.type === "lent" && i.status !== "settled") || (i.isEmi && i.status !== "settled"));
+      if (S.settings.showDues && activeDues.length > 0) {
+        duesCard.style.display = "block";
+        $("dues-list").innerHTML = activeDues.map(d => `
+          <div class="py-2.5 flex items-center justify-between text-xs">
+            <div>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase mr-1.5" style="background: var(--gold-soft); color: var(--gold)">
+                ${d.type === 'lent' ? 'Lent Due' : 'EMI Due'}
+              </span>
+              <b>${escapeHtml(d.borrower ? d.borrower + ' owes' : d.description)}</b>
+              <span style="color: var(--text-faint)"> &bull; ${escapeHtml(d.date)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-semibold">${fmt(d.amount, d.currency)}</span>
+              <button onclick="settleDue('${d.id}')" class="px-2 py-0.5 rounded text-[11px] font-medium border" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--accent);">
+                Settle
+              </button>
+            </div>
+          </div>
+        `).join("");
+      } else {
+        duesCard.style.display = "none";
+      }
+
+      // Category Breakdown Bars
+      const byCat = {};
+      expenses.forEach(i => { byCat[i.category] = (byCat[i.category] || 0) + (Number(i.amount) || 0); });
+      const catRows = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+      const maxVal = catRows.length ? catRows[0][1] : 1;
+
+      $("category-breakdown-box").innerHTML = catRows.length
+        ? catRows.map(([c, v]) => {
+          const isFiltered = activeCategoryFilter === c;
+          return `
+            <div class="flex items-center gap-3 text-xs cursor-pointer p-1 rounded-lg transition hover:bg-white/[0.04] ${isFiltered ? 'border border-teal-500/30' : ''}" onclick="toggleCategoryFilter('${escapeHtml(c)}')">
+              <span class="w-28 truncate font-medium flex items-center gap-1.5">
+                <span>${getCatIcon(c)}</span>
+                <span class="truncate ${isFiltered ? 'font-bold' : ''}" style="color: ${isFiltered ? 'var(--accent)' : 'inherit'}">${escapeHtml(c)}</span>
+              </span>
+              <div class="flex-1 h-2 rounded-full overflow-hidden" style="background: var(--bg-subtle)">
+                <div class="h-full rounded-full transition-all duration-300" style="width: ${(v / maxVal) * 100}%; background: ${isFiltered ? 'var(--accent-hover)' : 'var(--accent)'};"></div>
+              </div>
+              <span class="w-20 text-right font-mono" style="color: var(--text-muted)">${fmt(v)}</span>
+            </div>
+          `;
+        }).join("")
+        : '<div class="text-xs text-center py-2" style="color: var(--text-faint)">No expenses categorized for this month yet.</div>';
+
+      renderChart(currY, currM);
+      renderLedger(monthItems, filterQuery);
+      renderCategoryChips();
+      updateBackupStatusDisplay();
+    }
+
+    function toggleCategoryFilter(cat) {
+      if (activeCategoryFilter === cat) {
+        activeCategoryFilter = null;
+        showToast("Showing all categories");
+      } else {
+        activeCategoryFilter = cat;
+        showToast(`Filtered by ${cat}`);
+      }
+      render();
+    }
+
+    function renderChart(currY, currM) {
+      const container = $("six-months-bars-container");
+      container.innerHTML = "";
+
+      const months = [];
+      for (let k = 5; k >= 0; k--) {
+        const d = new Date(currY, currM - 1 - k, 1);
+        const yStr = d.getFullYear();
+        const mStr = String(d.getMonth() + 1).padStart(2, "0");
+        months.push(`${yStr}-${mStr}`);
+      }
+
+      const totals = months.map(m => S.items.filter(i => (i.date || "").startsWith(m) && i.type !== "income").reduce((s, itm) => s + (Number(itm.amount) || 0), 0));
+      const maxSpend = Math.max(...totals, 1000);
+
+      months.forEach((mKey, idx) => {
+        const [y, m] = mKey.split("-").map(Number);
+        const d = new Date(y, m - 1, 1);
+        const shortName = d.toLocaleString(undefined, { month: "short" });
+        const heightPct = Math.max(8, Math.round((totals[idx] / maxSpend) * 100));
+        const isSelected = mKey === vm;
+
+        const col = document.createElement("div");
+        col.className = "flex-1 flex flex-col items-center h-full justify-end group cursor-pointer";
+        col.title = `${shortName} ${y}: ${fmt(totals[idx])}`;
+        col.innerHTML = `
+          <div class="opacity-0 group-hover:opacity-100 transition-opacity mb-1 text-[10px] font-mono font-medium px-2 py-0.5 rounded border pointer-events-none whitespace-nowrap" style="background: var(--bg-surface); border-color: var(--border-highlight);">
+            ${fmt(totals[idx])}
+          </div>
+          <div class="w-full max-w-[42px] rounded-t-md transition-all duration-300" style="height: ${heightPct}%; background: ${isSelected ? 'var(--accent)' : 'var(--bg-subtle)'}; border-top: 1px solid var(--border-highlight);"></div>
+          <span class="mt-2 text-[11px] font-mono ${isSelected ? 'font-bold' : ''}" style="color: ${isSelected ? 'var(--text-main)' : 'var(--text-faint)'}">
+            ${shortName}
+          </span>
+        `;
+        col.onclick = () => { vm = mKey; render(); };
+        container.appendChild(col);
+      });
+    }
+
+    function renderLedger(monthItems, query = "") {
+      const listEl = $("transactions-list");
+      const emptyEl = $("empty-state-view");
+
+      let filtered = monthItems.sort((a, b) => (b.date || "").localeCompare(a.date || "") || (b.createdAt || 0) - (a.createdAt || 0));
+      
+      if (activeTypeFilter === "expense") {
+        filtered = filtered.filter(t => t.type !== "income");
+      } else if (activeTypeFilter === "income") {
+        filtered = filtered.filter(t => t.type === "income");
+      }
+
+      if (activeCategoryFilter) {
+        filtered = filtered.filter(t => t.category === activeCategoryFilter);
+      }
+
+      if (query.trim()) {
+        const q = query.toLowerCase();
+        filtered = filtered.filter(t => 
+          t.description.toLowerCase().includes(q) || 
+          t.category.toLowerCase().includes(q) || 
+          (t.payment && t.payment.toLowerCase().includes(q))
+        );
+      }
+
+      if (!filtered.length) {
+        listEl.innerHTML = "";
+        emptyEl.classList.remove("hidden");
+        return;
+      }
+
+      emptyEl.classList.add("hidden");
+      listEl.innerHTML = filtered.map(t => {
+        const isInc = t.type === "income";
+        const isLent = t.type === "lent";
+        const icon = isInc ? "💰" : (isLent ? "🤝" : getCatIcon(t.category));
+        const typeNote = isInc ? " [Income]" : (isLent ? ` [Lent: ${escapeHtml(t.borrower || "Due")}]` : "");
+        const meta = [`${icon} ${escapeHtml(t.category)}${typeNote}`, escapeHtml(t.payment), escapeHtml(t.date)].filter(Boolean).join(" &bull; ");
+        const sign = isInc ? "+" : "";
+        const amtColor = isInc ? "var(--success)" : (isLent ? "var(--gold)" : "var(--text-main)");
+
+        let reimbursementTag = "";
+        if (t.originalAmount && t.originalAmount > t.amount) {
+          const diff = Math.round((t.originalAmount - t.amount) * 100) / 100;
+          reimbursementTag = `<span class="block text-[10px] text-emerald-400 font-mono">Original: ${fmt(t.originalAmount, t.currency)} (-${fmt(diff)} reimbursed)</span>`;
+        }
+
+        return `
+          <div class="py-3 px-2 flex items-center justify-between gap-3 group rounded-xl hover:bg-white/[0.02]">
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-medium truncate">${escapeHtml(t.description)}</p>
+              <p class="text-[11px]" style="color: var(--text-faint)">${meta}</p>
+              ${reimbursementTag}
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-sm sm:text-base font-semibold" style="color: ${amtColor}">${sign}${fmt(t.amount, t.currency)}</span>
+              ${!isInc ? `<button onclick="openReimburseModal('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 text-teal-400 hover:text-teal-300" title="Deduct / Reimburse from Friends">↩</button>` : ''}
+              <button onclick="duplicateEntry('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 hover:text-white" title="Duplicate Entry">⎘</button>
+              <button onclick="openEditModal('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 hover:text-white" title="Modify Date/Entry">✎</button>
+              <button onclick="removeEntry('${t.id}')" class="p-1 rounded text-xs opacity-50 group-hover:opacity-100 text-rose-400" title="Delete">✕</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCategoryChips() {
+      const container = $("category-pills-container");
+      const allCategories = [...Object.entries(BASE_CAT_ICONS), ...S.customCategories.map(c => [c, "🏷️"])];
+
+      container.innerHTML = allCategories.map(([name, icon]) => `
+        <button class="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs transition" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);" onclick="appendTag('${name}')">
+          <span>${icon}</span> <span>${name}</span>
+        </button>
+      `).join("");
+
+      const customChipsEl = $("custom-cat-chips");
+      if (customChipsEl) {
+        customChipsEl.innerHTML = S.customCategories.length
+          ? S.customCategories.map((c, idx) => `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border" style="background: var(--bg-surface); border-color: var(--border-subtle)">
+                <span>🏷️ ${escapeHtml(c)}</span>
+                <button type="button" onclick="deleteCustomCat(${idx})" class="text-rose-400 hover:text-rose-300 font-bold ml-1">✕</button>
+              </span>
+            `).join("")
+          : `<span class="text-[11px]" style="color: var(--text-faint)">No custom categories added yet.</span>`;
+      }
+    }
+
+    function deleteCustomCat(idx) {
+      S.customCategories.splice(idx, 1);
+      saveStorage();
+      render();
+      showToast("Custom category removed");
+    }
+
+    function shiftMonth(n) {
+      const [y, m] = vm.split("-").map(Number);
+      const d = new Date(y, m - 1 + n, 1);
+      vm = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      render();
+    }
+
+    function downloadBlob(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportCsv(itemsToExport, filename) {
+      if (!itemsToExport.length) {
+        showToast("No entries to export");
+        return;
+      }
+      const q = s => `"${String(s || '').replace(/"/g, '""')}"`;
+      const rows = [
+        ["Date", "Category", "Description", "Payment Mode", "Amount", "Currency", "Type", "Status"],
+        ...itemsToExport.map(i => [
+          i.date, 
+          q(i.category), 
+          q(i.description), 
+          q(i.payment || "Direct"), 
+          i.amount, 
+          i.currency || S.cur,
+          i.type || "expense", 
+          i.status || "completed"
+        ])
+      ];
+      downloadBlob(filename, rows.map(r => r.join(",")).join("\n"), "text/csv;charset=utf-8;");
+      showToast("CSV statement exported");
+    }
+
+    // =========================================================================
+    // 5. EVENT LISTENERS & MODAL MANAGEMENT
+    // =========================================================================
+    function initListeners() {
+      // Connect Settings triggers for Backup Vault and APK Hub
+      $("btn-settings-open-vault").onclick = () => {
+        $("settings-modal").classList.remove("open");
+        renderSnapshotList();
+        $("backup-modal").classList.add("open");
+      };
+
+      $("btn-settings-open-apk").onclick = () => {
+        $("settings-modal").classList.remove("open");
+        $("apk-hub-modal").classList.add("open");
+      };
+
+      $("btn-settings-quick-json").onclick = () => {
+        const filename = `Fiscc_Backup_${iso(new Date())}_${Date.now().toString().slice(-4)}.json`;
+        downloadBlob(filename, JSON.stringify(S, null, 2), "application/json");
+        saveRollingSnapshot("Export");
+        showToast("Full JSON Backup downloaded");
+      };
+
+      $("btn-settings-quick-restore").onclick = () => {
+        $("backup-file-input").click();
+      };
+
+      // APK Hub Modal Open/Close
+      $("close-apk-x").onclick = () => $("apk-hub-modal").classList.remove("open");
+      $("btn-close-apk-modal").onclick = () => $("apk-hub-modal").classList.remove("open");
+
+      // 1-Tap PWA Install Trigger
+      $("btn-apk-native-install").onclick = async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === "accepted") {
+            showToast("Installing Fiscc App…");
+          }
+          deferredPrompt = null;
+          $("apk-hub-modal").classList.remove("open");
+        } else {
+          showToast("Tap browser menu (⋮) → 'Install App' or 'Add to Home Screen'");
+        }
+      };
+
+      // Download Manifest JSON
+      $("btn-download-manifest").onclick = () => {
+        downloadBlob("manifest.json", decodeURIComponent(manifestDataUri.replace("data:application/json;charset=utf-8,", "")), "application/json");
+        showToast("manifest.json downloaded");
+      };
+
+      // Copy Manifest JSON
+      $("btn-copy-manifest").onclick = () => {
+        const jsonStr = decodeURIComponent(manifestDataUri.replace("data:application/json;charset=utf-8,", ""));
+        navigator.clipboard.writeText(jsonStr)
+          .then(() => showToast("Manifest config copied to clipboard!"))
+          .catch(() => showToast("Copy failed"));
+      };
+
+      // Backup Vault Modal Open/Close
+      if ($("btn-open-backup-vault")) {
+        $("btn-open-backup-vault").onclick = () => {
+          renderSnapshotList();
+          $("backup-modal").classList.add("open");
+        };
+      }
+      if ($("btn-quick-backup")) {
+        $("btn-quick-backup").onclick = () => {
+          saveRollingSnapshot("Manual");
+          showToast("✓ Backup snapshot recorded!");
+        };
+      }
+      $("close-backup-x").onclick = () => $("backup-modal").classList.remove("open");
+      $("btn-close-backup-modal").onclick = () => $("backup-modal").classList.remove("open");
+
+      // Download Full JSON Backup
+      $("btn-download-json-backup").onclick = () => {
+        const filename = `Fiscc_Backup_${iso(new Date())}_${Date.now().toString().slice(-4)}.json`;
+        downloadBlob(filename, JSON.stringify(S, null, 2), "application/json");
+        saveRollingSnapshot("Export");
+        showToast("Full JSON Backup downloaded");
+      };
+
+      // Restore JSON from file
+      $("btn-trigger-restore-json").onclick = () => $("backup-file-input").click();
+      $("backup-file-input").onchange = async e => {
+        const f = e.target.files[0];
+        if (!f) return;
+        try {
+          const parsed = JSON.parse(await f.text());
+          if (Array.isArray(parsed)) S.items = parsed;
+          else if (parsed && Array.isArray(parsed.items)) S = parsed;
+          saveStorage(false);
+          saveRollingSnapshot("Restored");
+          applyTheme(S.theme || "obsidian");
+          render();
+          renderSnapshotList();
+          showToast(`✓ Successfully restored ${S.items.length} transactions!`);
+          if (window.cloudSyncTrigger) window.cloudSyncTrigger();
+        } catch (err) {
+          showToast("Invalid JSON backup file");
+        }
+        e.target.value = "";
+      };
+
+      // Manual snapshot creation
+      $("btn-create-manual-snapshot").onclick = () => {
+        saveRollingSnapshot("Manual");
+        renderSnapshotList();
+        showToast("Created manual checkpoint");
+      };
+
+      // CSV exports
+      $("btn-quick-csv").onclick = () => {
+        const mo = S.items.filter(i => (i.date || "").startsWith(vm));
+        exportCsv(mo, `Fiscc_Statement_${vm}.csv`);
+      };
+      $("btn-export-month-csv").onclick = () => {
+        const mo = S.items.filter(i => (i.date || "").startsWith(vm));
+        exportCsv(mo, `Fiscc_Statement_${vm}.csv`);
+      };
+      $("btn-export-all-csv").onclick = () => {
+        exportCsv(S.items, `Fiscc_Full_Ledger_${iso(new Date())}.csv`);
+      };
+
+      // Reset All Data Safeguard
+      $("btn-vault-reset-data").onclick = () => {
+        if (confirm("Are you sure you want to clear all transactions and reset Fiscc? This cannot be undone.")) {
+          saveRollingSnapshot("Pre-Reset");
+          S.items = [];
+          saveStorage(false);
+          render();
+          renderSnapshotList();
+          showToast("Ledger reset to empty state (Pre-reset snapshot saved)");
+        }
+      };
+
+      // Filter Tabs
+      const updateFilterBtns = (activeId) => {
+        ["filter-type-all", "filter-type-expense", "filter-type-income"].forEach(id => {
+          const btn = $(id);
+          if (id === activeId) {
+            btn.style.background = "var(--accent)";
+            btn.className = "px-2 py-1 rounded font-semibold text-white";
+          } else {
+            btn.style.background = "transparent";
+            btn.className = "px-2 py-1 rounded text-zinc-400";
+          }
+        });
+      };
+
+      $("filter-type-all").onclick = () => {
+        activeTypeFilter = "all";
+        updateFilterBtns("filter-type-all");
+        renderLedger(S.items.filter(i => (i.date || "").startsWith(vm)));
+      };
+      $("filter-type-expense").onclick = () => {
+        activeTypeFilter = "expense";
+        updateFilterBtns("filter-type-expense");
+        renderLedger(S.items.filter(i => (i.date || "").startsWith(vm)));
+      };
+      $("filter-type-income").onclick = () => {
+        activeTypeFilter = "income";
+        updateFilterBtns("filter-type-income");
+        renderLedger(S.items.filter(i => (i.date || "").startsWith(vm)));
+      };
+
+      // Add Custom Category in Settings
+      $("btn-add-custom-cat").onclick = () => {
+        const name = $("new-custom-cat-input").value.trim();
+        if (!name) return;
+        if (!S.customCategories.includes(name)) {
+          S.customCategories.push(name);
+          saveStorage();
+          $("new-custom-cat-input").value = "";
+          render();
+          showToast(`Added custom category: ${name}`);
+        } else {
+          showToast("Category already exists");
+        }
+      };
+
+      // App Lock
+      $("btn-quick-lock").onclick = () => lockApp();
+      $("btn-trigger-lock-now").onclick = () => {
+        $("settings-modal").classList.remove("open");
+        lockApp();
+      };
+      $("btn-unlock-biometric").onclick = () => triggerBiometricPrompt();
+      $("lock-pin-form").onsubmit = e => {
+        if (e && e.preventDefault) e.preventDefault();
+        const pin = $("lock-pin-input").value.trim();
+        if (pin === S.settings.lockPin) {
+          unlockApp();
+        } else {
+          $("lock-error-msg").textContent = "Incorrect Passcode / PIN";
+          $("lock-pin-input").value = "";
+          $("lock-pin-input").focus();
+        }
+        return false;
+      };
+
+      // Voice Dictation
+      const btnVoice = $("btn-voice-dictate");
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (SpeechRecognition) {
+        const recognizer = new SpeechRecognition();
+        recognizer.continuous = false;
+        recognizer.interimResults = false;
+        recognizer.lang = navigator.language || "en-US";
+
+        let isListening = false;
+        btnVoice.onclick = () => {
+          if (isListening) { recognizer.stop(); return; }
+          try {
+            recognizer.start();
+            isListening = true;
+            btnVoice.style.color = "var(--accent)";
+            btnVoice.style.borderColor = "var(--accent)";
+            showToast("🎙️ Listening… Speak your expense");
+          } catch (e) {}
+        };
+
+        recognizer.onresult = event => {
+          const spokenText = event.results[0][0].transcript;
+          const input = $("expense-omni-input");
+          input.value = input.value ? `${input.value}, ${spokenText}` : spokenText;
+          updateLiveBadge();
+          input.focus();
+          showToast(`Heard: "${spokenText}"`);
+        };
+
+        recognizer.onerror = () => { isListening = false; btnVoice.style.color = "var(--text-muted)"; };
+        recognizer.onend = () => { isListening = false; btnVoice.style.color = "var(--text-muted)"; };
+      } else {
+        btnVoice.onclick = () => showToast("Voice recognition not supported in this browser");
+      }
+
+      // Live parsing & submission
+      $("expense-omni-input").addEventListener("input", updateLiveBadge);
+      $("btn-add-expense").addEventListener("click", addExpense);
+      $("expense-omni-input").addEventListener("keydown", e => {
+        if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+          e.preventDefault();
+          addExpense();
+        }
+      });
+
+      $("clear-input-btn").onclick = () => {
+        $("expense-omni-input").value = "";
+        updateLiveBadge();
+        $("expense-omni-input").focus();
+      };
+
+      $("currency-selector").onchange = e => {
+        S.cur = e.target.value;
+        saveStorage();
+        render();
+        showToast(`Currency changed to ${S.cur}`);
+      };
+
+      $("prev-month-btn").onclick = () => shiftMonth(-1);
+      $("next-month-btn").onclick = () => shiftMonth(1);
+
+      $("search-transactions").addEventListener("input", e => {
+        const mo = S.items.filter(i => (i.date || "").startsWith(vm));
+        renderLedger(mo, e.target.value);
+      });
+
+      // Settings Modal Open/Close
+      $("btn-open-settings").onclick = () => {
+        $("setting-toggle-income").checked = S.settings.enableIncome !== false;
+        $("setting-toggle-dues").checked = S.settings.showDues !== false;
+        $("setting-toggle-cap").checked = !!S.settings.enableCap;
+        $("setting-cap-amount").value = S.settings.monthlyCap || 45000;
+        $("cap-input-row").style.display = S.settings.enableCap ? "flex" : "none";
+
+        $("setting-toggle-lock").checked = !!S.settings.enableLock;
+        $("setting-lock-pin").value = S.settings.lockPin || "";
+        $("setting-toggle-biometric").checked = S.settings.enableBiometric !== false;
+        $("lock-config-panel").style.display = S.settings.enableLock ? "block" : "none";
+
+        renderCategoryChips();
+        $("settings-modal").classList.add("open");
+      };
+      $("close-settings-x").onclick = () => $("settings-modal").classList.remove("open");
+
+      $("setting-toggle-cap").onchange = e => {
+        $("cap-input-row").style.display = e.target.checked ? "flex" : "none";
+      };
+      $("setting-toggle-lock").onchange = e => {
+        $("lock-config-panel").style.display = e.target.checked ? "block" : "none";
+      };
+
+      document.querySelectorAll(".theme-btn").forEach(btn => {
+        btn.onclick = () => {
+          applyTheme(btn.dataset.th);
+          saveStorage();
+          showToast(`Theme: ${btn.textContent.trim()}`);
+        };
+      });
+
+      $("btn-save-settings").onclick = () => {
+        S.settings.enableIncome = $("setting-toggle-income").checked;
+        S.settings.showDues = $("setting-toggle-dues").checked;
+        S.settings.enableCap = $("setting-toggle-cap").checked;
+        S.settings.monthlyCap = parseFloat($("setting-cap-amount").value) || 45000;
+
+        S.settings.enableLock = $("setting-toggle-lock").checked;
+        S.settings.lockPin = $("setting-lock-pin").value.trim();
+        S.settings.enableBiometric = $("setting-toggle-biometric").checked;
+
+        if (S.settings.enableLock && !S.settings.lockPin) {
+          showToast("Please enter a PIN to enable App Lock");
+          return;
+        }
+
+        saveStorage();
+        initAppLock();
+        $("settings-modal").classList.remove("open");
+        render();
+        showToast("Preferences & Security saved");
+      };
+
+      // Receipt Scan Simulation
+      $("scan-receipt-btn").onclick = () => $("scan-modal").classList.add("open");
+      $("close-scan-x").onclick = () => $("scan-modal").classList.remove("open");
+      $("cancel-scan-btn").onclick = () => $("scan-modal").classList.remove("open");
+      $("simulate-sample-btn").onclick = () => {
+        $("scan-modal").classList.remove("open");
+        $("expense-omni-input").value = "Blue Tokai cold brew 380 and artisanal sandwich 420 via card";
+        updateLiveBadge();
+        $("expense-omni-input").focus();
+        showToast("Receipt auto-filled into input");
+      };
+    }
+
+    function appendTag(name) {
+      const inp = $("expense-omni-input");
+      const cur = inp.value.trim();
+      inp.value = cur ? `${cur}, ${name} ` : `${name} `;
+      inp.focus();
+      updateLiveBadge();
+    }
+
+    window.appendTag = appendTag;
+    window.settleDue = settleDue;
+    window.openEditModal = openEditModal;
+    window.openReimburseModal = openReimburseModal;
+    window.duplicateEntry = duplicateEntry;
+    window.removeEntry = removeEntry;
+    window.deleteCustomCat = deleteCustomCat;
+    window.toggleCategoryFilter = toggleCategoryFilter;
+    window.restoreFromSnapshot = restoreFromSnapshot;
+
+    loadStorage();
+    initListeners();
+    render();
+  </script>
+
+  <!-- =====================================================================
+       FIREBASE AUTH & DETERMINISTIC CLOUD SYNC MODULE (v3.7 Always Synced)
+       ===================================================================== -->
+  <script type="module">
+    const $ = id => document.getElementById(id);
+    let isSignUp = false;
+
+    // Purge any legacy local-session lockouts from v3.6
+    localStorage.removeItem("fiscc_is_local_user");
+
+    const rememberedEmail = localStorage.getItem("fiscc_remembered_email");
+    if (rememberedEmail && $("auth-email")) {
+      $("auth-email").value = rememberedEmail;
+    }
+
+    $("btn-open-auth").onclick = () => {
+      $("auth-error-msg").innerHTML = "";
+      const rem = localStorage.getItem("fiscc_remembered_email");
+      if (rem) {
+        $("auth-email").value = rem;
+        $("auth-remember-me").checked = true;
+      }
+      $("auth-modal").classList.add("open");
+    };
+    $("btn-close-auth").onclick = () => $("auth-modal").classList.remove("open");
+    if ($("close-auth-x")) $("close-auth-x").onclick = () => $("auth-modal").classList.remove("open");
+    $("auth-modal").onclick = e => { if (e.target === $("auth-modal")) $("auth-modal").classList.remove("open"); };
+
+    $("tab-signin").onclick = () => {
+      isSignUp = false;
+      $("tab-signin").style.background = "var(--bg-surface)";
+      $("tab-signin").style.color = "var(--text-main)";
+      $("tab-signup").style.background = "transparent";
+      $("tab-signup").style.color = "var(--text-muted)";
+      $("auth-title").textContent = "Sign In to Fiscc Cloud";
+      $("auth-submit-btn").textContent = "Sign In";
+      $("auth-error-msg").innerHTML = "";
+    };
+    $("tab-signup").onclick = () => {
+      isSignUp = true;
+      $("tab-signup").style.background = "var(--bg-surface)";
+      $("tab-signup").style.color = "var(--text-main)";
+      $("tab-signin").style.background = "transparent";
+      $("tab-signin").style.color = "var(--text-muted)";
+      $("auth-title").textContent = "Create Fiscc Account";
+      $("auth-submit-btn").textContent = "Create Account";
+      $("auth-error-msg").innerHTML = "";
+    };
+
+    try {
+      const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js");
+      const { 
+        getAuth, 
+        setPersistence,
+        browserLocalPersistence,
+        signInWithEmailAndPassword, 
+        createUserWithEmailAndPassword, 
+        signOut, 
+        onAuthStateChanged,
+        sendPasswordResetEmail
+      } = await import("https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js");
+      const { 
+        getFirestore, 
+        collection, 
+        setDoc,
+        getDocs,
+        deleteDoc, 
+        doc, 
+        onSnapshot 
+      } = await import("https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js");
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDxRmd1fasxTLOlKgLlDqKJevIDOLI8XoI",
+        authDomain: "expense-agent-15e80.firebaseapp.com",
+        projectId: "expense-agent-15e80",
+        storageBucket: "expense-agent-15e80.firebasestorage.app",
+        messagingSenderId: "797719566536",
+        appId: "1:797719566536:web:f52107f082907a860bedfd"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      try { await setPersistence(auth, browserLocalPersistence); } catch (pErr) {}
+
+      let unsub = null;
+      let cachedLocalPreSignIn = [];
+
+      function updateSyncStatus(status, isOnline = true) {
+        const textEl = $("sync-status-text");
+        const dotEl = $("sync-dot");
+        const pulseEl = $("sync-pulse");
+        if (!textEl || !dotEl) return;
+
+        textEl.textContent = status;
+        if (isOnline) {
+          dotEl.style.background = "var(--accent)";
+          if (pulseEl) pulseEl.style.background = "var(--accent)";
+        } else {
+          dotEl.style.background = "var(--gold)";
+          if (pulseEl) pulseEl.style.background = "var(--gold)";
+        }
+      }
+
+      // Online & Offline Network Listeners
+      window.addEventListener("online", () => {
+        if (auth.currentUser) {
+          updateSyncStatus("Cloud Synced", true);
+          showToast("Network restored: Cloud Synced");
+          pullCloudData(auth.currentUser);
+        }
+      });
+
+      window.addEventListener("offline", () => {
+        updateSyncStatus("Offline Cache", false);
+        showToast("Offline: Working with local cache");
+      });
+
+      // Pull all entries directly from Cloud
+      async function pullCloudData(user) {
+        if (!user || !user.uid) return;
+        try {
+          updateSyncStatus("Syncing…", true);
+          const userRef = collection(db, "users", user.uid, "expenses");
+          const snap = await getDocs(userRef);
+          const cloudItems = [];
+          snap.forEach(d => cloudItems.push({ id: d.id, ...d.data() }));
+
+          if (cloudItems.length > 0) {
+            // Check if there are local-only entries that were added before signing in
+            const cloudIdSet = new Set(cloudItems.map(i => String(i.id)));
+            const localOnly = S.items.filter(local => !cloudIdSet.has(String(local.id)));
+
+            // Always display Cloud Items first!
+            S.items = cloudItems;
+            saveStorage(false);
+            render();
+            updateSyncStatus("Cloud Synced", true);
+            showToast(`Loaded ${cloudItems.length} entries from Cloud`);
+
+            // If local un-synced entries exist, display non-blocking banner
+            if (localOnly.length > 0) {
+              cachedLocalPreSignIn = localOnly;
+              $("reconcile-banner-msg").textContent = `Showing all ${cloudItems.length} cloud records. You also have ${localOnly.length} local entry(ies) added before signing in.`;
+              $("reconcile-banner").classList.remove("hidden");
+            } else {
+              $("reconcile-banner").classList.add("hidden");
+            }
+          } else if (S.items.length > 0) {
+            // Cloud has 0 items but local has items -> upload them
+            await window.cloudSyncAdd(S.items);
+            updateSyncStatus("Cloud Synced", true);
+          } else {
+            updateSyncStatus("Cloud Synced (Empty)", true);
+          }
+        } catch (err) {
+          console.warn("Pull cloud data error", err);
+          updateSyncStatus(navigator.onLine ? "Cloud Synced" : "Offline", navigator.onLine);
+        }
+      }
+
+      // Banner Button Actions
+      $("btn-banner-merge").onclick = async () => {
+        if (!cachedLocalPreSignIn.length || !auth.currentUser) return;
+        saveRollingSnapshot("Pre-Merge");
+
+        // Upload local entries to Cloud
+        await window.cloudSyncAdd(cachedLocalPreSignIn);
+
+        // Merge into current S.items
+        const idSet = new Set(S.items.map(i => String(i.id)));
+        cachedLocalPreSignIn.forEach(itm => {
+          if (!idSet.has(String(itm.id))) {
+            S.items.unshift(itm);
+          }
+        });
+
+        saveStorage(false);
+        render();
+        $("reconcile-banner").classList.add("hidden");
+        showToast(`✓ Added ${cachedLocalPreSignIn.length} local entries to Cloud!`);
+        cachedLocalPreSignIn = [];
+      };
+
+      $("btn-banner-discard").onclick = () => {
+        saveRollingSnapshot("Discarded-Local");
+        $("reconcile-banner").classList.add("hidden");
+        cachedLocalPreSignIn = [];
+        showToast("Kept cloud entries only (Backup snapshot saved)");
+      };
+
+      // Header Force Pull Button & Pill click
+      $("btn-force-pull-cloud").onclick = () => {
+        if (auth.currentUser) pullCloudData(auth.currentUser);
+        else showToast("Please sign in first");
+      };
+
+      $("sync-status-pill").onclick = () => {
+        if (auth.currentUser) {
+          pullCloudData(auth.currentUser);
+        } else {
+          $("btn-open-auth").click();
+        }
+      };
+
+      // Realtime listener
+      function attachRealtimeListener(user) {
+        const userRef = collection(db, "users", user.uid, "expenses");
+        if (unsub) unsub();
+        unsub = onSnapshot(userRef, snap => {
+          const cloudItems = [];
+          snap.forEach(d => cloudItems.push({ id: d.id, ...d.data() }));
+
+          if (cloudItems.length > 0) {
+            // If banner is not currently open, update live
+            if ($("reconcile-banner").classList.contains("hidden")) {
+              S.items = cloudItems;
+              saveStorage(false);
+              render();
+            }
+          }
+        }, err => {
+          console.warn("Snapshot error", err);
+        });
+      }
+
+      onAuthStateChanged(auth, async user => {
+        if (user && user.isAnonymous) {
+          await signOut(auth);
+          return;
+        }
+
+        if (user && user.email) {
+          window.fisccCurrentUser = user;
+          localStorage.setItem("fiscc_auth_email", user.email);
+
+          updateSyncStatus("Cloud Synced", navigator.onLine);
+          $("btn-open-auth").classList.add("hidden");
+          $("account-box").classList.remove("hidden");
+          $("account-box").classList.add("inline-flex");
+          $("user-badge").textContent = user.email;
+
+          // Pull all data from cloud immediately and attach live listener
+          await pullCloudData(user);
+          attachRealtimeListener(user);
+
+        } else {
+          window.fisccCurrentUser = null;
+          localStorage.removeItem("fiscc_auth_email");
+          updateSyncStatus("Local Mode", true);
+          $("btn-open-auth").classList.remove("hidden");
+          $("account-box").classList.add("hidden");
+          $("account-box").classList.remove("inline-flex");
+          $("reconcile-banner").classList.add("hidden");
+          if (unsub) { unsub(); unsub = null; }
+        }
+      });
+
+      window.cloudSyncAdd = async (items) => {
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
+        try {
+          for (const itm of items) {
+            const { id, ...data } = itm;
+            await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
+          }
+        } catch (e) {
+          console.warn("Cloud sync write failed", e);
+        }
+      };
+
+      window.cloudSyncUpdate = async (itm) => {
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
+        try {
+          const { id, ...data } = itm;
+          await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
+        } catch (e) {
+          console.warn("Cloud sync update failed", e);
+        }
+      };
+
+      window.cloudSyncTrigger = async () => {
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
+        try {
+          for (const itm of S.items) {
+            const { id, ...data } = itm;
+            await setDoc(doc(db, "users", u.uid, "expenses", String(id)), data, { merge: true });
+          }
+          saveStorage(false);
+        } catch (e) {
+          console.warn("Cloud sync trigger error", e);
+        }
+      };
+
+      window.cloudSyncDelete = async (id) => {
+        const u = auth.currentUser;
+        if (!u || !u.uid) return;
+        try {
+          await deleteDoc(doc(db, "users", u.uid, "expenses", String(id)));
+        } catch (e) {
+          console.warn("Cloud delete failed", e);
+        }
+      };
+
+      $("auth-form").onsubmit = async (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const email = $("auth-email").value.trim();
+        const pass = $("auth-password").value;
+        const rememberMe = $("auth-remember-me") ? $("auth-remember-me").checked : true;
+
+        if (!email || !pass) return false;
+        if (rememberMe) localStorage.setItem("fiscc_remembered_email", email);
+        else localStorage.removeItem("fiscc_remembered_email");
+
+        $("auth-submit-btn").disabled = true;
+        $("auth-submit-btn").textContent = isSignUp ? "Creating account…" : "Signing in…";
+        $("auth-error-msg").innerHTML = "";
+
+        try {
+          if (isSignUp) {
+            const cred = await createUserWithEmailAndPassword(auth, email, pass);
+            if (S.items.length > 0 && cred.user) await window.cloudSyncAdd(S.items);
+            showToast("Account created in Fiscc Cloud!");
+          } else {
+            await signInWithEmailAndPassword(auth, email, pass);
+            showToast("Signed in to Fiscc Cloud!");
+          }
+          $("auth-modal").classList.remove("open");
+        } catch (err) {
+          $("auth-error-msg").textContent = err.message ? err.message.replace("Firebase: ", "") : "Sign in failed.";
+        } finally {
+          $("auth-submit-btn").disabled = false;
+          $("auth-submit-btn").textContent = isSignUp ? "Create Account" : "Sign In";
+        }
+        return false;
+      };
+
+      $("btn-forgot-pass").onclick = async () => {
+        const email = $("auth-email").value.trim();
+        if (!email) { $("auth-error-msg").textContent = "Please enter your email above first."; return; }
+        try {
+          await sendPasswordResetEmail(auth, email);
+          showToast("Password reset link sent to your email!");
+        } catch (err) {
+          $("auth-error-msg").textContent = err.message ? err.message.replace("Firebase: ", "") : "Failed to send reset link.";
+        }
+      };
+
+      $("btn-sign-out").onclick = async () => {
+        try { await signOut(auth); } catch (e) {}
+        window.fisccCurrentUser = null;
+        localStorage.removeItem("fiscc_auth_email");
+        updateSyncStatus("Local Mode", true);
+        $("btn-open-auth").classList.remove("hidden");
+        $("account-box").classList.add("hidden");
+        $("account-box").classList.remove("inline-flex");
+        $("reconcile-banner").classList.add("hidden");
+        showToast("Signed out to Local Mode");
+      };
+
+    } catch (err) {
+      console.warn("Firebase initialization error", err);
+    }
+  </script>
+</body>
+</html>
