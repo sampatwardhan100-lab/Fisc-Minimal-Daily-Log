@@ -14,13 +14,13 @@
   <meta name="description" content="Fiscc Money Logs — Minimal Daily Log with Automated Backups & APK Standalone Packaging.">
 
   <!-- Favicon & PWA Icons -->
-  <link rel="apple-touch-icon" id="apple-touch-icon" href="logo.png">
+  <link rel="apple-touch-icon" id="apple-touch-icon" href="Logo.png">
   <link rel="icon" id="favicon-link" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 110'%3E%3Cpath d='M22 14H68L84 30V68L50 96L16 68V20L22 14Z' stroke='%23006466' stroke-width='8' fill='%2307090e'/%3E%3Cpath d='M16 48L30 62L62 30' stroke='%23006466' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
 
   <!-- Embedded Web App Manifest for Android APK / TWA -->
   <link rel="manifest" id="manifest-placeholder">
 
-  <title>Fiscc Money Logs v3.7 — Always Cloud Synced & Backup Vault</title>
+  <title>Fiscc Money Logs v3.8 — Message Decoder & Smarter Parsing</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -369,7 +369,7 @@
          ===================================================================== -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b" style="border-color: var(--border-subtle)">
       <div class="flex items-center gap-3">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc Money Logs v3.7 — Always Cloud Synced')" title="Fiscc v3.7">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showToast('Fiscc Money Logs v3.8 — Message Decoder')" title="Fiscc v3.8">
           <svg class="fiscc-logo-symbol flex-shrink-0" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M22 14H68L84 30V68L50 96L16 68V20L22 14Z" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
             <path d="M68 14V30H84" stroke="currentColor" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round" style="color: var(--accent);"/>
@@ -386,7 +386,7 @@
               Fiscc: <span class="font-normal" style="color: var(--text-muted);">Money Logs</span>
             </h1>
             <p class="text-xs font-medium tracking-wide flex items-center gap-1.5" style="color: var(--text-faint);">
-              <span>v3.7 Always Synced</span>
+              <span>v3.8 Message Decoder</span>
               <span>&bull;</span>
               <span id="header-backup-status" class="text-emerald-400 font-mono text-[10px]">Cloud Active</span>
             </p>
@@ -475,6 +475,7 @@
         </label>
         <div class="flex items-center gap-2 text-[11px]" style="color: var(--text-faint);">
           <span class="hidden sm:inline font-mono">Press ⌘/Ctrl + Enter to add</span>
+          <button id="btn-open-sms" type="button" class="hover:underline p-1 font-medium" style="color: var(--accent)" title="Paste a bank / UPI / card message">📋 Paste message</button>
           <button id="clear-input-btn" class="hover:underline p-1">Clear</button>
         </div>
       </div>
@@ -724,6 +725,43 @@
       <span class="font-serif italic">“Fiscc &bull; Architectural Minimalist Finance System &bull; Standalone APK &amp; Backup Vault”</span>
     </footer>
   </main>
+
+  <!-- =====================================================================
+       MODAL: DECODE PASTED BANK / UPI / CARD MESSAGES (v3.8)
+       ===================================================================== -->
+  <div id="sms-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 560px;">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b" style="border-color: var(--border-subtle)">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📩</span>
+          <div>
+            <h3 class="font-serif text-lg font-semibold">Decode Messages</h3>
+            <p class="text-[11px]" style="color: var(--text-muted)">Paste SMS / iMessage alerts. Check them, then add.</p>
+          </div>
+        </div>
+        <button id="close-sms-x" type="button" class="text-sm p-1" style="color: var(--text-faint)">✕</button>
+      </div>
+
+      <textarea id="sms-raw" rows="4" class="w-full rounded-xl p-2.5 text-sm leading-relaxed resize-y" placeholder="Paste one or many messages, e.g. Rs.500.00 debited from a/c **1234 on 23-11-26 to VPA swiggy@icici (UPI Ref No 123456789012)"></textarea>
+      <div class="flex items-center gap-2 mt-2">
+        <button id="btn-sms-paste" type="button" class="pill-btn">📋 Paste from clipboard</button>
+        <button id="btn-sms-clear" type="button" class="pill-btn">Clear</button>
+      </div>
+
+      <div id="sms-summary" class="mt-3 text-[11px] font-mono" style="color: var(--text-muted)"></div>
+      <div id="sms-review-list" class="mt-2 space-y-2"></div>
+
+      <details id="sms-skipped" class="mt-3 hidden text-[11px]" style="color: var(--text-muted)">
+        <summary id="sms-skipped-title" class="cursor-pointer font-medium">Skipped</summary>
+        <div id="sms-skipped-list" class="mt-1"></div>
+      </details>
+
+      <div class="mt-4 pt-3 border-t flex items-center justify-end gap-2" style="border-color: var(--border-subtle)">
+        <button id="btn-sms-cancel" type="button" class="px-4 py-1.5 rounded-lg border text-xs" style="border-color: var(--border-subtle); color: var(--text-muted)">Cancel</button>
+        <button id="btn-sms-commit" type="button" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-white shadow" style="background: var(--accent); opacity: 0.5;" disabled><span id="btn-sms-commit-label">Add</span></button>
+      </div>
+    </div>
+  </div>
 
   <!-- =====================================================================
        MODAL: DEDICATED BACKUP & DATA VAULT HUB (Automatic Snapshots & Restore)
@@ -1051,11 +1089,11 @@
             <div class="flex justify-between items-center">
               <span class="font-serif font-semibold text-sm">Fiscc Money Logs</span>
               <span class="font-mono text-[10px] px-2.5 py-0.5 rounded-full font-semibold border" style="background: var(--accent-soft); color: var(--accent); border-color: var(--accent)">
-                v3.7 Cloud Always
+                v3.8 Decoder
               </span>
             </div>
             <p style="color: var(--text-muted);">
-              v3.7 Release: Guaranteed instant server priority. When signed in, older cloud entries display immediately with automatic network reconnection and local entry reconcile.
+              v3.8 Release: paste bank / UPI / card messages (SMS or iMessage) and review them before adding; smarter typed parsing (whole-word categories, 1,500 style amounts, merchant memory). v3.7: Guaranteed instant server priority. When signed in, older cloud entries display immediately with automatic network reconnection and local entry reconcile.
             </p>
           </div>
         </div>
@@ -1384,27 +1422,124 @@
       "Food": "🍔", "Groceries": "🛒", "Vehicle": "🚗", "Transport": "🚕", 
       "Shopping": "🛍️", "Subscriptions": "📱", "Bills": "💡", "Health": "💊", 
       "Entertainment": "🎬", "Travel": "✈️", "Education": "📚", "Investments": "📈", 
-      "Personal Care": "✨", "Home": "🏡", "Gifts & Charity": "🎁", "Pets": "🐾", "Other": "🏷️"
+      "Personal Care": "✨", "Income": "💰", "Home": "🏡", "Gifts & Charity": "🎁", "Pets": "🐾", "Other": "🏷️"
     };
 
-    const KW = {
-      "Vehicle": /vehicle|car|bike|motorcycle|scooter|service|servicing|tyre|tire|mechanic|challan|rto|toll|fastag|diesel|petrol|patrol|cng|engine oil|ev charge|ev charging|repair car|repair bike/i,
-      "Subscriptions": /netflix|spotify|youtube|prime video|amazon prime|icloud|apple music|chatgpt|openai|hulu|disney|patreon|discord|subscription|saas|github|audible/i,
-      "Investments": /sip|mutual fund|stock|stocks|share|shares|zerodha|groww|crypto|bitcoin|eth|gold|deposit|fd|rd|trading|etf|equity/i,
-      "Education": /course|udemy|coursera|books|book|tuition|school|college|exam|coaching|cert|bootcamp|training|kindle|stationery|pen|pencil|notes/i,
-      "Personal Care": /salon|haircut|barber|spa|massage|skincare|cosmetics|makeup|facial|perfume|grooming|waxing|shaving|shampoo/i,
-      "Home": /furniture|repair|plumber|electrician|appliance|cleaning|laundry|dry clean|decor|hardware|pest|kitchen|ikea|utensil/i,
-      "Gifts & Charity": /gift|charity|donation|donate|tip|temple|church|mosque|ngo|present|birthday gift|anniversary/i,
-      "Pets": /pet|dog|cat|vet|veterinary|puppy|kitten|pet food|pedigree|whiskas|litter/i,
-      "Health": /doctor|medicine|pharmacy|hospital|gym|fitness|workout|medical|clinic|protein|dentist|tablet|therapy|test|pathology|blood test|apollo/i,
-      "Entertainment": /movie|cinema|theatre|concert|game|gaming|steam|playstation|xbox|event|party|club|pub|bowling|amusement/i,
-      "Travel": /flight|hotel|airbnb|resort|vacation|trip|tour|visa|airfare|hostel|luggage|makemytrip|goibibo/i,
-      "Groceries": /grocer|vegetable|veggie|fruit|milk|supermarket|bigbasket|blinkit|zepto|ration|dal|rice|bread|instamart|pantry|egg|chicken|meat|fish/i,
-      "Transport": /cab|uber|ola|taxi|bus|metro|train|auto|rickshaw|rapido|fare/i,
-      "Shopping": /shirt|shoes|clothes|shopping|mall|jeans|pants|apparel|electronics|gadget|amazon|flipkart|myntra|zara|h&m|dress|tshirt/i,
-      "Bills": /rent|electric|electricity|power|wifi|broadband|internet|recharge|emi|insurance|water bill|gas bill|piped gas|maintenance|society/i,
-      "Food": /lunch|dinner|breakfast|coffee|tea|cafe|restaurant|snack|pizza|swiggy|zomato|meal|biryani|burger|eat|drinks|bakery|dessert|takeout|starbucks|chai/i
+    // v3.8: keyword rules are compiled with word boundaries so "spent" never matches "pen" and "card" never matches "car".
+    // Order matters: first match wins.
+    const KW_SRC = {
+      "Vehicle": "vehicle|car|bike|motorcycle|scooter|servicing|car service|bike service|vehicle service|tyre|tire|mechanic|challan|rto|toll|fastag|diesel|petrol|patrol|cng|engine oil|ev charge|ev charging|repair car|repair bike|puncture|car wash|wheel alignment|helmet",
+      "Subscriptions": "netflix|spotify|youtube|prime video|amazon prime|icloud|apple music|chatgpt|openai|hulu|disney|patreon|discord|subscription|saas|github|audible|hotstar|jiostar|zee5|sonyliv|jiocinema|google one|google play|microsoft 365|office 365|adobe|canva|notion|linkedin|claude|anthropic|dropbox|prime",
+      "Investments": "sip|mutual fund|stock|stocks|share|shares|zerodha|groww|upstox|kuvera|smallcase|indmoney|crypto|bitcoin|eth|gold|deposit|fd|rd|trading|etf|equity|nps|ppf|demat|ccil|iccl",
+      "Education": "course|udemy|coursera|books|book|tuition|school|college|exam|coaching|cert|bootcamp|training|kindle|stationery|pen|pencil|notes|byju|unacademy|vedantu|upgrad|duolingo|library",
+      "Personal Care": "salon|haircut|barber|spa|massage|skincare|cosmetics|makeup|facial|perfume|grooming|waxing|shaving|shampoo|nykaa|lakme|manicure|pedicure|parlour|parlor|beauty",
+      "Home": "furniture|repair|plumber|electrician|appliance|cleaning|laundry|dry clean|decor|hardware|pest|kitchen|ikea|utensil|urban company|urbanclap|pepperfry|asian paints|carpenter|painter|maid|sofa|mattress|curtain",
+      "Gifts & Charity": "gift|charity|donation|donate|donated|tip|temple|church|mosque|gurudwara|mandir|ngo|present|birthday gift|anniversary|ketto|give india",
+      "Pets": "pet|dog|cat|vet|veterinary|puppy|kitten|pet food|pedigree|whiskas|litter|supertails|heads up for tails",
+      "Health": "doctor|medicine|pharmacy|hospital|gym|fitness|workout|medical|clinic|protein|dentist|tablet|therapy|test|pathology|blood test|apollo|1mg|pharmeasy|netmeds|medplus|practo|cultfit|cult fit|curefit|healthkart|diagnostic|lab test",
+      "Entertainment": "movie|cinema|theatre|concert|game|gaming|steam|playstation|xbox|event|party|club|pub|bowling|amusement|bookmyshow|pvr|inox|dream11",
+      "Transport": "cab|uber|ola|taxi|bus|metro|train|auto|rickshaw|rapido|fare|parking|ferry|redbus|bus pass|namma yatri|blusmart",
+      "Travel": "flight|hotel|airbnb|resort|vacation|trip|tour|visa|airfare|hostel|luggage|makemytrip|goibibo|cleartrip|ixigo|yatra|indigo|air india|vistara|spicejet|akasa|oyo|irctc",
+      "Groceries": "grocer|grocery|groceries|vegetable|veggie|fruit|milk|supermarket|bigbasket|big basket|blinkit|zepto|ration|dal|rice|bread|instamart|pantry|egg|chicken|meat|fish|amazon fresh|kirana|sabzi|atta|sugar|curd|paneer|dmart|jiomart|dairy|onion|tomato|potato",
+      "Shopping": "shirt|shoes|clothes|shopping|mall|jeans|pants|apparel|electronics|gadget|amazon|flipkart|myntra|zara|h&m|dress|tshirt|ajio|meesho|croma|decathlon|lenskart|tata cliq|reliance digital|bata|nike|adidas|puma|uniqlo|pantaloons|westside|shoppers stop|sneakers",
+      "Bills": "rent|electric|electricity|power|wifi|broadband|internet|recharge|emi|insurance|water bill|water tax|gas bill|piped gas|maintenance|society|jio|airtel|vodafone|bsnl|tatasky|tata play|dth|bescom|tneb|mseb|bses|tata power|adani electricity|lpg|cylinder|postpaid|prepaid|premium|loan|property tax|credit card bill|cc bill|bill payment|billdesk|bbps|lic",
+      "Food": "lunch|dinner|breakfast|coffee|tea|cafe|restaurant|snack|pizza|swiggy|zomato|meal|biryani|burger|eat|drinks|bakery|dessert|takeout|starbucks|chai|tiffin|dosa|idli|thali|paratha|momo|noodles|juice|ice cream|icecream|sandwich|pasta|kfc|mcdonalds|dominos|subway|haldiram|brunch|smoothie|beer|wine|liquor|whisky|vodka|dhaba|canteen|mess|food|sweets|mithai|chaat|samosa|maggi|cold brew|cold drink|soft drink|cola|coke|pepsi|soda"
     };
+    const KW = {};
+    for (const k in KW_SRC) KW[k] = new RegExp("\\b(?:" + KW_SRC[k] + ")(?:s|es|ing)?\\b", "i");
+    const MEAL_RE = /\b(?:lunch|dinner|breakfast|brunch|meals?|snacks?)\b/i;
+
+    // Known merchants: [pattern, display name, category]. Used for pasted bank/UPI messages and typed text.
+    const MERCHANT_ALIASES = [
+      [/rzp|razorpay/i, "Razorpay payment", "Other"],
+      [/swiggy\s*instamart|instamart/i, "Swiggy Instamart", "Groceries"],
+      [/swiggy|bundl\s*tech/i, "Swiggy", "Food"],
+      [/zomato|eternal\s*(?:ltd|limited)/i, "Zomato", "Food"],
+      [/domino|jubilant\s*food/i, "Domino's", "Food"],
+      [/mcdonald|hardcastle/i, "McDonald's", "Food"],
+      [/\bkfc\b|devyani/i, "KFC", "Food"],
+      [/starbucks|tata\s*starbucks/i, "Starbucks", "Food"],
+      [/blue\s*tokai/i, "Blue Tokai", "Food"],
+      [/chaayos/i, "Chaayos", "Food"],
+      [/haldiram/i, "Haldiram's", "Food"],
+      [/blinkit|grofers/i, "Blinkit", "Groceries"],
+      [/zepto|kiranakart/i, "Zepto", "Groceries"],
+      [/big\s*basket|bigbasket|innovative\s*retail/i, "BigBasket", "Groceries"],
+      [/d-?mart|avenue\s*supermarts/i, "DMart", "Groceries"],
+      [/jiomart/i, "JioMart", "Groceries"],
+      [/amazon\s*fresh/i, "Amazon Fresh", "Groceries"],
+      [/\buber\b/i, "Uber", "Transport"],
+      [/\bola\b|ani\s*technologies|olacabs/i, "Ola", "Transport"],
+      [/rapido|roppen/i, "Rapido", "Transport"],
+      [/namma\s*yatri|blusmart/i, "Cab ride", "Transport"],
+      [/\bdmrc\b|bmrcl|cmrl|metro\s*rail/i, "Metro", "Transport"],
+      [/redbus/i, "redBus", "Transport"],
+      [/irctc/i, "IRCTC", "Travel"],
+      [/make\s*my\s*trip|makemytrip|\bmmt\b/i, "MakeMyTrip", "Travel"],
+      [/goibibo/i, "Goibibo", "Travel"],
+      [/cleartrip/i, "Cleartrip", "Travel"],
+      [/ixigo/i, "ixigo", "Travel"],
+      [/indigo|interglobe/i, "IndiGo", "Travel"],
+      [/air\s*india/i, "Air India", "Travel"],
+      [/vistara/i, "Vistara", "Travel"],
+      [/spicejet/i, "SpiceJet", "Travel"],
+      [/\boyo\b/i, "OYO", "Travel"],
+      [/airbnb/i, "Airbnb", "Travel"],
+      [/hpcl|hindustan\s*petroleum/i, "HPCL Fuel", "Vehicle"],
+      [/bpcl|bharat\s*petroleum/i, "BPCL Fuel", "Vehicle"],
+      [/iocl|indian\s*oil|indianoil/i, "Indian Oil Fuel", "Vehicle"],
+      [/nayara|reliance\s*bp|jio-?bp/i, "Fuel", "Vehicle"],
+      [/\bshell\b/i, "Shell Fuel", "Vehicle"],
+      [/fastag|\bnhai\b|\bnetc\b/i, "FASTag", "Vehicle"],
+      [/netflix/i, "Netflix", "Subscriptions"],
+      [/spotify/i, "Spotify", "Subscriptions"],
+      [/hotstar|jiostar|disney/i, "Hotstar", "Subscriptions"],
+      [/prime\s*video|amazon\s*prime/i, "Amazon Prime", "Subscriptions"],
+      [/youtube/i, "YouTube", "Subscriptions"],
+      [/google\s*(?:play|one|workspace|cloud)/i, "Google", "Subscriptions"],
+      [/apple\.com|itunes|apple\s*services|icloud/i, "Apple", "Subscriptions"],
+      [/openai|chatgpt/i, "ChatGPT", "Subscriptions"],
+      [/anthropic|claude\.ai/i, "Claude", "Subscriptions"],
+      [/microsoft|msft/i, "Microsoft", "Subscriptions"],
+      [/adobe/i, "Adobe", "Subscriptions"],
+      [/linkedin/i, "LinkedIn", "Subscriptions"],
+      [/zee5|sonyliv|jiocinema/i, "Streaming", "Subscriptions"],
+      [/bookmyshow|bigtree/i, "BookMyShow", "Entertainment"],
+      [/\bpvr\b|\binox\b/i, "Cinema", "Entertainment"],
+      [/dream11/i, "Dream11", "Entertainment"],
+      [/amazon\s*pay|amzn|amazon/i, "Amazon", "Shopping"],
+      [/flipkart/i, "Flipkart", "Shopping"],
+      [/myntra/i, "Myntra", "Shopping"],
+      [/ajio/i, "Ajio", "Shopping"],
+      [/meesho/i, "Meesho", "Shopping"],
+      [/croma|reliance\s*digital/i, "Electronics", "Shopping"],
+      [/decathlon/i, "Decathlon", "Shopping"],
+      [/lenskart/i, "Lenskart", "Shopping"],
+      [/nykaa/i, "Nykaa", "Personal Care"],
+      [/ikea|pepperfry|urban\s*company|urbanclap/i, "Home", "Home"],
+      [/airtel|bharti\s*airtel/i, "Airtel", "Bills"],
+      [/reliance\s*jio|\bjio\b/i, "Jio", "Bills"],
+      [/vodafone|vodafone\s*idea/i, "Vi", "Bills"],
+      [/bsnl/i, "BSNL", "Bills"],
+      [/tata\s*play|tatasky|dish\s*tv/i, "DTH", "Bills"],
+      [/act\s*fibernet|hathway/i, "Broadband", "Bills"],
+      [/bescom|tneb|tangedco|msedcl|mseb|\bbses\b|adani\s*electricity|tata\s*power|torrent\s*power|\bcesc\b|uppcl|kseb/i, "Electricity", "Bills"],
+      [/mahanagar\s*gas|indraprastha|adani\s*gas|\bigl\b|\bmgl\b/i, "Gas bill", "Bills"],
+      [/\blic\b|life\s*insurance|hdfc\s*life|sbi\s*life|max\s*life|star\s*health/i, "Insurance", "Bills"],
+      [/bajaj\s*fin/i, "Bajaj Finance EMI", "Bills"],
+      [/\bcred\b|cred\.club/i, "CRED", "Bills"],
+      [/billdesk|\bbbps\b/i, "Bill payment", "Bills"],
+      [/apollo/i, "Apollo", "Health"],
+      [/1mg|pharmeasy|api\s*holdings|netmeds|medplus/i, "Pharmacy", "Health"],
+      [/practo/i, "Practo", "Health"],
+      [/cult\.?fit|curefit/i, "Cult.fit", "Health"],
+      [/lal\s*path|thyrocare|metropolis/i, "Diagnostics", "Health"],
+      [/byju|unacademy|vedantu|upgrad|udemy|coursera|duolingo/i, "Learning", "Education"],
+      [/zerodha|groww|upstox|kuvera|smallcase|indmoney|paytm\s*money|\bccil\b|\biccl\b|nse\s*clearing/i, "Investment", "Investments"],
+      [/ketto|give\s*india/i, "Donation", "Gifts & Charity"],
+      [/supertails|heads\s*up\s*for\s*tails/i, "Pet supplies", "Pets"]
+    ];
+
 
     const MONTHS_MAP = {
       jan: 1, january: 1, feb: 2, february: 2, mar: 3, march: 3, apr: 4, april: 4,
@@ -1422,6 +1557,7 @@
       cur: "₹",
       theme: "obsidian",
       customCategories: [],
+      merchantMap: {},
       lastBackupTimestamp: 0,
       settings: {
         enableIncome: true,
@@ -1554,7 +1690,7 @@
         return;
       }
       if (confirm(`Restore snapshot from ${snap.dateStr} (${snap.itemCount} items)? Current entries will be replaced.`)) {
-        S = snap.data;
+        S = normalizeState(snap.data);
         saveStorage(false); // don't overwrite the snapshot we just restored
         applyTheme(S.theme || "obsidian");
         render();
@@ -1600,6 +1736,20 @@
       else el.textContent = "Backup Safe";
     }
 
+    // Fill in any missing fields so restored backups / snapshots can never crash the app
+    function normalizeState(p) {
+      p = (p && typeof p === "object") ? p : {};
+      const base = { enableIncome: true, showDues: true, enableCap: false, monthlyCap: 45000, enableLock: false, lockPin: "", enableBiometric: true };
+      return Object.assign({}, p, {
+        items: Array.isArray(p.items) ? p.items : [],
+        cur: p.cur || "₹",
+        theme: p.theme || "obsidian",
+        customCategories: Array.isArray(p.customCategories) ? p.customCategories : [],
+        merchantMap: (p.merchantMap && typeof p.merchantMap === "object") ? p.merchantMap : {},
+        settings: Object.assign(base, p.settings || {})
+      });
+    }
+
     // --- STORAGE MANAGEMENT ---
     function loadStorage() {
       try {
@@ -1613,6 +1763,7 @@
             S.cur = parsed.cur || "₹";
             S.theme = parsed.theme || "obsidian";
             S.customCategories = Array.isArray(parsed.customCategories) ? parsed.customCategories : [];
+            S.merchantMap = (parsed.merchantMap && typeof parsed.merchantMap === "object") ? parsed.merchantMap : {};
             S.lastBackupTimestamp = parsed.lastBackupTimestamp || 0;
             S.settings = Object.assign({ 
               enableIncome: true, 
@@ -1741,15 +1892,204 @@
     // =========================================================================
     // 3. UNIVERSAL NATURAL LANGUAGE DATE & CURRENCY PARSER
     // =========================================================================
+    // =========================================================================
+    // 3. PARSING ENGINE (v3.8): typed text + pasted bank / UPI / card messages
+    // =========================================================================
+    const pad2 = n => String(n).padStart(2, "0");
+    const escapeRegex = s => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const titleCase = s => String(s || "").toLowerCase().replace(/(^|[\s\-\/(&])([a-z])/g, (m, a, b) => a + b.toUpperCase());
+
+    // ---- Learned merchants: remember the category you pick for a merchant ----
+    function merchantWords(s) {
+      return String(s || "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ")
+        .replace(/\b(?:ltd|pvt|limited|private|india|the|upi|payment|payments)\b/g, " ")
+        .replace(/\s+/g, " ").trim();
+    }
+    function learnMerchant(name, cat) {
+      const k = merchantWords(name).split(" ").slice(0, 2).join(" ");
+      if (!k || k.length < 3 || !cat || cat === "Other") return;
+      if (!S.merchantMap || typeof S.merchantMap !== "object") S.merchantMap = {};
+      S.merchantMap[k] = cat;
+      const keys = Object.keys(S.merchantMap);
+      if (keys.length > 300) delete S.merchantMap[keys[0]];
+    }
+    function lookupLearned(text) {
+      const map = S.merchantMap;
+      if (!map) return "";
+      const hay = " " + merchantWords(text) + " ";
+      let best = "", bestLen = 0;
+      for (const k in map) {
+        if (k.length > bestLen && hay.indexOf(" " + k + " ") !== -1) { best = map[k]; bestLen = k.length; }
+      }
+      return best;
+    }
+
+    // ---- Dates ----
+    const MONTH_RE = "jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?";
+    const WEEKDAY_RE = "sunday|monday|tuesday|wednesday|thursday|friday|saturday";
+
+    function mkDate(y, m, d) {
+      y = Number(y); m = Number(m); d = Number(d);
+      if (y < 100) y += 2000;
+      if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31)) return "";
+      const dt = new Date(y, m - 1, d);
+      if (dt.getMonth() !== m - 1 || dt.getDate() !== d) return "";
+      return `${y}-${pad2(m)}-${pad2(d)}`;
+    }
+    function plausibleYear(y) {
+      y = Number(y); if (y < 100) y += 2000;
+      const cy = new Date().getFullYear();
+      return y >= cy - 15 && y <= cy + 1;
+    }
+
+    // Returns { date:"YYYY-MM-DD", start, end, yearGiven } or null
+    function extractDate(text) {
+      const now = new Date();
+      const cy = now.getFullYear();
+      let m;
+
+      if ((m = text.match(/\b(\d{1,2})\s*\([dD]\)[-\/.\s]*(\d{1,2})\s*\([mM]\)[-\/.\s]*(\d{2,4})\s*\([yY]\)/))) {
+        const d = mkDate(m[3], m[2], m[1]);
+        if (d) return { date: d, start: m.index, end: m.index + m[0].length, yearGiven: true };
+      }
+      if ((m = text.match(/\b(20\d{2})[-\/.](\d{1,2})[-\/.](\d{1,2})\b/))) {
+        const d = mkDate(m[1], m[2], m[3]);
+        if (d) return { date: d, start: m.index, end: m.index + m[0].length, yearGiven: true };
+      }
+      if ((m = text.match(/\b(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4}|\d{2})\b/)) && plausibleYear(m[3])) {
+        const d = mkDate(m[3], m[2], m[1]) || mkDate(m[3], m[1], m[2]);
+        if (d) return { date: d, start: m.index, end: m.index + m[0].length, yearGiven: true };
+      }
+
+      // 23 Nov, 23-Nov-26, 23Nov26, 1st of November 2026
+      const dmRe = new RegExp("\\b(\\d{1,2})(?:st|nd|rd|th)?[\\s\\-/.]*(?:of\\s+)?(" + MONTH_RE + ")(?![a-z])", "i");
+      if ((m = text.match(dmRe))) {
+        const day = Number(m[1]);
+        const mon = MONTHS_MAP[m[2].toLowerCase().slice(0, 3)];
+        let end = m.index + m[0].length, year = cy, yearGiven = false;
+        const ym = text.slice(end).match(/^([\s\-\/.,']*)(\d{4}|\d{2})(?!\d)/);
+        if (ym) {
+          const full = Number(ym[2]) < 100 ? 2000 + Number(ym[2]) : Number(ym[2]);
+          const strongSep = ym[1] === "" || /[-\/.,']/.test(ym[1]);
+          if (plausibleYear(full) && (ym[2].length === 4 || strongSep || Math.abs(full - cy) <= 1)) {
+            year = full; yearGiven = true; end += ym[0].length;
+          }
+        }
+        const d = mkDate(year, mon, day);
+        if (d) return { date: d, start: m.index, end, yearGiven };
+      }
+
+      // Nov 23, 2026 / November 5th
+      const mdRe = new RegExp("\\b(" + MONTH_RE + ")(?![a-z])[\\s\\-/.]*(\\d{1,2})(?:st|nd|rd|th)?(?!\\d)", "i");
+      if ((m = text.match(mdRe))) {
+        const mon = MONTHS_MAP[m[1].toLowerCase().slice(0, 3)];
+        const day = Number(m[2]);
+        let end = m.index + m[0].length, year = cy, yearGiven = false;
+        const rest = text.slice(end);
+        let ym = rest.match(/^\s*,?\s*(\d{4})(?!\d)/);
+        let yv = ym ? Number(ym[1]) : 0;
+        if (!ym) { ym = rest.match(/^\s*'(\d{2})(?!\d)/); yv = ym ? 2000 + Number(ym[1]) : 0; }
+        if (ym && plausibleYear(yv)) { year = yv; yearGiven = true; end += ym[0].length; }
+        const d = mkDate(year, mon, day);
+        if (d) return { date: d, start: m.index, end, yearGiven };
+      }
+
+      // Relative dates
+      const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const rel = (offsetDays, mm) => {
+        const d = new Date(base); d.setDate(d.getDate() + offsetDays);
+        return { date: iso(d), start: mm.index, end: mm.index + mm[0].length, yearGiven: true };
+      };
+      if ((m = text.match(/\b(\d{1,2})\s+days?\s+(?:ago|back)\b/i))) return rel(-Number(m[1]), m);
+      if ((m = text.match(/\bday\s+before\s+yesterday\b/i))) return rel(-2, m);
+      if ((m = text.match(/\b(?:yesterday|last\s+night)\b/i))) return rel(-1, m);
+      if ((m = text.match(/\b(?:today|tonight|tonite|this\s+(?:morning|afternoon|evening))\b/i))) return rel(0, m);
+      if ((m = text.match(new RegExp("\\blast\\s+(" + WEEKDAY_RE + ")\\b", "i")))) {
+        const target = DAYS_MAP[m[1].toLowerCase()];
+        let diff = base.getDay() - target; if (diff <= 0) diff += 7;
+        return rel(-diff, m);
+      }
+      if ((m = text.match(new RegExp("\\b(?:on\\s+|this\\s+|since\\s+)?(" + WEEKDAY_RE + ")\\b", "i")))) {
+        const target = DAYS_MAP[m[1].toLowerCase()];
+        let diff = base.getDay() - target; if (diff < 0) diff += 7;
+        return rel(-diff, m);
+      }
+      return null;
+    }
+
+    // ---- Amounts ----
+    const CURRENCY_SYM = { rs: "₹", inr: "₹", rupee: "₹", rupees: "₹", "₹": "₹", usd: "$", "$": "$", eur: "€", "€": "€", gbp: "£", "£": "£", aed: "AED", sgd: "SGD" };
+    const MULT = { k: 1e3, lakh: 1e5, lakhs: 1e5, lac: 1e5, lacs: 1e5, cr: 1e7, crore: 1e7, crores: 1e7 };
+    const NUM_SRC = "(\\d[\\d,]*(?:\\.\\d+)?)";
+    const MULT_SRC = "(?:\\s*(k|lakhs?|lacs?|crores?|cr)(?![a-z])|(L)(?![a-z]))?";
+    const CUR_WORD_SRC = "(rs|inr|usd|eur|gbp|aed|sgd|rupees?)(?![a-z])";
+    const UNIT_AFTER = /^\s*(?:people|persons?|pax|ppl|guys|friends|kgs?|gms?|g\b|km|kms|ltrs?|litres?|liters?|ml\b|pcs|pieces?|items?|nights?|days?|hrs?|hours?|mins?|minutes?|x\b|%|st\b|nd\b|rd\b|th\b)/i;
+
+    function toNumber(numStr, mult) {
+      let v = parseFloat(String(numStr).replace(/,/g, ""));
+      if (!isFinite(v)) return NaN;
+      if (mult) { const k = String(mult).toLowerCase(); v *= (MULT[k] || (k === "l" ? 1e5 : 1)); }
+      return v;
+    }
+
+    // All currency-marked amounts (Rs 500, 500 rs, ₹500, INR 1,250.00, 500/-, $20, 2k rs ...) in order of appearance
+    function allCurrencyAmounts(text) {
+      const found = [];
+      const pre = new RegExp("(?:\\b" + CUR_WORD_SRC + "\\.?|([₹$€£]))\\s*" + NUM_SRC + MULT_SRC, "gi");
+      const post = new RegExp(NUM_SRC + MULT_SRC + "\\s*(?:" + CUR_WORD_SRC + "|([₹$€£])|\\/-)", "gi");
+      let m;
+      while ((m = pre.exec(text))) {
+        const cur = CURRENCY_SYM[(m[1] || m[2]).toLowerCase().replace(/s$/, "")] || CURRENCY_SYM[(m[1] || m[2]).toLowerCase()] || S.cur;
+        const amt = toNumber(m[3], m[4] || m[5]);
+        if (amt > 0) found.push({ amount: amt, currency: cur, start: m.index, end: m.index + m[0].length, marked: true });
+      }
+      while ((m = post.exec(text))) {
+        if (m.index > 0 && /[A-Za-z*•#\/]/.test(text[m.index - 1])) continue;   // "XX1234 INR 500": 1234 is an account mask
+        const sym = m[4] || m[5];
+        const cur = sym ? (CURRENCY_SYM[sym.toLowerCase().replace(/s$/, "")] || CURRENCY_SYM[sym.toLowerCase()] || S.cur) : "₹";
+        const amt = toNumber(m[1], m[2] || m[3]);
+        if (amt > 0) found.push({ amount: amt, currency: cur, start: m.index, end: m.index + m[0].length, marked: true });
+      }
+      found.sort((a, b) => a.start - b.start);
+      return found;
+    }
+
+    // Bare numbers (no currency). Skips times, ref numbers, quantities ("4 people", "5 kg") and picks the largest.
+    function plainAmount(text) {
+      const re = /(\d[\d,]*(?:\.\d+)?)(?:\s*(k|lakhs?|lacs?|crores?|cr)(?![a-z]))?/gi;
+      let m, best = null;
+      while ((m = re.exec(text))) {
+        const start = m.index, end = start + m[0].length;
+        const prev = start > 0 ? text[start - 1] : "";
+        const next = text.slice(end, end + 14);
+        if (/[A-Za-z#:\/@.]/.test(prev)) continue;
+        if (/^\s*:\d/.test(next)) continue;
+        if (/^\s*(?:am|pm)\b/i.test(next)) continue;
+        if (UNIT_AFTER.test(next)) continue;
+        if (m[1].replace(/\D/g, "").length > 9) continue;
+        const val = toNumber(m[1], m[2]);
+        if (!(val > 0)) continue;
+        if (!best || val > best.amount) best = { amount: val, currency: S.cur, start, end, marked: false };
+      }
+      return best;
+    }
+
+    function extractAmount(text) {
+      const c = allCurrencyAmounts(text);
+      return c.length ? c[0] : plainAmount(text);
+    }
+
+    // ---- Payment mode (typed text) ----
     function extractPaymentMode(text) {
-      if (/\b(?:credit\s*card|c\.?c\.?|amex|mastercard\s+credit|visa\s+credit)\b/i.test(text)) return "Credit Card";
-      if (/\b(?:debit\s*card|d\.?c\.?|atm\s*card|visa\s+debit|mastercard\s+debit)\b/i.test(text)) return "Debit Card";
-      if (/\b(?:upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|qr\s*code|qr|scan\s*and\s*pay)\b/i.test(text)) return "UPI";
+      if (/\b(?:credit\s*card|cc|c\.c|amex|american\s+express|mastercard\s+credit|visa\s+credit)\b/i.test(text)) return "Credit Card";
+      if (/\b(?:debit\s*card|dc|d\.c|atm\s*card|visa\s+debit|mastercard\s+debit)\b/i.test(text)) return "Debit Card";
+      if (/\b(?:wallet|amazon\s*pay|apple\s*pay|samsung\s*pay)\b/i.test(text)) return "Wallet";
+      if (/\b(?:upi|gpay|g\s*pay|google\s*pay|phonepe|phone\s*pe|paytm|bhim|cred|qr\s*code|qr|scan\s*(?:and|&|n)\s*pay)\b|[\w.-]+@[a-z]{2,}\b/i.test(text)) return "UPI";
       if (/\b(?:cash|in\s*cash|currency\s*notes)\b/i.test(text)) return "Cash";
-      if (/\b(?:netbanking|net\s*banking)\b/i.test(text)) return "NetBanking";
-      if (/\b(?:direct\s*bank|bank\s*transfer|neft|rtgs|imps|wire\s*transfer|hdfc|icici|sbi|axis|kotak|pnb)\b/i.test(text)) return "Bank Transfer";
-      if (/\b(?:wallet|amazon\s*pay|apple\s*pay)\b/i.test(text)) return "Wallet";
-      if (/\b(?:cheque|check)\b/i.test(text)) return "Cheque";
+      if (/\b(?:netbanking|net\s*banking|internet\s*banking)\b/i.test(text)) return "NetBanking";
+      if (/\b(?:direct\s*bank|bank\s*transfer|neft|rtgs|imps|wire\s*transfer)\b/i.test(text)) return "Bank Transfer";
+      if (/\b(?:cheque|chq)\b/i.test(text)) return "Cheque";
+      if (/\b(?:hdfc|icici|sbi|axis|kotak|pnb)\b/i.test(text)) return "Bank Transfer";
       return "";
     }
 
@@ -1757,7 +2097,6 @@
       if (!targetKeyword || !targetKeyword.trim()) return null;
       const cleanKeyword = targetKeyword.toLowerCase().replace(/^(?:the|for|against|on|at)\s+/i, "").trim();
       if (!cleanKeyword) return null;
-
       return S.items.find(item => {
         if (item.type === "income") return false;
         const desc = (item.description || "").toLowerCase();
@@ -1766,144 +2105,72 @@
       }) || null;
     }
 
+    function categorize(text, type) {
+      if (type === "lent") return "Gifts & Charity";
+      if (type === "income") return "Income";
+      const learned = lookupLearned(text);
+      if (learned) return learned;
+      for (const c of S.customCategories) {
+        if (new RegExp("\\b" + escapeRegex(c) + "\\b", "i").test(text)) return c;
+      }
+      if (MEAL_RE.test(text)) return "Food";
+      for (const a of MERCHANT_ALIASES) { if (a[0].test(text)) return a[2]; }
+      for (const c in KW) { if (KW[c].test(text)) return c; }
+      return "Other";
+    }
+
+    // ---- Typed text -> entries ----
+    function splitTypedEntries(text) {
+      return String(text || "")
+        .split(/\s*(?:\n+|;|,(?!\d)|\s&\s|\s\+\s|\band\b)\s*/i)
+        .map(s => (s || "").trim()).filter(Boolean);
+    }
+
+    const PAY_PHRASE_RE = /\b(?:via|through|by|with|using|paid\s+via|paid\s+by|paid\s+through)\s+(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|cash|netbanking|net\s*banking|direct\s*bank|bank\s*transfer|bank|wallet|cheque|check|card)\b/gi;
+    const PAY_WORD_RE = /\b(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|phonepe|paytm|cash|netbanking|direct\s*bank|bank\s*transfer)\b/gi;
+    const FILLER_RE = /\b(?:spent|paid|pay|on|for|via|by|with|through|using|rs|inr|usd|eur|gbp|aed|bought|purchased|purchase|lent\s+to|borrowed\s+by|expecting\s+return|credited|received|to|at|from|of|the|my|a)\b|[₹$€£]|\/-/gi;
+
     function parseExpenseText(text) {
       const now = new Date();
-      const defaultYear = parseInt(vm.slice(0, 4), 10) || now.getFullYear();
-
+      const todayIso = iso(now);
       const out = [];
-      const parts = text.split(/\s*(?:,|\band\b|\n|;)\s*/i).filter(Boolean);
+      const parts = splitTypedEntries(text);
+      let carry = "";
+      let sharedDate = "";
 
-      for (let p of parts) {
+      for (const raw of parts) {
+        const p = carry ? carry + " " + raw : raw;
+        carry = "";
+
+        // 1. Date (isolated first so it is never mistaken for an amount)
+        const dRes = extractDate(p);
+        const textNoDate = dRes ? p.slice(0, dRes.start) + " " + p.slice(dRes.end) : p;
+
+        // 2. Amount
+        const aRes = extractAmount(textNoDate);
+        if (!aRes || !aRes.amount) {
+          const rest = textNoDate.replace(/[:\-–—]+/g, " ").replace(/\b(?:on|for|date|spent|expenses?|all|the|from)\b/gi, "").trim();
+          if (dRes && !rest) sharedDate = dRes.date;                 // "Yesterday:" on its own applies to what follows
+          else if (!dRes && p.split(/\s+/).length <= 3) carry = p;    // "salt and pepper 50" keeps its words
+          continue;
+        }
+        // a date at the very start ("Yesterday coffee 100, lunch 200") applies to every item without its own date
+        if (dRes && dRes.start <= 1 && out.length === 0) sharedDate = dRes.date;
+        const pDate = dRes ? dRes.date : (sharedDate || todayIso);
+        const textClean = textNoDate.slice(0, aRes.start) + " " + textNoDate.slice(aRes.end);
+        const detectedCur = aRes.currency || S.cur;
+
+        // 3. Reimbursement / deduction against an existing entry
         const isReimbursementPhrase = /\b(received|got back|reimbursement|reimbursed|refund|refunded|minus|deduct|share from|paid back)\b/i.test(p);
         const targetMatch = p.match(/(?:against|for|on|from|towards)\s+([A-Za-z0-9\s&'-]+?)(?:\s+(?:via|through|by|with|using|yesterday|today|on|\d)|$)/i);
-
-        let pDate = iso(now);
-        let dateMatchedString = "";
-
-        const tagDmyMatch = p.match(/\b(\d{1,2})\s*\([dD]\)[-/.\s]*(\d{1,2})\s*\([mM]\)[-/.\s]*(\d{2,4})\s*\([yY]\)\b/i);
-        const numericDmyMatch = p.match(/\b(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})\b/);
-        const dayMonthMatch = p.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:\s*,?\s*(\d{2,4}))?\b/i);
-        const monthDayMatch = p.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s*,?\s*(\d{2,4}))?\b/i);
-        const lastDayMatch = p.match(/\blast\s+(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/i);
-        const dayBeforeYesterdayMatch = p.match(/\bday\s+before\s+yesterday\b/i);
-        const yesterdayMatch = p.match(/\byesterday\b/i);
-        const todayMatch = p.match(/\btoday\b/i);
-
-        if (tagDmyMatch) {
-          const day = parseInt(tagDmyMatch[1], 10);
-          const mon = parseInt(tagDmyMatch[2], 10);
-          let yr = parseInt(tagDmyMatch[3], 10);
-          if (yr < 100) yr = 2000 + yr;
-          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-          dateMatchedString = tagDmyMatch[0];
-        } else if (numericDmyMatch) {
-          const day = parseInt(numericDmyMatch[1], 10);
-          const mon = parseInt(numericDmyMatch[2], 10);
-          let yr = parseInt(numericDmyMatch[3], 10);
-          if (yr < 100) yr = 2000 + yr;
-          if (mon >= 1 && mon <= 12 && day >= 1 && day <= 31) {
-            pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-            dateMatchedString = numericDmyMatch[0];
-          }
-        } else if (dayMonthMatch) {
-          const day = parseInt(dayMonthMatch[1], 10);
-          const monKey = dayMonthMatch[2].toLowerCase().slice(0, 3);
-          const mon = MONTHS_MAP[monKey] || 1;
-          let yr = dayMonthMatch[3] ? parseInt(dayMonthMatch[3], 10) : defaultYear;
-          if (yr < 100) yr = 2000 + yr;
-          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-          dateMatchedString = dayMonthMatch[0];
-        } else if (monthDayMatch) {
-          const monKey = monthDayMatch[1].toLowerCase().slice(0, 3);
-          const day = parseInt(monthDayMatch[2], 10);
-          const mon = MONTHS_MAP[monKey] || 1;
-          let yr = monthDayMatch[3] ? parseInt(monthDayMatch[3], 10) : defaultYear;
-          if (yr < 100) yr = 2000 + yr;
-          pDate = `${yr}-${String(mon).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-          dateMatchedString = monthDayMatch[0];
-        } else if (lastDayMatch) {
-          const targetDay = DAYS_MAP[lastDayMatch[1].toLowerCase()];
-          const d = new Date();
-          let diff = d.getDay() - targetDay;
-          if (diff <= 0) diff += 7;
-          d.setDate(d.getDate() - diff);
-          pDate = iso(d);
-          dateMatchedString = lastDayMatch[0];
-        } else if (dayBeforeYesterdayMatch) {
-          const y = new Date(); y.setDate(y.getDate() - 2);
-          pDate = iso(y);
-          dateMatchedString = dayBeforeYesterdayMatch[0];
-        } else if (yesterdayMatch) {
-          const y = new Date(); y.setDate(y.getDate() - 1);
-          pDate = iso(y);
-          dateMatchedString = yesterdayMatch[0];
-        } else if (todayMatch) {
-          pDate = iso(new Date());
-          dateMatchedString = todayMatch[0];
-        }
-
-        let textWithoutDate = p;
-        if (dateMatchedString) {
-          textWithoutDate = p.replace(dateMatchedString, " ");
-        }
-
-        let amt = null;
-        let detectedCur = S.cur;
-        let matchStr = "";
-
-        const curMatch = textWithoutDate.match(/(?:(?:rs\.?|inr|₹)\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*(?:rs\.?|inr|₹))/i);
-        const usdMatch = textWithoutDate.match(/(?:\$\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*usd)/i);
-        const eurMatch = textWithoutDate.match(/(?:€\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*eur)/i);
-        const gbpMatch = textWithoutDate.match(/(?:£\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*gbp)/i);
-        const aedMatch = textWithoutDate.match(/(?:aed\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?)|(?:(\d[\d,]*(?:\.\d+)?)\s*(k)?\s*aed)/i);
-        const plainNumberMatch = textWithoutDate.match(/\b(\d[\d,]*(?:\.\d+)?)\s*(k)?\b/i);
-
-        if (curMatch) {
-          const val = curMatch[1] || curMatch[3];
-          const isK = curMatch[2] || curMatch[4];
-          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
-          detectedCur = "₹";
-          matchStr = curMatch[0];
-        } else if (usdMatch) {
-          const val = usdMatch[1] || usdMatch[3];
-          const isK = usdMatch[2] || usdMatch[4];
-          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
-          detectedCur = "$";
-          matchStr = usdMatch[0];
-        } else if (eurMatch) {
-          const val = eurMatch[1] || eurMatch[3];
-          const isK = eurMatch[2] || eurMatch[4];
-          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
-          detectedCur = "€";
-          matchStr = eurMatch[0];
-        } else if (gbpMatch) {
-          const val = gbpMatch[1] || gbpMatch[3];
-          const isK = gbpMatch[2] || gbpMatch[4];
-          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
-          detectedCur = "£";
-          matchStr = gbpMatch[0];
-        } else if (aedMatch) {
-          const val = aedMatch[1] || aedMatch[3];
-          const isK = aedMatch[2] || aedMatch[4];
-          amt = parseFloat(val.replace(/,/g, "")) * (isK ? 1000 : 1);
-          detectedCur = "AED";
-          matchStr = aedMatch[0];
-        } else if (plainNumberMatch) {
-          amt = parseFloat(plainNumberMatch[1].replace(/,/g, "")) * (plainNumberMatch[2] ? 1000 : 1);
-          matchStr = plainNumberMatch[0];
-        }
-
-        if (!amt || isNaN(amt)) continue;
-
         const pPayment = extractPaymentMode(p);
-
         if (isReimbursementPhrase && targetMatch) {
           const matchedTarget = findMatchingEntryForReimbursement(targetMatch[1]);
           if (matchedTarget) {
             out.push({
               isOffsetAction: true,
               targetItem: matchedTarget,
-              deductAmount: Math.round(amt * 100) / 100,
+              deductAmount: Math.round(aRes.amount * 100) / 100,
               payment: pPayment,
               date: pDate,
               note: `Reimbursed from: ${p}`
@@ -1912,49 +2179,37 @@
           }
         }
 
+        // 4. Type + borrower
         let type = "expense";
         let borrower = "";
-        let isEmi = /\bemi\b/i.test(p);
-
-        const lentMatch = p.match(/\b(?:lent|loaned|gave)\s+(?:to\s+)?([A-Za-z]+)|\b([A-Za-z]+)\s+borrowed|\bdue\s+from\s+([A-Za-z]+)/i);
-        const isLending = /lent|borrowed|loaned|due from|expecting return|pay back/i.test(p);
-        
+        const isEmi = /\bemi\b/i.test(p);
+        const isLending = /\b(?:lent|loaned|lending|borrowed)\b|\bdue\s+from\b|\bexpecting\s+return\b|\bpay\s*back\b/i.test(p);
         if (isLending) {
           type = "lent";
-          if (lentMatch) borrower = (lentMatch[1] || lentMatch[2] || lentMatch[3] || "").trim();
-        } else if (/salary|credited|freelance|dividend|bonus|income|received|got paid|cashback|stipend|consulting|sale proceeds/i.test(p)) {
+          const bm = textClean.match(/\b(?:lent|loaned|lending|gave)\b\s*(?:to\s+)?([A-Za-z]+)/i)
+            || textClean.match(/\b([A-Za-z]+)\s+borrowed\b/i)
+            || textClean.match(/\bdue\s+from\s+([A-Za-z]+)/i)
+            || textClean.match(/\bto\s+([A-Za-z]+)/i);
+          if (bm && !/^(?:to|from|for|on|via|upi|cash|by|with|him|her|them)$/i.test(bm[1])) borrower = bm[1];
+        } else if (/\b(?:salary|credited|freelance|dividends?|bonus|income|received|got\s+paid|cashback|stipend|consulting|sale\s+proceeds|refund(?:ed)?|payout)\b/i.test(p)) {
           type = "income";
         }
 
-        let desc = textWithoutDate
-          .replace(matchStr, "")
-          .replace(/\b(?:via|through|by|with|using|paid\s+via|paid\s+by|paid\s+through)\s+(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|google\s*pay|phonepe|paytm|bhim|cred|cash|netbanking|net\s*banking|direct\s*bank|bank\s*transfer|bank|wallet|cheque|check|card)\b/gi, "")
-          .replace(/\b(?:credit\s*card|debit\s*card|c\.?c\.?|d\.?c\.?|upi|gpay|phonepe|paytm|cash|netbanking|direct\s*bank|bank\s*transfer)\b/gi, "")
-          .replace(/\b(spent|on|for|paid|via|by|with|through|using|rs|inr|usd|eur|gbp|aed|lent to|borrowed by|expecting return|salary|income|credited|to)\b|[₹$€£]/gi, "")
-          .replace(/\s+/g, " ")
-          .trim();
+        // 5. Description
+        let desc = textClean
+          .replace(PAY_PHRASE_RE, " ")
+          .replace(PAY_WORD_RE, " ");
+        const catSource = desc;
+        desc = desc.replace(FILLER_RE, " ").replace(/[:;,()\-–—]+/g, " ").replace(/\s+/g, " ").trim();
+        if (type === "lent") desc = borrower ? `Lent to ${titleCase(borrower)}` : (desc || "Money Lent");
+        if (!desc) desc = type === "income" ? "Income" : "Expense";
 
-        if (!desc) {
-          desc = type === "lent" ? (borrower ? `Lent to ${borrower}` : "Money Lent") : (type === "income" ? "Income" : "Expense");
-        }
-
-        let cat = "Other";
-        if (type === "lent") cat = "Gifts & Charity";
-        else if (type === "income") cat = "Investments";
-        else {
-          for (const c of S.customCategories) {
-            if (new RegExp("\\b" + c + "\\b", "i").test(p)) { cat = c; break; }
-          }
-          if (cat === "Other") {
-            for (const c in KW) {
-              if (KW[c].test(p)) { cat = c; break; }
-            }
-          }
-        }
+        // 6. Category
+        const cat = categorize(catSource, type);
 
         out.push({
           id: "fiscc_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
-          amount: Math.round(amt * 100) / 100,
+          amount: Math.round(aRes.amount * 100) / 100,
           currency: detectedCur,
           category: cat,
           description: desc.charAt(0).toUpperCase() + desc.slice(1),
@@ -1970,12 +2225,640 @@
       return out;
     }
 
+    // =========================================================================
+    // 3B. BANK / UPI / CARD MESSAGE DECODER (SMS, iMessage, WhatsApp copies)
+    // =========================================================================
+    const AMT_MARK = /(?:\brs\b\.?|\binr\b|₹|\busd\b|\$)\s*\d|\d\s*(?:\brs\b|\binr\b)/i;
+    const DEBIT_RE = /\b(?:debited|debit\s+of|spent|sent|paid|payment\s+of|purchase(?:d)?|withdrawn|withdrawal|charged|deducted|transferred|trf|used\s+for|transaction\s+of|txn\s+of)\b|\btxn(?=\s*(?:rs\b|inr\b|₹|usd\b|\$))/i;
+    const CREDIT_RE = /\b(?:credited|received|deposited|refund(?:ed)?|reversal|reversed|added\s+to)\b/i;
+
+    const STRONG_BANK_TOKENS = [
+      /\ba\/c\b|\bacct?\b|\baccount\s*(?:no|number|ending)\b/i,
+      /(?:\bx{2,}|\*{2,}|•{2,})\s*\d{3,4}\b|\bx\d{3,4}\b|\*\d{3,4}\b/i,
+      /\bvpa\b|[\w.\-]{2,}@[a-z]{2,}\b/i,
+      /\b(?:upi\s*ref|ref\s*(?:no|num|number|id)|refno|rrn|utr|txn\s*id)\b/i,
+      /\b(?:avl|avail(?:able)?|ledger|clear)\s*(?:bal|balance|limit|lmt)/i,
+      /\bnot\s+you\b|\bsms\s+block\b|\bcall\s+\d{4,}/i,
+      /\bdear\s+(?:customer|upi\s+user|card\s*member|member|sir|valued)/i,
+      /\b(?:hdfc|icici|axis|kotak|idfc|indusind|yes|sbi|pnb|canara)\s*bank\b|\bsbi\b|\bhdfcbk\b|\bicicib\b/i,
+      /\bcard\s*(?:no\.?|ending|xx)|\bcredit\s*card\s*(?:xx|no|ending)/i
+    ];
+
+    function lineIsTxn(line) {
+      return AMT_MARK.test(line) && (DEBIT_RE.test(line) || CREDIT_RE.test(line));
+    }
+
+    function looksLikeBankMessage(text) {
+      const t = String(text || "");
+      if (t.length < 25) return false;
+      let hits = 0;
+      for (const re of STRONG_BANK_TOKENS) if (re.test(t)) hits++;
+      if (hits >= 3) return true;
+      if (hits >= 2 && AMT_MARK.test(t)) return true;
+      const lines = t.split(/\n+/).map(l => l.trim()).filter(Boolean);
+      if (lines.length >= 2 && lines.filter(lineIsTxn).length >= 2 && hits >= 1) return true;
+      return false;
+    }
+
+    // Split a pasted blob (one or many messages, with iMessage headers) into message strings
+    function splitBankMessages(raw) {
+      const text = String(raw || "").replace(/\r\n?/g, "\n").replace(/[​-‏‪-‮⁠﻿￼]/g, "");
+      const lines = text.split("\n").map(l => l.trim());
+      const timeRe = /\b\d{1,2}[:.]\d{2}(?::\d{2})?\s*(?:am|pm)?\b/i;
+      const senderRe = /^(?:[A-Z]{2}-)?[A-Z0-9]{3,10}(?:-[A-Z])?$/;
+      const noiseRe = /^(?:text message|imessage|sms|rcs message|delivered|read|not delivered|\d{1,2}[.)])(?:\s*[•·|].*)?$/i;
+
+      const headerDate = (line) => {
+        if (line.length > 48) return null;
+        const rel = /^(today|yesterday)\b/i.exec(line);
+        if (rel && (line.length <= rel[0].length || timeRe.test(line))) {
+          const d = new Date(); if (/yesterday/i.test(rel[1])) d.setDate(d.getDate() - 1);
+          return iso(d);
+        }
+        if (timeRe.test(line) || /^[A-Za-z]{3,9},?\s/.test(line)) {
+          const dd = extractDate(line);
+          if (dd) {
+            const rest = (line.slice(0, dd.start) + " " + line.slice(dd.end)).replace(timeRe, "")
+              .replace(/\b(?:at|on|mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/gi, "").replace(/[,\s]+/g, "");
+            if (!rest) return dd.date;
+          }
+        }
+        return null;
+      };
+
+      const msgs = [];
+      let cur = [], curDate = "", pendDate = "", pendSender = "", curSender = "";
+      const flush = () => {
+        if (cur.length) msgs.push({ lines: cur, date: curDate, sender: curSender });
+        cur = []; curDate = ""; curSender = "";
+      };
+      for (const line of lines) {
+        if (!line) { flush(); continue; }
+        if (!cur.length) {
+          if (noiseRe.test(line)) continue;
+          if (senderRe.test(line) && /[A-Z]/.test(line) && !/^\d+$/.test(line)) { pendSender = line; continue; }
+          const hd = headerDate(line);
+          if (hd) { pendDate = hd; continue; }
+          curDate = pendDate; curSender = pendSender; pendDate = ""; pendSender = "";
+        }
+        cur.push(line);
+      }
+      flush();
+
+      const result = [];
+      for (const m of msgs) {
+        if (m.lines.length > 1 && m.lines.filter(lineIsTxn).length >= 2) {
+          m.lines.forEach(l => result.push({ text: l, date: m.date, sender: m.sender }));
+        } else {
+          result.push({ text: m.lines.join(" "), date: m.date, sender: m.sender });
+        }
+      }
+      return result;
+    }
+
+    function bankDirection(t) {
+      const d = t.search(DEBIT_RE), c = t.search(CREDIT_RE);
+      if (d === -1 && c === -1) {
+        if (/\bUPI\/CR\b|\bCR\b/.test(t)) return "credit";
+        if (/\bUPI\/(?:DR|P2[AMP])\b|\bDR\b/.test(t)) return "debit";
+        return "";
+      }
+      if (d === -1) return "credit";
+      if (c === -1) return "debit";
+      return d < c ? "debit" : "credit";
+    }
+
+    function classifySkip(t) {
+      if (/\b(?:otp|one[\s-]*time\s+password|verification\s+code|cvv|do\s+not\s+share|never\s+share)\b/i.test(t))
+        return "OTP / security message";
+      const dir = bankDirection(t);
+      if (/\b(?:failed|declined|unsuccessful|not\s+successful|could\s+not\s+be\s+processed|insufficient\s+(?:funds|balance)|rejected|cancelled|canceled)\b/i.test(t) && !/\b(?:reversed|refund)/i.test(t))
+        return "Failed or declined transaction";
+      if (/(?:payment|pmt).{0,40}(?:received|credited).{0,80}credit\s*card|thank\s+you\s+for\s+(?:your\s+)?(?:card\s+)?payment/i.test(t))
+        return "Card bill payment confirmation (the bank debit already covers it)";
+      if (/\bwill\s+be\s+(?:debited|charged|deducted|auto-?debited)|\bto\s+be\s+debited|\bscheduled\b|\bupcoming\b|\bmandate\s+(?:created|registered|set|approved)|standing\s+instruction\s+(?:registered|created)|auto-?pay\s+(?:set|registered|activated)|requested\s+money|collect\s+request|payment\s+request|has\s+requested|pending\s+approval/i.test(t))
+        return "Upcoming or pending (not paid yet)";
+      if (!dir) {
+        if (/\b(?:avl|available|ledger)\s*bal/i.test(t)) return "Balance alert";
+        if (/statement|total\s+(?:amt|amount)\s+due|min(?:imum)?\s+(?:amt|amount\s+)?due|payment\s+due|due\s+(?:on|by|date)/i.test(t)) return "Statement / bill reminder";
+        if (/\boffers?\b|apply\s+now|pre-?approved|click\s+(?:here|on)|\bt&c\b|\btnc\b|congratulations|kyc\s+(?:pending|expir)|update\s+your\s+kyc|download\s+the\s+app|https?:\/\//i.test(t)) return "Promotional message";
+      }
+      return "";
+    }
+
+    const BANKS = [
+      [/hdfc|hdfcbk/i, "HDFC"], [/icici|icicib/i, "ICICI"], [/\bsbi\b|state\s*bank/i, "SBI"], [/axis/i, "Axis"], [/kotak/i, "Kotak"],
+      [/yes\s*bank/i, "Yes Bank"], [/idfc/i, "IDFC First"], [/indusind/i, "IndusInd"], [/\bpnb\b|punjab\s*national/i, "PNB"],
+      [/bank\s*of\s*baroda|\bbob\b/i, "BoB"], [/canara/i, "Canara"], [/union\s*bank/i, "Union Bank"], [/federal/i, "Federal"],
+      [/\brbl\b/i, "RBL"], [/\bau\s*(?:small|bank)/i, "AU Bank"], [/hsbc/i, "HSBC"], [/\bciti(?:bank)?\b/i, "Citi"],
+      [/standard\s*chartered/i, "StanChart"], [/amex|american\s*express/i, "Amex"], [/\bidbi\b/i, "IDBI"], [/bandhan/i, "Bandhan"],
+      [/paytm\s*payments|paytm\s*bank/i, "Paytm Bank"], [/airtel\s*payments/i, "Airtel Payments"], [/jio\s*payments/i, "Jio Payments"]
+    ];
+    function bankName(t, sender) {
+      const hay = String(t).replace(/[\w.\-]{2,}@[a-z]{2,}/gi, " ") + " " + (sender || "");
+      for (const b of BANKS) if (b[0].test(hay)) return b[1];
+      return "";
+    }
+
+    function bankAccount(t) {
+      let m = t.match(/\b(?:a\/c|a\.c\.?|ac|acct|acc|account|card)\b\.?(?:\s*(?:no\.?|number))?\s*[:#]?\s*(?:ending(?:\s*with)?\s*)?[xX*•.\-]*\s*(\d{3,4})\b/i);
+      if (!m) m = t.match(/\b(?:ending(?:\s+with|\s+in)?|ends\s+with)\s*(\d{3,4})\b/i);
+      if (!m) m = t.match(/(?:[xX*•]{2,})\s*(\d{3,4})\b/);
+      return m ? m[1] : "";
+    }
+
+    function bankRef(t) {
+      let m = t.match(/\b(?:upi\s*ref(?:\s*no)?|ref(?:erence)?(?:\s*(?:no|num|number|id))?|rrn|utr|txn\s*(?:id|no|ref)|trans(?:action)?\s*(?:id|no)|imps\s*ref(?:\s*no)?|neft\s*ref)\.?\s*[:#\-]?\s*([A-Za-z0-9]{8,24})\b/i);
+      if (m && /\d/.test(m[1])) return m[1].toUpperCase();
+      m = t.match(/\b(\d{12})\b/);
+      return m ? m[1] : "";
+    }
+
+    function bankPayment(t) {
+      if (/\bcredit\s*card|\bcc\b/i.test(t)) return "Credit Card";
+      if (/\bdebit\s*card|atm\s*card|\batm\b|\bpos\b/i.test(t)) return "Debit Card";
+      if (/\bwallet\b/i.test(t)) return "Wallet";
+      if (/\bupi\b|\bvpa\b|[\w.\-]{2,}@[a-z]{2,}|gpay|phonepe|paytm|bhim/i.test(t)) return "UPI";
+      if (/\bimps\b|\bneft\b|\brtgs\b|\bach\b|\bnach\b|\becs\b|auto-?debit|standing\s+instruction/i.test(t)) return "Bank Transfer";
+      if (/net\s*banking|netbanking|\bnb\b|billdesk|bbps/i.test(t)) return "NetBanking";
+      if (/\bcard\b/i.test(t)) return /limit|lmt|spent/i.test(t) ? "Credit Card" : "Debit Card";
+      if (/\b(?:ref|refno|rrn|utr)\D{0,8}\d{12}\b/i.test(t)) return "UPI";
+      return "";
+    }
+
+    // The transaction amount: first money value that is not a balance / limit / due figure
+    function bankAmount(t) {
+      const cands = [];
+      allCurrencyAmounts(t).forEach(c => cands.push(c));
+      const verbRe = /\b(?:debited|credited|spent|sent|paid|withdrawn|received|deducted|charged|purchase(?:d)?\s+of|transaction\s+of|txn\s+of|payment\s+of|transfer(?:red)?\s+of)\s*(?:by|for|of|with|at|:)?\s*(?:rs\.?|inr|₹|usd|\$|eur|€|gbp|£|aed)?\s*(\d[\d,]*(?:\.\d{1,2})?)(?!\d)/ig;
+      let m;
+      while ((m = verbRe.exec(t))) {
+        const start = m.index + m[0].length - m[1].length;
+        const v = toNumber(m[1]);
+        if (v > 0) cands.push({ amount: v, currency: "₹", start, end: start + m[1].length, marked: false });
+      }
+      cands.sort((a, b) => a.start - b.start);
+      for (const c of cands) {
+        const before = t.slice(Math.max(0, c.start - 26), c.start).toLowerCase();
+        if (/(?:avl|avail|bal|limit|lmt|outstanding|due|o\/s)(?:.{0,18})$/.test(before)) continue;
+        // a number glued to a reference ("Ref 123456") is not an amount
+        if (!c.marked && String(c.amount).length > 9) continue;
+        return c;
+      }
+      return null;
+    }
+
+    const CUT_RE = /\s+(?:paid|basis|on|dt|dated|ref\w*|upi|via|using|from|txn|transaction|avl|avail|available|bal|balance|not|if|call|a\/c|ac|acct|card|for|is|has|was|will|credited|debited|sms|block|total|limit|lmt|info|thank|thanks)\b|\s*[(;,|]|\.\s|\.$|\s+\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}|\s+\d{1,2}(?:st|nd|rd|th)?[-\s]*(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i;
+    const BAD_MERCHANT = /^(?:(?:a|an|the)\s|rs\b|inr\b|usd\b|eur\b|gbp\b|₹|\$|emi\b|rent\b|bill\b|payment\b|recharge\b|purchase\b|transaction\b|txn\b|a\/c|ac\b|acct|account|your|you\b|the\s+bank|xx|x{2,}|\*|no\.?\b|bank\b|neft|imps|rtgs|upi\b|cheque|clearing|cash\b|transfer|\d)/i;
+
+    function cleanMerchant(s) {
+      s = String(s || "").replace(/\s+/g, " ").trim();
+      s = s.replace(/^(?:vpa|merchant|info|towards|name|beneficiary)[:\s\-]+/i, "");
+      s = s.replace(/[.,;:\-_\/]+$/g, "").trim();
+      return s;
+    }
+
+    function grabAfter(msg, labelRe) {
+      const re = new RegExp(labelRe.source, "ig");
+      let m;
+      while ((m = re.exec(msg))) {
+        let rest = msg.slice(m.index + m[0].length, m.index + m[0].length + 70);
+        const cut = rest.search(CUT_RE);
+        if (cut >= 0) rest = rest.slice(0, cut);
+        rest = cleanMerchant(rest);
+        if (!rest || rest.length < 2 || BAD_MERCHANT.test(rest)) continue;
+        return rest;
+      }
+      return "";
+    }
+
+    const BUSINESS_WORD_RE = /\b(?:store|stores|mart|ltd|limited|pvt|private|enterprises?|traders?|foods?|cafe|restaurant|hotel|services?|bakery|medical|medicals|pharmacy|shop|supermarket|petrol|pump|mobile|electronics|tech|technologies|solutions|industries|agency|center|centre|retail|fashion|kitchen|bar|dhaba|sweets|stationers?|general|dairy|fuel|motors|auto|garage|clinic|hospital|labs?|school|college|academy|gym|salon|travels?|tours?|cabs?|bank|pay|payments?|online|digital|india|corp|inc|company|llp)\b/i;
+
+    // Returns { name, p2p }
+    function bankMerchant(msg, dir) {
+      let raw = "";
+      let m;
+      // UPI/P2M/123456789012/SWIGGY   |  UPI-123456789012-SWIGGY
+      if ((m = msg.match(/UPI\/(?:P2[AMP]\/|CR\/|DR\/)?\d{9,}\/([^\/\n]{2,50})/i)) || (m = msg.match(/UPI-\d{9,}-([^\-\n]{2,40})/i))) {
+        const cut = m[1].search(CUT_RE);
+        raw = cleanMerchant(cut >= 0 ? m[1].slice(0, cut) : m[1]);
+      }
+      // NEFT-HDFCN52026112312345-ACME CORP-SALARY
+      if (!raw && (m = msg.match(/(?:NEFT|IMPS|RTGS)[\/\-][A-Z0-9]{8,}[\/\-]([^\-\/\n]{2,40})/))) raw = cleanMerchant(m[1]);
+      // Axis card style: "... 23-11-26 10:30:11 BIGBASKET Avl Lmt INR 90,000"
+      if (!raw && dir === "debit" && (m = msg.match(/\d{1,2}:\d{2}:\d{2}\s+([A-Za-z][A-Za-z0-9 &.\-]{2,30}?)\s+(?:Avl|Available|SMS|Lmt|Limit)\b/))) raw = cleanMerchant(m[1]);
+      // ICICI style: "...on 23-Nov-26; SWIGGY credited."
+      if (!raw && dir === "debit" && (m = msg.match(/;\s*([A-Za-z0-9 &._\-]{2,40}?)\s+credited\b/i))) raw = cleanMerchant(m[1]);
+      if (!raw && dir === "credit" && (m = msg.match(/;\s*([A-Za-z0-9 &._\-]{2,40}?)\s+debited\b/i))) raw = cleanMerchant(m[1]);
+
+      if (!raw) {
+        const debitLabels = [/\bat\s+/, /\bto\s+/, /\btowards\s+/, /\binfo\s*[:\-]\s*/, /\bmerchant\s*[:\-]?\s*/, /\bfor\s+/];
+        const creditLabels = [/\bfrom\s+/, /\bby\s+/, /\binfo\s*[:\-]\s*/];
+        for (const lab of (dir === "credit" ? creditLabels : debitLabels)) {
+          raw = grabAfter(msg, lab);
+          if (raw) break;
+        }
+      }
+      if (!raw && (m = msg.match(/\b([\w.\-]{2,}@[a-z]{2,})\b/i))) raw = m[1];
+      if (!raw) return { name: "", p2p: false };
+
+      // VPA -> readable name
+      if (/@/.test(raw)) {
+        const vpa = (raw.match(/([\w.\-]+)@/) || [])[1] || "";
+        if (/^\d{8,}$/.test(vpa)) return { name: "", p2p: true, phone: vpa };
+        if (/\d{6,}/.test(vpa) || /^(?:paytmqr|q\d|gpay-?\d|bharatpe|phonepe)/i.test(vpa)) {
+          return { name: /paytmqr|bharatpe|phonepe/i.test(vpa) ? "QR merchant" : "", p2p: false };
+        }
+        raw = vpa.replace(/[._\-]+/g, " ").replace(/\d+$/, "").trim();
+      }
+      raw = raw.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/\s+(?:pvt\.?\s*ltd\.?|private\s+limited|limited|ltd\.?|llp|inc\.?|corp\.?|llc)$/i, "").trim();
+      if (!raw) return { name: "", p2p: false };
+      if (raw === raw.toUpperCase() || raw === raw.toLowerCase()) raw = titleCase(raw);
+
+      for (const a of MERCHANT_ALIASES) {
+        if (a[0].test(raw)) return { name: a[1], p2p: false, cat: a[2] };
+      }
+      const looksPerson = /^[A-Za-z]+(?: [A-Za-z]+){0,2}$/.test(raw) && !BUSINESS_WORD_RE.test(raw) && !lookupLearned(raw)
+        && !Object.keys(KW).some(k => KW[k].test(raw));
+      return { name: raw, p2p: looksPerson };
+    }
+
+    // Parse one bank/UPI/card message. Returns { txn } or { skip }
+    function parseBankMessage(text, meta) {
+      meta = meta || {};
+      const t = text;
+      const skip = classifySkip(t);
+      if (skip) return { skip };
+      const dir = bankDirection(t);
+      if (!dir) return { skip: "Couldn't tell whether money went out or came in" };
+      const amt = bankAmount(t);
+      if (!amt) return { skip: "No amount found" };
+
+      const now = new Date();
+      const dRes = extractDate(t);
+      let date = dRes ? dRes.date : (meta.date || iso(now));
+      let partial = false;
+      if (!dRes) {
+        const pm = t.match(/\bon\s+(\d{1,2})[-\/](\d{1,2})(?![-\/.\d])/i);
+        const pd = pm ? mkDate(now.getFullYear(), pm[2], pm[1]) : "";
+        if (pd) { date = pd; partial = true; }
+      }
+      if ((dRes && !dRes.yearGiven) || partial) {
+        if (date > iso(new Date(now.getTime() + 2 * 864e5))) date = `${Number(date.slice(0, 4)) - 1}${date.slice(4)}`;
+      }
+
+      const isCredit = dir === "credit";
+      const ref = bankRef(t);
+      const acc = bankAccount(t);
+      const bank = bankName(t, meta.sender);
+      const payment = bankPayment(t);
+      const mer = bankMerchant(t, dir);
+      const isAtm0 = /\batm\b/i.test(t);
+      mer.p2p = !!mer.p2p && !/card/i.test(payment) && !isAtm0;   // card payments go to merchants, not people
+      const warn = [];
+      let doubleCount = false;
+
+      const isAtm = /\batm\b.{0,30}(?:withdraw|wdl|cash)|cash\s*withdrawal|withdrawn.{0,25}\batm\b|\batm\s*wdl/i.test(t);
+      const isEmi = /\bemi\b/i.test(t);
+      const isCardBill = !isCredit && /credit\s*card\s*(?:bill|payment|due)|\bcc\s*(?:bill|payment)|card\s*bill|\bcred\b|cred\.club/i.test(t);
+      const isRefund = isCredit && /refund|reversal|reversed|cashback/i.test(t);
+      const isSalary = isCredit && /\bsalary\b|\bsal\b/i.test(t);
+      const isInterest = isCredit && /\binterest\b|\bint\.?\s*(?:pd|credit|cr)\b/i.test(t);
+      const isDividend = isCredit && /dividend/i.test(t);
+
+      let description = "", category = "Other", merchant = mer.name || "";
+
+      if (isCredit) {
+        if (isSalary) description = "Salary";
+        else if (isInterest) description = "Interest credit";
+        else if (isDividend) description = "Dividend";
+        else if (isRefund) description = merchant ? `Refund: ${merchant}` : "Refund";
+        else if (merchant) description = mer.p2p ? `Received from ${merchant}` : merchant;
+        else description = mer.phone ? `Received from ${mer.phone}` : (payment === "UPI" ? "UPI money received" : "Account credit");
+        category = "Income";
+      } else if (isAtm) {
+        description = "ATM withdrawal"; category = "Other"; doubleCount = true;
+        warn.push("Cash withdrawal: may double count if you also log cash spends");
+      } else {
+        if (isEmi) description = merchant ? `EMI: ${merchant}` : "EMI";
+        else if (merchant) description = mer.p2p ? `Paid ${merchant}` : merchant;
+        else if (mer.phone) description = `Paid ${mer.phone}`;
+        else description = payment === "UPI" ? "UPI payment" : (/card/i.test(payment) ? "Card payment" : (payment === "Bank Transfer" ? "Bank transfer" : "Payment"));
+
+        const learned = lookupLearned(merchant || description);
+        const catHay = merchant + " " + ((t.match(/\b(?:emi|insurance|premium|recharge|electricity|broadband|fastag|toll|petrol|diesel|rent|maintenance|tuition)\b/i) || [""])[0]);
+        if (learned) category = learned;
+        else if (isEmi || isCardBill) category = "Bills";
+        else if (mer.cat) category = mer.cat;
+        else {
+          const hit = MERCHANT_ALIASES.find(a => a[0].test(catHay));
+          if (hit) category = hit[2];
+          else {
+            category = "Other";
+            for (const c in KW) { if (KW[c].test(catHay)) { category = c; break; } }
+          }
+        }
+        if (category === "Other" && /standing\s+instruction|\bSI\b|e-?mandate|auto-?debit|recurring/i.test(t)) category = "Subscriptions";
+        if (isCardBill) { doubleCount = true; warn.push("Looks like a credit-card bill payment: your card spends may already be logged"); }
+      }
+
+      const account = (bank || acc) ? `${bank}${bank && acc ? " " : ""}${acc ? "•" + acc : ""}`.trim() : "";
+      return {
+        txn: {
+          amount: Math.round(amt.amount * 100) / 100,
+          currency: amt.currency || "₹",
+          category, suggestedCat: category,
+          description, merchant,
+          payment, date,
+          type: isCredit ? "income" : "expense",
+          borrower: "", isEmi, status: "completed",
+          source: "message", ref, account,
+          p2p: isAtm ? false : !!mer.p2p,
+          warn, doubleCount
+        }
+      };
+    }
+
+    // Decode a pasted blob. Returns { txns:[...], skipped:[{text,reason}] }
+    function decodeMessages(raw) {
+      const msgs = splitBankMessages(raw);
+      const txns = [], skipped = [];
+      for (const m of msgs) {
+        const text = m.text.replace(/\s+/g, " ").trim();
+        if (!text) continue;
+        const bankLike = looksLikeBankMessage(text);
+        if (bankLike || text.length >= 45) {
+          const sk = classifySkip(text);
+          if (sk) { skipped.push({ text, reason: sk }); continue; }
+        }
+        if (bankLike) {
+          const r = parseBankMessage(text, m);
+          if (r.skip) skipped.push({ text, reason: r.skip });
+          else txns.push(r.txn);
+        } else {
+          const typed = parseExpenseText(text).filter(x => !x.isOffsetAction);
+          if (!typed.length) { skipped.push({ text, reason: "No amount found" }); continue; }
+          typed.forEach(x => { x.source = "typed"; x.suggestedCat = x.category; x.merchant = ""; x.warn = []; txns.push(x); });
+        }
+      }
+      return { txns, skipped };
+    }
+
+    // Mark duplicates against the ledger and inside the pasted batch
+    function markDuplicates(txns) {
+      const seenRefs = new Set();
+      const dayMs = 864e5;
+      txns.forEach(t => {
+        t.include = true; t.dupNote = "";
+        if (t.ref) {
+          const hit = S.items.find(i => i.ref && String(i.ref) === String(t.ref));
+          if (hit) { t.include = false; t.dupNote = `Already logged (same reference ${t.ref})`; }
+          else if (seenRefs.has(t.ref)) { t.include = false; t.dupNote = "Duplicate inside this paste"; }
+          seenRefs.add(t.ref);
+        }
+        if (t.include) {
+          const td = new Date(t.date + "T00:00:00").getTime();
+          const isInc = t.type === "income";
+          const hit = S.items.find(i => {
+            if ((i.type === "income") !== isInc) return false;
+            if (Math.abs(Number(i.amount) - t.amount) > 0.01) return false;
+            const id = new Date(String(i.date) + "T00:00:00").getTime();
+            return Math.abs(id - td) <= dayMs;
+          });
+          if (hit) { t.include = false; t.dupNote = `Possible duplicate of "${hit.description}" (same amount & date)`; }
+        }
+        if (t.doubleCount) t.include = false;
+      });
+      return txns;
+    }
+
+    // =========================================================================
+    // 3C. MESSAGE REVIEW MODAL (decode -> review -> add)
+    // =========================================================================
+    let smsState = { raw: "", txns: [], skipped: [], fromInput: false };
+    let smsDecodeTimer = null;
+
+    function smsCategoryOptions(selected) {
+      const all = Array.from(new Set([...Object.keys(BASE_CAT_ICONS), ...S.customCategories]));
+      if (selected && !all.includes(selected)) all.push(selected);
+      return all.map(c => `<option value="${escapeHtml(c)}" ${c === selected ? "selected" : ""}>${getCatIcon(c)} ${escapeHtml(c)}</option>`).join("");
+    }
+
+    function openSmsReview(raw, fromInput) {
+      smsState.fromInput = !!fromInput;
+      $("sms-raw").value = raw || "";
+      $("sms-modal").classList.add("open");
+      decodeSmsNow();
+      if (!raw) setTimeout(() => $("sms-raw").focus(), 60);
+    }
+
+    function decodeSmsNow() {
+      const raw = $("sms-raw").value;
+      smsState.raw = raw;
+      if (!raw.trim()) {
+        smsState.txns = []; smsState.skipped = [];
+      } else {
+        const r = decodeMessages(raw);
+        smsState.txns = markDuplicates(r.txns);
+        smsState.skipped = r.skipped;
+      }
+      renderSmsReview();
+    }
+
+    function smsFmt(t) { return fmt(t.amount, t.currency); }
+
+    function renderSmsReview() {
+      const { txns, skipped } = smsState;
+      const list = $("sms-review-list");
+      if (!$("sms-raw").value.trim()) {
+        list.innerHTML = `<p class="text-xs text-center py-6" style="color: var(--text-faint)">Paste one or many bank, UPI or card messages above. Fiscc reads the amount, date, merchant and whether it was money out or in, then lets you check it before adding.</p>`;
+      } else if (!txns.length) {
+        list.innerHTML = `<p class="text-xs text-center py-5" style="color: var(--text-muted)">Nothing to log from this text.${skipped.length ? " See what was skipped below." : ""}</p>`;
+      } else {
+        list.innerHTML = txns.map((t, i) => {
+          const chips = [];
+          chips.push(t.type === "income" ? "Money in" : "Money out");
+          if (t.payment) chips.push(escapeHtml(t.payment));
+          if (t.account) chips.push(escapeHtml(t.account));
+          if (t.ref) chips.push("Ref " + escapeHtml(t.ref));
+          if (t.source === "typed") chips.push("typed entry");
+          if (t.p2p) chips.push("person-to-person");
+          const notes = [];
+          if (t.dupNote) notes.push(`<span style="color: var(--gold)">⚠ ${escapeHtml(t.dupNote)}</span>`);
+          (t.warn || []).forEach(w => notes.push(`<span style="color: var(--gold)">⚠ ${escapeHtml(w)}</span>`));
+          return `
+          <div class="rounded-xl border p-2.5 space-y-2" style="background: var(--bg-subtle); border-color: ${t.include ? "var(--border-highlight)" : "var(--border-subtle)"}; opacity: ${t.include ? 1 : 0.65}">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" data-sms="inc" data-i="${i}" ${t.include ? "checked" : ""} class="w-4 h-4 flex-shrink-0" aria-label="Include this entry">
+              <button type="button" data-sms="type" data-i="${i}" class="px-2 py-1 rounded-full border text-[11px] font-semibold flex-shrink-0" style="border-color: var(--border-highlight); color: ${t.type === "income" ? "var(--success)" : "var(--text-main)"}">${t.type === "income" ? "⬇ Income" : "⬆ Expense"}</button>
+              <span class="text-xs flex-shrink-0" style="color: var(--text-muted)">${escapeHtml(t.currency)}</span>
+              <input type="number" step="0.01" min="0" inputmode="decimal" data-sms="amount" data-i="${i}" value="${t.amount}" class="flex-1 min-w-0 p-1.5 rounded-lg text-sm font-mono text-right" aria-label="Amount">
+            </div>
+            <input type="text" data-sms="desc" data-i="${i}" value="${escapeHtml(t.description)}" class="w-full p-1.5 rounded-lg text-sm" aria-label="Description">
+            <div class="grid grid-cols-2 gap-2">
+              <select data-sms="cat" data-i="${i}" class="w-full p-1.5 rounded-lg text-xs" aria-label="Category">${smsCategoryOptions(t.category)}</select>
+              <input type="date" data-sms="date" data-i="${i}" value="${escapeHtml(t.date)}" class="w-full p-1.5 rounded-lg text-xs" aria-label="Date">
+            </div>
+            <div class="text-[10px] leading-relaxed" style="color: var(--text-faint)">${chips.join(" &bull; ")}</div>
+            ${notes.length ? `<div class="text-[10px] leading-relaxed">${notes.join("<br>")}</div>` : ""}
+          </div>`;
+        }).join("");
+      }
+
+      const sk = $("sms-skipped");
+      if (skipped.length) {
+        sk.classList.remove("hidden");
+        $("sms-skipped-title").textContent = `${skipped.length} message${skipped.length === 1 ? "" : "s"} skipped`;
+        $("sms-skipped-list").innerHTML = skipped.map(s => `
+          <div class="py-1.5 border-t" style="border-color: var(--border-subtle)">
+            <b style="color: var(--text-muted)">${escapeHtml(s.reason)}</b>
+            <div class="break-words" style="color: var(--text-faint)">${escapeHtml(s.text.length > 160 ? s.text.slice(0, 160) + "…" : s.text)}</div>
+          </div>`).join("");
+      } else {
+        sk.classList.add("hidden");
+      }
+      updateSmsSummary();
+    }
+
+    function updateSmsSummary() {
+      const { txns } = smsState;
+      const picks = txns.filter(t => t.include && Number(t.amount) > 0);
+      const out = picks.filter(t => t.type !== "income").reduce((s, t) => s + Number(t.amount), 0);
+      const inn = picks.filter(t => t.type === "income").reduce((s, t) => s + Number(t.amount), 0);
+      $("sms-summary").textContent = txns.length
+        ? `${picks.length} of ${txns.length} selected  •  out ${fmt(out)}  •  in ${fmt(inn)}`
+        : "";
+      const btn = $("btn-sms-commit");
+      btn.disabled = picks.length === 0;
+      btn.style.opacity = picks.length ? "1" : "0.5";
+      $("btn-sms-commit-label").textContent = picks.length ? `Add ${picks.length} ${picks.length === 1 ? "entry" : "entries"}` : "Add";
+    }
+
+    function commitSmsReview() {
+      const picks = smsState.txns.filter(t => t.include && Number(t.amount) > 0);
+      if (!picks.length) { showToast("Nothing selected to add"); return; }
+      const stamp = Date.now();
+      const added = picks.map((t, i) => {
+        const item = {
+          id: "fiscc_" + stamp + "_" + i + "_" + Math.random().toString(36).slice(2, 6),
+          amount: Math.round(Number(t.amount) * 100) / 100,
+          currency: t.currency || S.cur,
+          category: t.category || "Other",
+          description: String(t.description || "").trim() || "Transaction",
+          payment: t.payment || "",
+          date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || "") ? t.date : iso(new Date()),
+          type: t.type || "expense",
+          borrower: t.borrower || "",
+          isEmi: !!t.isEmi,
+          status: t.type === "lent" ? "pending" : "completed",
+          createdAt: stamp - i
+        };
+        if (t.ref) item.ref = t.ref;
+        if (t.account) item.account = t.account;
+        if (t.merchant) item.merchant = t.merchant;
+        if (t.source === "message") item.source = "message";
+        // remember category corrections for next time
+        if (t.category && t.category !== t.suggestedCat) learnMerchant(t.merchant || t.description, t.category);
+        return item;
+      });
+      added.forEach(it => S.items.unshift(it));
+      vm = added.map(i => i.date).sort().pop().slice(0, 7);
+      saveStorage();
+      $("sms-modal").classList.remove("open");
+      if (smsState.fromInput) { $("expense-omni-input").value = ""; updateLiveBadge(); }
+      render();
+      showToast(`✓ Added ${added.length} ${added.length === 1 ? "entry" : "entries"} from messages`);
+      if (window.cloudSyncAdd) window.cloudSyncAdd(added);
+      smsState = { raw: "", txns: [], skipped: [], fromInput: false };
+    }
+
+    async function pasteClipboardIntoSms() {
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.readText) throw new Error("no clipboard api");
+        const txt = await navigator.clipboard.readText();
+        if (!txt || !txt.trim()) { showToast("Clipboard is empty"); return; }
+        $("sms-raw").value = txt;
+        decodeSmsNow();
+      } catch (e) {
+        $("sms-raw").focus();
+        showToast("Long-press the box and choose Paste");
+      }
+    }
+
+    function initSmsUi() {
+      const raw = $("sms-raw");
+      raw.addEventListener("input", () => {
+        clearTimeout(smsDecodeTimer);
+        smsDecodeTimer = setTimeout(decodeSmsNow, 250);
+      });
+      $("close-sms-x").onclick = () => $("sms-modal").classList.remove("open");
+      $("btn-sms-cancel").onclick = () => $("sms-modal").classList.remove("open");
+      $("btn-sms-clear").onclick = () => { raw.value = ""; decodeSmsNow(); raw.focus(); };
+      $("btn-sms-paste").onclick = pasteClipboardIntoSms;
+      $("btn-sms-commit").onclick = commitSmsReview;
+      $("btn-open-sms").onclick = () => { openSmsReview("", false); pasteClipboardIntoSms(); };
+
+      const list = $("sms-review-list");
+      list.addEventListener("input", e => {
+        const el = e.target, i = Number(el.dataset.i), k = el.dataset.sms;
+        const t = smsState.txns[i]; if (!t) return;
+        if (k === "amount") t.amount = parseFloat(el.value) || 0;
+        else if (k === "desc") t.description = el.value;
+        else if (k === "date") t.date = el.value;
+        updateSmsSummary();
+      });
+      list.addEventListener("change", e => {
+        const el = e.target, i = Number(el.dataset.i), k = el.dataset.sms;
+        const t = smsState.txns[i]; if (!t) return;
+        if (k === "cat") t.category = el.value;
+        else if (k === "inc") { t.include = el.checked; renderSmsReview(); }
+      });
+      list.addEventListener("click", e => {
+        const el = e.target.closest("[data-sms='type']");
+        if (!el) return;
+        const t = smsState.txns[Number(el.dataset.i)]; if (!t) return;
+        t.type = t.type === "income" ? "expense" : "income";
+        if (t.type === "income" && t.category === t.suggestedCat) { t.category = "Income"; t.suggestedCat = "Income"; }
+        else if (t.type === "expense" && t.category === "Income") { t.category = "Other"; t.suggestedCat = "Other"; }
+        renderSmsReview();
+      });
+
+      // Pasting bank messages straight into the main box opens the review (newlines preserved)
+      $("expense-omni-input").addEventListener("paste", e => {
+        const clip = (e.clipboardData && e.clipboardData.getData("text")) || "";
+        if (clip && looksLikeBankMessage(clip)) {
+          e.preventDefault();
+          openSmsReview(clip, true);
+        }
+      });
+
+      // Optional: open Fiscc with ?sms=<text> (for an iOS Shortcut / automation) to decode straight away
+      try {
+        const qs = new URLSearchParams(window.location.search);
+        const incoming = qs.get("sms") || qs.get("text");
+        if (incoming) {
+          history.replaceState(null, "", window.location.pathname);
+          setTimeout(() => openSmsReview(incoming, false), 400);
+        }
+      } catch (e) {}
+    }
+
     function updateLiveBadge() {
       const val = $("expense-omni-input").value;
       const badge = $("live-parse-badge");
       const text = $("live-parse-text");
       if (!val.trim()) {
         badge.classList.add("hidden");
+        return;
+      }
+      if (looksLikeBankMessage(val)) {
+        const r = decodeMessages(val);
+        const n = r.txns.length;
+        text.textContent = n
+          ? `Bank message: ${n} transaction${n === 1 ? "" : "s"} found. Press Add to review`
+          : `Bank message: nothing to log (${r.skipped[0] ? r.skipped[0].reason : "no amount found"})`;
+        badge.classList.remove("hidden");
+        badge.classList.add("inline-flex");
         return;
       }
       const parsed = parseExpenseText(val);
@@ -1999,6 +2882,11 @@
       if (!val) {
         showToast("Please type what you spent first");
         input.focus();
+        return;
+      }
+
+      if (looksLikeBankMessage(val)) {
+        openSmsReview(val, true);
         return;
       }
 
@@ -2031,7 +2919,7 @@
       render();
 
       if (offsetCount === 0 || newItemsToAdd.length > 0) {
-        showToast(`Logged ${newItemsToAdd.length} entry${newItemsToAdd.length > 1 ? "ies" : ""}`);
+        showToast(`Logged ${newItemsToAdd.length} ${newItemsToAdd.length === 1 ? "entry" : "entries"}`);
         if (window.cloudSyncAdd) window.cloudSyncAdd(newItemsToAdd);
       }
     }
@@ -2204,6 +3092,7 @@
           S.customCategories.push(chosenCat);
         }
       }
+      if (itm.category !== chosenCat) learnMerchant(itm.merchant || itm.description, chosenCat);
       itm.category = chosenCat;
       itm.borrower = itm.type === "lent" ? $("edit-borrower").value.trim() : "";
 
@@ -2229,7 +3118,7 @@
     };
 
     function settleDue(id) {
-      const itm = S.items.find(x => x.id === id);
+      const itm = S.items.find(x => String(x.id) === String(id));
       if (!itm) return;
       itm.status = "settled";
       saveStorage();
@@ -2668,7 +3557,7 @@
         try {
           const parsed = JSON.parse(await f.text());
           if (Array.isArray(parsed)) S.items = parsed;
-          else if (parsed && Array.isArray(parsed.items)) S = parsed;
+          else if (parsed && Array.isArray(parsed.items)) S = normalizeState(parsed);
           saveStorage(false);
           saveRollingSnapshot("Restored");
           applyTheme(S.theme || "obsidian");
@@ -2935,6 +3824,7 @@
 
     loadStorage();
     initListeners();
+    initSmsUi();
     render();
   </script>
 
